@@ -34,28 +34,41 @@ There are two simple ways to install this fork.
 
 ### Option 2: Build and install from source
 
-1. Install Android Studio or a local Android SDK setup.
+1. Install Android Studio or Android command-line tools so `sdkmanager` is available.
 2. Use JDK 21.
 3. Clone this repository.
-4. Build an APK:
+4. Run the setup script:
 
 ```bash
-./gradlew assembleDebug
+./setup.sh
 ```
+
+This will:
+- create a repo-local Android SDK in `.android-sdk`
+- write `local.properties`
+- install `cmdline-tools;latest`, `platform-tools`, `platforms;android-34`, and `build-tools;36.0.0`
+
+5. Build the app:
+
+```bash
+./build.sh
+```
+
+That defaults to `assembleDebug`.
 
 For a release build:
 
 ```bash
-./gradlew assembleRelease
+./build.sh assembleRelease
 ```
-
-Generated APKs are written to `app/build/outputs/apk/`.
 
 To install a debug build directly onto a connected device:
 
 ```bash
-./gradlew installDebug
+./build.sh installDebug
 ```
+
+Generated APKs are written to `app/build/outputs/apk/`.
 
 ## Development
 
@@ -65,9 +78,16 @@ This fork is maintained by [@NanashiTheNameless](<https://github.com/NanashiTheN
 
 ## Building
 
-Walrus is a standard Android Studio project. Run the Gradle wrapper with JDK 21. This project currently uses Android Gradle Plugin 9.1.0 and Gradle 9.4.1. After selecting JDK 21, open the project in Android Studio or run the Gradle wrapper directly.
+Walrus is a standard Android Studio project. This fork currently uses Android Gradle Plugin 9.1.0 and Gradle 9.4.1, and it expects JDK 21.
 
-TODO: When we refresh and remove the current Google Maps API key from the repo, we'll need to point out that this needs to be generated and set manually if maps are needed.
+For local command-line builds, the simplest flow is:
+
+```bash
+./setup.sh
+./build.sh
+```
+
+`setup.sh` prepares the repo-local SDK and `local.properties`. `build.sh` runs setup first and then invokes the Gradle wrapper with the repo-local SDK environment.
 
 For signed nightly builds and GitHub Actions keystore setup, see [docs/nightly-signing.md](docs/nightly-signing.md).
 

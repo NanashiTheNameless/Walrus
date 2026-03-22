@@ -120,11 +120,40 @@
                 android:layout_height="150dp"
                 android:layout_marginTop="4dp">
 
-                <fragment
+                <LinearLayout
                     android:id="@+id/locationMap"
-                    class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:background="@color/primaryLightColor"
+                    android:gravity="center_vertical"
+                    android:onClick="onOpenLocationMapClick"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/openstreetmap_label"
+                        android:textColor="@color/secondaryColor"/>
+
+                    <TextView
+                        android:id="@+id/locationCoordinates"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="16sp"/>
+
+                    <Button
+                        android:id="@+id/openLocationMap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:onClick="onOpenLocationMapClick"
+                        android:text="@string/open_in_openstreetmap"/>
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/locationUnknown"

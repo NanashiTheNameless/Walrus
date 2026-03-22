@@ -160,6 +160,15 @@
     <!-- Displayed in place of a location when none is available -->
     <string name="unknown">Unknown</string>
 
+    <!-- Label shown above the OpenStreetMap location action -->
+    <string name="openstreetmap_label">OpenStreetMap</string>
+
+    <!-- Coordinates shown for a stored card location -->
+    <string name="location_coordinates">Lat %1$.5f, Lng %2$.5f</string>
+
+    <!-- Button label for opening a card location in OpenStreetMap -->
+    <string name="open_in_openstreetmap">Open in OpenStreetMap</string>
+
     <!-- Section header -->
     <string name="notes">Notes</string>
 

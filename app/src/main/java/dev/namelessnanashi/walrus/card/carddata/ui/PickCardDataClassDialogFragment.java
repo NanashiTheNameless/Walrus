@@ -82,6 +82,8 @@ public class PickCardDataClassDialogFragment extends DialogFragment
 
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.choose_card_type)
+                .titleColorRes(R.color.primaryTextColor)
+                .backgroundColorRes(R.color.primaryDarkColor)
                 .adapter(new CardDataClassAdapter(this, cardDataClasses, 16), null)
                 .build();
     }

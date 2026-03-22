@@ -23,7 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -41,6 +43,11 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         WebView webView = new WebView(this);
+        WebSettings webSettings = webView.getSettings();
+
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+        webView.setWebViewClient(new WebViewClient());
 
         setContentView(webView);
 
@@ -50,6 +57,13 @@ public class WebViewActivity extends AppCompatActivity {
         if (url == null || url.trim().isEmpty()) {
             finish();
             return;
+        }
+
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setDomStorageEnabled(true);
+            webSettings.setLoadWithOverviewMode(true);
+            webSettings.setUseWideViewPort(true);
         }
 
         webView.loadUrl(url);

@@ -106,6 +106,8 @@ public class PickCardDataTargetDialogFragment extends DialogFragment
 
         return new MaterialDialog.Builder(getActivity())
                 .title(titleId)
+                .titleColorRes(R.color.primaryTextColor)
+                .backgroundColorRes(R.color.primaryDarkColor)
                 .customView(R.layout.dialog_pick_card_data_target, true)
                 .build();
     }

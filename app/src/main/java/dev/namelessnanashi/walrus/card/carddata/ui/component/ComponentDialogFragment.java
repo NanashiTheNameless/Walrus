@@ -105,8 +105,15 @@ public class ComponentDialogFragment extends DialogFragment
             @Nullable Bundle savedInstanceState) {
         final View result = super.onCreateView(inflater, container, savedInstanceState);
 
-        ViewGroup viewGroup = (ViewGroup) ((MaterialDialog) getDialog()).getCustomView();
-        assert viewGroup != null;
+        MaterialDialog dialog = (MaterialDialog) getDialog();
+        if (dialog == null) {
+            return result;
+        }
+
+        ViewGroup viewGroup = (ViewGroup) dialog.getCustomView();
+        if (viewGroup == null) {
+            return result;
+        }
 
         component = viewModel.getComponentSourceAndSink().createComponent(getActivity(),
                 getArguments().getBoolean("clean"), getArguments().getBoolean("editable"));
@@ -128,11 +135,14 @@ public class ComponentDialogFragment extends DialogFragment
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        updatePositiveButtonState();
+    }
+
+    @Override
     public void onComponentChange(Component changedComponent) {
-        if (getArguments().getBoolean("editable")) {
-            ((MaterialDialog) getDialog()).getActionButton(DialogAction.POSITIVE).setEnabled(
-                    component.isValid());
-        }
+        updatePositiveButtonState();
 
         problemViewGroup.removeAllViews();
 
@@ -158,6 +168,22 @@ public class ComponentDialogFragment extends DialogFragment
         Bundle bundle = new Bundle();
         component.saveInstanceState(bundle);
         outState.putBundle("component", bundle);
+    }
+
+    private void updatePositiveButtonState() {
+        if (!getArguments().getBoolean("editable") || component == null) {
+            return;
+        }
+
+        MaterialDialog dialog = (MaterialDialog) getDialog();
+        if (dialog == null) {
+            return;
+        }
+
+        View positiveButton = dialog.getActionButton(DialogAction.POSITIVE);
+        if (positiveButton != null) {
+            positiveButton.setEnabled(component.isValid());
+        }
     }
 
     public interface OnEditedCallback {

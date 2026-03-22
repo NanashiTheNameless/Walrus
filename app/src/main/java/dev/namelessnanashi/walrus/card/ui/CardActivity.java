@@ -24,6 +24,7 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.UiThread;
 import android.support.v4.app.DialogFragment;
@@ -62,13 +63,8 @@ import dev.namelessnanashi.walrus.device.ui.CardDeviceAdapter;
 import dev.namelessnanashi.walrus.device.ui.PickCardDataTargetDialogFragment;
 import dev.namelessnanashi.walrus.device.ui.ReadCardDataOperationFragment;
 import dev.namelessnanashi.walrus.device.ui.WriteOrEmulateCardDataOperationFragment;
+import dev.namelessnanashi.walrus.ui.WebViewActivity;
 import dev.namelessnanashi.walrus.util.UIUtils;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.parceler.Parcels;
@@ -77,10 +73,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
-        implements OnMapReadyCallback, DeleteCardConfirmDialogFragment.OnDeleteCardConfirmCallback,
+        implements DeleteCardConfirmDialogFragment.OnDeleteCardConfirmCallback,
         PickCardDataTargetDialogFragment.OnCardDataTargetClickCallback,
         PickCardDataClassDialogFragment.OnCardDataClassClickCallback,
         ReadCardDataOperationFragment.OnResultCallback, ComponentDialogFragment.OnEditedCallback,
@@ -94,6 +91,8 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     private static final String PICK_CARD_DEVICE_DIALOG_FRAGMENT_TAG = "pick_card_device_dialog";
     private static final String PICK_CARD_DATA_CLASS_DIALOG_FRAGMENT_TAG =
             "pick_card_data_class_dialog";
+    private static final String OPEN_STREET_MAP_URL =
+            "https://www.openstreetmap.org/?mlat=%1$.6f&mlon=%2$.6f#map=16/%1$.6f/%2$.6f";
 
     private final UIUtils.TextChangeWatcher notesEditorDirtier = new TextChangeDirtier();
     private final UIUtils.TextChangeWatcher walrusCardViewNameDirtier = new TextChangeDirtier();
@@ -105,6 +104,8 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     private WalrusCardView walrusCardView;
     private TextView notes;
     private EditText notesEditor;
+    private View locationMap;
+    private TextView locationCoordinates;
 
     public CardActivity() {
         super(DatabaseHelper.class);
@@ -163,6 +164,11 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
                 card = new Card();
             } else if (card.id == 0) {
                 dirty = true;
+            } else {
+                Card persistedCard = getHelper().getCardDao().queryForId(card.id);
+                if (persistedCard != null) {
+                    card = persistedCard;
+                }
             }
         } else {
             card = Parcels.unwrap(savedInstanceState.getParcelable("card"));
@@ -198,6 +204,8 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         walrusCardView = findViewById(R.id.card);
         notes = findViewById(R.id.notes);
         notesEditor = findViewById(R.id.notesEditor);
+        locationMap = findViewById(R.id.locationMap);
+        locationCoordinates = findViewById(R.id.locationCoordinates);
 
         walrusCardView.setCard(card);
         walrusCardView.setEditable(mode != Mode.VIEW);
@@ -219,6 +227,8 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
                 findViewById(R.id.notes).setVisibility(View.GONE);
                 break;
         }
+
+        updateUI();
     }
 
     @Override
@@ -253,22 +263,14 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         ((TextView) findViewById(R.id.dateAcquired)).setText(card.cardDataAcquired != null
                 ? card.cardDataAcquired.toString() : getString(R.string.unknown));
 
-        SupportMapFragment locationMap =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(
-                        R.id.locationMap);
         TextView locationUnknown = findViewById(R.id.locationUnknown);
         if (card.cardLocationLat != null && card.cardLocationLng != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .show(locationMap)
-                    .commit();
-            locationMap.getMapAsync(this);
-
+            locationMap.setVisibility(View.VISIBLE);
+            locationCoordinates.setText(getString(R.string.location_coordinates,
+                    card.cardLocationLat, card.cardLocationLng));
             locationUnknown.setVisibility(View.GONE);
         } else {
-            getSupportFragmentManager().beginTransaction()
-                    .hide(locationMap)
-                    .commit();
-
+            locationMap.setVisibility(View.GONE);
             locationUnknown.setVisibility(View.VISIBLE);
         }
 
@@ -276,12 +278,19 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         notesEditor.setText(card.notes);
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        LatLng latLng = new LatLng(card.cardLocationLat, card.cardLocationLng);
+    public void onOpenLocationMapClick(View view) {
+        if (card.cardLocationLat == null || card.cardLocationLng == null) {
+            return;
+        }
 
-        googleMap.addMarker(new MarkerOptions().position(latLng));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        String openStreetMapUrl = String.format(Locale.US, OPEN_STREET_MAP_URL,
+                card.cardLocationLat, card.cardLocationLng);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(openStreetMapUrl));
+        if (browserIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(browserIntent);
+        } else {
+            startActivity(WebViewActivity.createIntent(this, openStreetMapUrl));
+        }
     }
 
     @Override
