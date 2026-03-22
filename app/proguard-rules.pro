@@ -33,6 +33,19 @@
 -keep @org.parceler.Parcel class * { *; }
 -keep class **$$Parcelable { *; }
 
+# Manual-entry and metadata-driven dialogs instantiate these classes reflectively.
+-keep class * extends dev.namelessnanashi.walrus.card.carddata.CardData {
+    public <init>();
+}
+-keep class * extends android.support.v4.app.DialogFragment {
+    public <init>();
+}
+-keep class * extends dev.namelessnanashi.walrus.card.carddata.ui.MifareReadStepDialogFragment {
+    public <init>();
+}
+-keep interface dev.namelessnanashi.walrus.card.carddata.ui.component.ComponentSourceAndSink
+-keep class * implements dev.namelessnanashi.walrus.card.carddata.ui.component.ComponentSourceAndSink { *; }
+
 # Don't warn about these being referenced but not found
 -dontwarn com.google.errorprone.**
 -dontwarn com.google.gson.**

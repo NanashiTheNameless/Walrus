@@ -20,9 +20,12 @@
 package dev.namelessnanashi.walrus.card.carddata.ui.component;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +68,10 @@ public class ChoiceComponent extends ContainerComponent {
 
         spinner.setPadding(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
                 spinner.getResources().getDisplayMetrics()), 0, 0);
+        spinner.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(context, R.color.secondaryColor)));
+        spinner.setPopupBackgroundDrawable(new ColorDrawable(
+                ContextCompat.getColor(context, R.color.primaryDarkColor)));
 
         List<String> choiceNames = new ArrayList<>();
         for (Choice choice : choices) {
@@ -76,16 +83,25 @@ public class ChoiceComponent extends ContainerComponent {
             public View getDropDownView(int position, @Nullable View convertView,
                     @NonNull ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
+                applyChoiceColor(position, view);
+                return view;
+            }
 
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                applyChoiceColor(position, view);
+                return view;
+            }
+
+            private void applyChoiceColor(int position, View view) {
                 if (view instanceof TextView) {
                     ((TextView) view).setTextColor(
                             ChoiceComponent.this.choices.get(position).color);
                 }
-
-                return view;
             }
         };
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAdapter.setDropDownViewResource(R.layout.layout_multiline_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -73,6 +73,12 @@ public class ComponentDialogFragment extends DialogFragment
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                 .title(getArguments().getString("title"))
+                .titleColorRes(R.color.primaryTextColor)
+                .contentColorRes(R.color.primaryTextColor)
+                .backgroundColorRes(R.color.primaryDarkColor)
+                .positiveColorRes(R.color.primaryTextColor)
+                .negativeColorRes(R.color.secondaryTextColor)
+                .widgetColorRes(R.color.secondaryColor)
                 .customView(R.layout.dialog_component_dialog, true);
 
         if (editable) {

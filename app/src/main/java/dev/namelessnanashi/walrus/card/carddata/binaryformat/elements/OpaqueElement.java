@@ -20,9 +20,11 @@
 package dev.namelessnanashi.walrus.card.carddata.binaryformat.elements;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.TypedValue;
 import android.view.View;
@@ -88,6 +90,11 @@ public class OpaqueElement extends BinaryFormat.Element {
             if (editable) {
                 final EditText editText = new EditText(context);
                 view = editText;
+                editText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+                editText.setHintTextColor(ContextCompat.getColor(context,
+                        R.color.secondaryTextColor));
+                editText.setBackgroundTintList(ColorStateList.valueOf(
+                        ContextCompat.getColor(context, R.color.secondaryColor)));
 
                 if (!hex) {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -116,6 +123,7 @@ public class OpaqueElement extends BinaryFormat.Element {
                         context.getResources().getDisplayMetrics());
                 textView.setPadding(padding, padding, padding, 0);
                 textView.setTextAppearance(context, android.R.style.TextAppearance_Widget_EditText);
+                textView.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
             }
 
             String text = value != null ? extractValue(value).toString(hex ? 16 : 10) : "";

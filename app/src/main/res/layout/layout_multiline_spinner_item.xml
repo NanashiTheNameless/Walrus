@@ -24,5 +24,11 @@
     style="?android:attr/spinnerItemStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/primaryDarkColor"
+    android:paddingBottom="8dp"
+    android:paddingEnd="4dp"
+    android:paddingStart="4dp"
+    android:paddingTop="8dp"
     android:singleLine="false"
-    android:textAlignment="inherit"/>
+    android:textAlignment="inherit"
+    android:textColor="@color/primaryTextColor"/>

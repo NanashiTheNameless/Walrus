@@ -22,9 +22,12 @@ package dev.namelessnanashi.walrus.card.carddata.ui.component;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import dev.namelessnanashi.walrus.R;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,6 +59,7 @@ public abstract class Component {
             if (title != null) {
                 TextView titleView = new TextView(context);
                 titleView.setText(title);
+                titleView.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
                 viewGroup.addView(titleView);
             }
 

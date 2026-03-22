@@ -50,6 +50,8 @@ import dev.namelessnanashi.walrus.card.DatabaseHelper;
 import dev.namelessnanashi.walrus.card.OrmLiteBaseAppCompatActivity;
 import dev.namelessnanashi.walrus.card.QueryUtils;
 import dev.namelessnanashi.walrus.card.carddata.CardData;
+import dev.namelessnanashi.walrus.card.carddata.HIDCardData;
+import dev.namelessnanashi.walrus.card.carddata.MifareCardData;
 import dev.namelessnanashi.walrus.card.carddata.ui.PickCardDataClassDialogFragment;
 import dev.namelessnanashi.walrus.card.carddata.ui.component.ComponentDialogFragment;
 import dev.namelessnanashi.walrus.card.carddata.ui.component.ComponentSourceAndSink;
@@ -400,12 +402,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
             return;
         }
 
-        DialogFragment viewDialogFragment;
-        try {
-            viewDialogFragment = viewDialogFragmentClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        DialogFragment viewDialogFragment = instantiateDialogFragment(viewDialogFragmentClass);
 
         Bundle args = new Bundle();
         args.putString("title", getString(R.string.view_card_data_title, cardDataMetadata.name()));
@@ -535,12 +532,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         if (callbackId == -1) {
             Class<? extends DialogFragment> editDialogFragmentClass =
                     cardDataClass.getAnnotation(CardData.Metadata.class).editDialogFragmentClass();
-            DialogFragment editDialogFragment;
-            try {
-                editDialogFragment = editDialogFragmentClass.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+            DialogFragment editDialogFragment = instantiateDialogFragment(editDialogFragmentClass);
 
             boolean clean = card.cardData == null || card.cardData.getClass() != cardDataClass;
 
@@ -552,11 +544,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
                     throw new RuntimeException(e);
                 }
             } else {
-                try {
-                    cardData = cardDataClass.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
+                cardData = instantiateCardData(cardDataClass);
             }
 
             CardData.Metadata cardDataMetadata = cardData.getClass().getAnnotation(
@@ -625,6 +613,34 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     @Override
     public void onEdited(ComponentSourceAndSink componentSourceAndSink, int callbackId) {
         onResult((CardData) componentSourceAndSink, callbackId);
+    }
+
+    private DialogFragment instantiateDialogFragment(
+            Class<? extends DialogFragment> dialogFragmentClass) {
+        if (dialogFragmentClass == ComponentDialogFragment.class) {
+            return new ComponentDialogFragment();
+        }
+
+        try {
+            return dialogFragmentClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private CardData instantiateCardData(Class<? extends CardData> cardDataClass) {
+        if (cardDataClass == HIDCardData.class) {
+            return new HIDCardData();
+        }
+        if (cardDataClass == MifareCardData.class) {
+            return new MifareCardData();
+        }
+
+        try {
+            return cardDataClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

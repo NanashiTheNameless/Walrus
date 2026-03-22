@@ -208,6 +208,8 @@ public class HIDCardData extends CardData implements ComponentSourceAndSink {
                         if (textView == null) {
                             textView = new TextView(this.context);
                             textView.setText(R.string.hid_format_autodetected);
+                            textView.setTextColor(ContextCompat.getColor(this.context,
+                                    R.color.secondaryTextColor));
                         }
 
                         return textView;
@@ -220,7 +222,7 @@ public class HIDCardData extends CardData implements ComponentSourceAndSink {
             choices.add(new ChoiceComponent.Choice(
                     format.getName(),
                     ContextCompat.getColor(context, editable || format.getProblems(data).isEmpty()
-                            ? android.R.color.black : android.R.color.holo_red_light),
+                            ? R.color.primaryTextColor : android.R.color.holo_red_light),
                     new MultiComponent(context, null, components)));
 
             ++i;
