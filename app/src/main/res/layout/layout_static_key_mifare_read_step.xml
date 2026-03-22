@@ -25,7 +25,7 @@
     <data class="StaticKeyMifareReadStepBinding">
 
         <variable name="readStep"
-                  type="com.bugfuzz.android.projectwalrus.card.carddata.StaticKeyMifareReadStep"/>
+                  type="dev.namelessnanashi.walrus.card.carddata.StaticKeyMifareReadStep"/>
 
     </data>
 

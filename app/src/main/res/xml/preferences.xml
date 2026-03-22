@@ -40,7 +40,7 @@
 
     <PreferenceCategory android:title="@string/wallet_settings_preference">
 
-        <com.bugfuzz.android.projectwalrus.card.ui.DeleteAllCardsPreference
+        <dev.namelessnanashi.walrus.card.ui.DeleteAllCardsPreference
             android:title="@string/delete_all_cards_preference"/>
 
     </PreferenceCategory>
@@ -51,7 +51,7 @@
             <intent android:action=".ui.WebViewActivity">
                 <!--suppress AndroidElementNotAllowed -->
                 <extra
-                    android:name="com.bugfuzz.android.projectwalrus.ui.WebViewActivity.EXTRA_URL"
+                    android:name="dev.namelessnanashi.walrus.ui.WebViewActivity.EXTRA_URL"
                     android:value="file:///android_asset/open_source.html"/>
             </intent>
         </Preference>

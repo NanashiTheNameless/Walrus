@@ -24,7 +24,7 @@
     <data class="MifareReadSetupDialogBinding">
 
         <variable name="viewModel"
-                  type="com.bugfuzz.android.projectwalrus.card.carddata.ui.MifareReadSetupDialogViewModel"/>
+                  type="dev.namelessnanashi.walrus.card.carddata.ui.MifareReadSetupDialogViewModel"/>
 
     </data>
 

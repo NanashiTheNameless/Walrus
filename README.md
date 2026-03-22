@@ -25,7 +25,7 @@ Walrus is developed by Daniel Underhay and Matthew Daley (a.k.a. [Team Walrus](m
 
 ## Building
 
-Walrus is a standard Android Studio project. At this stage there are no unusual dependencies or build steps beyond the usual cloning of the repository and opening the project in Android Studio.
+Walrus is a standard Android Studio project. Run the Gradle wrapper with JDK 21. This project currently uses Android Gradle Plugin 8.5 and Gradle 8.7, which do not run correctly on newer JDKs such as Java 25. After selecting JDK 21, open the project in Android Studio or run the Gradle wrapper directly.
 
 TODO: When we refresh and remove the current Google Maps API key from the repo, we'll need to point out that this needs to be generated and set manually if maps are needed.
 
@@ -41,7 +41,7 @@ The current layout of Walrus's source code is as follows:
 
   * `/res`: Resource files.
 
-  * `/java/com/bugfuzz/android/projectwalrus`: Actual code lives here!
+  * `/java/dev/namelessnanashi/walrus`: Actual code lives here!
 
     * `/card`: Code to do with persistent data (i.e. the wallet). The `Card` class, the base `CardData` class and various card data type classes, database models and database helpers are here.
 

@@ -20,17 +20,22 @@
 buildscript {
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:8.5.2'
     }
 }
 
 allprojects {
     repositories {
         google()
+        mavenCentral()
         jcenter()
+        maven {
+            url "https://artifactory.appodeal.com/appodeal-public"
+        }
         maven {
             url "https://jitpack.io"
         }
