@@ -101,11 +101,7 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
 
     @Override
     protected Pair<Proxmark3Command, Integer> sliceIncoming(byte[] in) {
-        if (in.length < Proxmark3Command.getByteLength()) {
-            return null;
-        }
-
-        return new Pair<>(Proxmark3Command.fromBytes(in), Proxmark3Command.getByteLength());
+        return Proxmark3Command.slice(in);
     }
 
     @Override
@@ -222,7 +218,8 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
         try {
             Proxmark3Command version = sendThenReceiveCommands(
                     new Proxmark3Command(Proxmark3Command.VERSION),
-                    new CommandWaiter(Proxmark3Command.ACK, DEFAULT_TIMEOUT));
+                    new CommandWaiter(DEFAULT_TIMEOUT, Proxmark3Command.ACK,
+                            Proxmark3Command.VERSION));
             if (version == null) {
                 throw new IOException(context.getString(R.string.get_version_timeout));
             }
@@ -253,7 +250,8 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
             Proxmark3Command result = sendThenReceiveCommands(
                     new Proxmark3Command(Proxmark3Command.MEASURE_ANTENNA_TUNING,
                             new long[]{arg, 0, 0}),
-                    new CommandWaiter(Proxmark3Command.MEASURED_ANTENNA_TUNING, DEFAULT_TIMEOUT));
+                    new CommandWaiter(DEFAULT_TIMEOUT,
+                            Proxmark3Command.MEASURED_ANTENNA_TUNING));
             if (result == null) {
                 throw new IOException(context.getString(R.string.tune_timeout));
             }
@@ -417,7 +415,7 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
                     Proxmark3Command result = proxmark3Device.sendThenReceiveCommands(
                             new Proxmark3Command(Proxmark3Command.READER_ISO_14443A,
                                     new long[]{Proxmark3Command.ISO14A_CONNECT, 0, 0}),
-                            new CommandWaiter(Proxmark3Command.ACK, DEFAULT_TIMEOUT));
+                            new CommandWaiter(DEFAULT_TIMEOUT, Proxmark3Command.ACK));
 
                     if (result == null) {
                         break;
@@ -478,16 +476,29 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
             extends WatchdogReceiveSink<Proxmark3Command, Proxmark3Command> {
 
         private final long op;
+        private final long[] moreOps;
 
-        CommandWaiter(long op, @SuppressWarnings("SameParameterValue") long timeout) {
+        CommandWaiter(@SuppressWarnings("SameParameterValue") long timeout, long op,
+                long... moreOps) {
             super(timeout);
 
             this.op = op;
+            this.moreOps = moreOps;
         }
 
         @Override
         public Proxmark3Command onReceived(Proxmark3Command in) {
-            return in.op == op ? in : null;
+            if (in.op == op) {
+                return in;
+            }
+
+            for (long moreOp : moreOps) {
+                if (in.op == moreOp) {
+                    return in;
+                }
+            }
+
+            return null;
         }
     }
 

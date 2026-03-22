@@ -19,6 +19,20 @@
 
 apply plugin: 'com.android.application'
 
+def localKeystoreProperties = new Properties()
+def localKeystorePropertiesFile = rootProject.file("../walrus-keystore.properties")
+if (localKeystorePropertiesFile.exists()) {
+    localKeystoreProperties.load(new FileInputStream(localKeystorePropertiesFile))
+}
+
+def releaseKeystoreFile = System.getenv("KEYSTORE_FILE") ?: localKeystoreProperties['storeFile']
+def releaseKeystorePassword =
+        System.getenv("KEYSTORE_PASSWORD") ?: localKeystoreProperties['storePassword']
+def releaseKeyAlias = System.getenv("KEY_ALIAS") ?: localKeystoreProperties['keyAlias']
+def releaseKeyPassword = System.getenv("KEY_PASSWORD") ?: localKeystoreProperties['keyPassword']
+def hasReleaseSigning = [releaseKeystoreFile, releaseKeystorePassword, releaseKeyAlias,
+                         releaseKeyPassword].every { it != null && it.toString().trim() }
+
 android {
     compileSdkVersion 27
     compileOptions {
@@ -30,7 +44,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 4
-        versionName "0.2.1"
+        versionName "0.2.1-localbuild"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "google_maps_key",
                 (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
@@ -38,17 +52,13 @@ android {
     dataBinding {
         enabled = true
     }
-    if (new File("../walrus-keystore.properties").exists()) {
-        def keystorePropertiesFile = rootProject.file("../walrus-keystore.properties")
-        def keystoreProperties = new Properties()
-        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
+    if (hasReleaseSigning) {
         signingConfigs {
             config {
-                keyAlias keystoreProperties['keyAlias']
-                keyPassword keystoreProperties['keyPassword']
-                storeFile file(keystoreProperties['storeFile'])
-                storePassword keystoreProperties['storePassword']
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+                storeFile file(releaseKeystoreFile)
+                storePassword releaseKeystorePassword
             }
         }
     }
@@ -64,7 +74,7 @@ android {
             minifyEnabled true
             useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            if (new File("../walrus-keystore.properties").exists())
+            if (hasReleaseSigning)
                 signingConfig signingConfigs.config
         }
     }

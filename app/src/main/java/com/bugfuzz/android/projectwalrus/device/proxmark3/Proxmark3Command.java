@@ -21,6 +21,7 @@ package com.bugfuzz.android.projectwalrus.device.proxmark3;
 
 import android.support.annotation.LongDef;
 import android.support.annotation.Size;
+import android.util.Pair;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -33,6 +34,24 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 class Proxmark3Command {
+
+    private static final int LONG_BYTE_LENGTH = 8;
+    private static final int SHORT_BYTE_LENGTH = 2;
+    private static final int MAGIC_BYTE_LENGTH = 4;
+    private static final int OLD_DATA_MAX_LENGTH = 512;
+    private static final int LEGACY_ARGS_BYTE_LENGTH = 3 * LONG_BYTE_LENGTH;
+    private static final int OLD_FRAME_LENGTH =
+            LONG_BYTE_LENGTH + LEGACY_ARGS_BYTE_LENGTH + OLD_DATA_MAX_LENGTH;
+    private static final int MIX_DATA_MAX_LENGTH = OLD_DATA_MAX_LENGTH - LEGACY_ARGS_BYTE_LENGTH;
+    private static final int RESPONSE_HEADER_LENGTH = MAGIC_BYTE_LENGTH + SHORT_BYTE_LENGTH + 1 + 1
+            + SHORT_BYTE_LENGTH;
+    private static final int RESPONSE_MIN_LENGTH = RESPONSE_HEADER_LENGTH + SHORT_BYTE_LENGTH;
+    private static final int COMMAND_HEADER_LENGTH = MAGIC_BYTE_LENGTH + SHORT_BYTE_LENGTH
+            + SHORT_BYTE_LENGTH;
+    private static final int COMMAND_CRC_PLACEHOLDER = 0x3361;
+    private static final int NG_LENGTH_FLAG = 1 << 15;
+    private static final byte[] COMMAND_MAGIC = new byte[]{0x50, 0x4d, 0x33, 0x61};
+    private static final byte[] RESPONSE_MAGIC = new byte[]{0x50, 0x4d, 0x33, 0x62};
 
     static final long ACK = 0xff;
     static final long DEBUG_PRINT_STRING = 0x100;
@@ -53,8 +72,19 @@ class Proxmark3Command {
     final long op;
     final long[] args;
     final byte[] data;
+    private final int dataLength;
+    private final boolean legacyArgs;
+    private final int status;
+    private final int reason;
 
-    Proxmark3Command(@Opcode long op, @Size(3) long[] args, @Size(max = 512) byte[] data) {
+    Proxmark3Command(@Opcode long op, @Size(3) long[] args,
+            @Size(max = OLD_DATA_MAX_LENGTH) byte[] data) {
+        this(op, args, data, data.length, true, 0, 0);
+    }
+
+    private Proxmark3Command(@Opcode long op, @Size(3) long[] args,
+            @Size(max = OLD_DATA_MAX_LENGTH) byte[] data, int dataLength, boolean legacyArgs,
+            int status, int reason) {
         this.op = op;
 
         if (args.length != 3) {
@@ -62,13 +92,20 @@ class Proxmark3Command {
         }
         this.args = args;
 
-        if (data.length > 512) {
+        if (dataLength < 0 || dataLength > data.length) {
+            throw new IllegalArgumentException("Invalid data length");
+        }
+        if (data.length > OLD_DATA_MAX_LENGTH) {
             throw new IllegalArgumentException("Data too long");
         }
-        this.data = Arrays.copyOf(data, 512);
+        this.data = Arrays.copyOf(data, dataLength);
+        this.dataLength = dataLength;
+        this.legacyArgs = legacyArgs;
+        this.status = status;
+        this.reason = reason;
     }
 
-    Proxmark3Command(@Opcode long op, @Size(max = 512) long[] args) {
+    Proxmark3Command(@Opcode long op, @Size(max = OLD_DATA_MAX_LENGTH) long[] args) {
         this(op, args, new byte[0]);
     }
 
@@ -76,11 +113,80 @@ class Proxmark3Command {
         this(op, new long[3]);
     }
 
-    static int getByteLength() {
-        return 8 + 3 * 8 + 512;
+    static Pair<Proxmark3Command, Integer> slice(byte[] bytes) {
+        Pair<Proxmark3Command, Integer> response = sliceResponse(bytes);
+        if (response != null) {
+            return response;
+        }
+
+        if (bytes.length < OLD_FRAME_LENGTH) {
+            return null;
+        }
+
+        return new Pair<>(fromOldBytes(bytes), OLD_FRAME_LENGTH);
     }
 
-    static Proxmark3Command fromBytes(byte[] bytes) {
+    private static Pair<Proxmark3Command, Integer> sliceResponse(byte[] bytes) {
+        if (!startsWith(bytes, RESPONSE_MAGIC)) {
+            return null;
+        }
+        if (bytes.length < RESPONSE_MIN_LENGTH) {
+            return null;
+        }
+
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+
+        bb.position(MAGIC_BYTE_LENGTH);
+        int lengthAndFlags = bb.getShort() & 0xffff;
+        boolean ng = (lengthAndFlags & NG_LENGTH_FLAG) != 0;
+        int payloadLength = lengthAndFlags & ~NG_LENGTH_FLAG;
+        int frameLength = RESPONSE_HEADER_LENGTH + payloadLength + SHORT_BYTE_LENGTH;
+        if (bytes.length < frameLength) {
+            return null;
+        }
+
+        int status = bb.get();
+        int reason = bb.get();
+        long op = bb.getShort() & 0xffffL;
+
+        byte[] payload = new byte[payloadLength];
+        bb.get(payload);
+
+        if (!ng && payloadLength >= LEGACY_ARGS_BYTE_LENGTH) {
+            ByteBuffer payloadBuffer = ByteBuffer.wrap(payload);
+            payloadBuffer.order(ByteOrder.LITTLE_ENDIAN);
+
+            long[] args = new long[3];
+            for (int i = 0; i < args.length; ++i) {
+                args[i] = payloadBuffer.getLong();
+            }
+
+            byte[] data = ArrayUtils.subarray(payload, LEGACY_ARGS_BYTE_LENGTH, payload.length);
+
+            return new Pair<>(new Proxmark3Command(op, args, data, data.length, true,
+                    status, reason), frameLength);
+        }
+
+        return new Pair<>(new Proxmark3Command(op, new long[3], payload, payload.length, false,
+                status, reason), frameLength);
+    }
+
+    private static boolean startsWith(byte[] bytes, byte[] prefix) {
+        if (bytes.length < prefix.length) {
+            return false;
+        }
+
+        for (int i = 0; i < prefix.length; ++i) {
+            if (bytes[i] != prefix[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static Proxmark3Command fromOldBytes(byte[] bytes) {
         ByteBuffer bb = ByteBuffer.wrap(bytes);
         bb.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -91,39 +197,66 @@ class Proxmark3Command {
             args[i] = bb.getLong();
         }
 
-        byte[] data = new byte[512];
+        byte[] data = new byte[OLD_DATA_MAX_LENGTH];
         bb.get(data);
 
-        return new Proxmark3Command(op, args, data);
+        return new Proxmark3Command(op, args, data, data.length, true, 0, 0);
     }
 
     byte[] toBytes() {
-        ByteBuffer bb = ByteBuffer.allocate(getByteLength());
+        if ((op & 0xffffL) != op) {
+            throw new IllegalArgumentException("MIX frames only support 16-bit commands");
+        }
+        if (data.length > MIX_DATA_MAX_LENGTH) {
+            throw new IllegalArgumentException("Data too long for MIX frame");
+        }
+
+        ByteBuffer bb = ByteBuffer.allocate(COMMAND_HEADER_LENGTH + LEGACY_ARGS_BYTE_LENGTH
+                + data.length + SHORT_BYTE_LENGTH);
         bb.order(ByteOrder.LITTLE_ENDIAN);
 
-        bb.putLong(op);
+        bb.put(COMMAND_MAGIC);
+        bb.putShort((short) (LEGACY_ARGS_BYTE_LENGTH + data.length));
+        bb.putShort((short) op);
 
         for (long arg : args) {
             bb.putLong(arg);
         }
 
         bb.put(data);
+        bb.putShort((short) COMMAND_CRC_PLACEHOLDER);
 
-        byte[] bytes = new byte[bb.capacity()];
-        bb.flip();
-        bb.get(bytes);
-
-        return bytes;
+        return bb.array();
     }
 
     @Override
     public String toString() {
-        return "<Proxmark3Command " + op + ", args " + Arrays.toString(args) + ", data "
-                + Arrays.toString(data) + ">";
+        return "<Proxmark3Command " + op + ", args " + Arrays.toString(args) + ", status "
+                + status + ", reason " + reason + ", data " + Arrays.toString(data) + ">";
     }
 
     public String dataAsString() {
-        return new String(ArrayUtils.subarray(data, 0, (int) args[0]));
+        int length = Math.min(dataLength, data.length);
+        for (int i = 0; i < length; ++i) {
+            if (data[i] == 0) {
+                length = i;
+                break;
+            }
+        }
+
+        return new String(ArrayUtils.subarray(data, 0, length));
+    }
+
+    boolean usesLegacyArgs() {
+        return legacyArgs;
+    }
+
+    boolean isSuccessful() {
+        return status == 0;
+    }
+
+    int getReason() {
+        return reason;
     }
 
     @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE})

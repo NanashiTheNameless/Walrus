@@ -1,0 +1,168 @@
+name: Nightly Build
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Gather variables
+        id: vars
+        run: |
+          GIT_SHA7=$(git rev-parse --short HEAD)
+          DATE=$(date -u +'%Y.%m.%d')
+          APK_ASSET_NAME="Walrus-nightly-${DATE}-${GIT_SHA7}.apk"
+          echo "GIT_SHA7=$GIT_SHA7"
+          echo "DATE=$DATE"
+          echo "APK_ASSET_NAME=$APK_ASSET_NAME"
+          echo "GIT_SHA7=$GIT_SHA7" >> "$GITHUB_OUTPUT"
+          echo "DATE=$DATE" >> "$GITHUB_OUTPUT"
+          echo "APK_ASSET_NAME=$APK_ASSET_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Replace "localbuild" in version with commit SHA7
+        run: |
+          sed -i "s/localbuild/${{ steps.vars.outputs.GIT_SHA7 }}/g" app/build.gradle
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: zulu
+          java-version: "8"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-27" \
+            "build-tools;28.0.3"
+
+      - name: Set up Gradle cache
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-read-only: false
+          gradle-home-cache-includes: |
+            caches
+            notifications
+            jdks
+
+      - name: Ensure keystore directory exists
+        run: mkdir -p app/AndroidKeystore
+
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > app/AndroidKeystore/release-key.jks
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      - name: Build release APK
+        env:
+          KEYSTORE_FILE: AndroidKeystore/release-key.jks
+          KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          ./gradlew --no-daemon assembleRelease --build-cache
+
+      - name: Locate APK
+        id: locate_apk
+        run: |
+          apk_path=$(ls app/build/outputs/apk/release/*.apk | head -n 1)
+          echo "apk_path=$apk_path" >> "$GITHUB_OUTPUT"
+
+      - name: Create or update nightly tag
+        uses: NanashiTheNameless/action-create-tag@main
+        with:
+          tag: nightly
+          message: "Nightly build"
+          force_push_tag: true
+          tag_exists_error: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Ensure nightly release exists
+        id: release
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const tag = 'nightly';
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            async function findRelease() {
+              try {
+                return await github.rest.repos.getReleaseByTag({ owner, repo, tag });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                return null;
+              }
+            }
+
+            const releaseName = `Nightly (${{ steps.vars.outputs.DATE }})`;
+            let release = await findRelease();
+
+            const apkAssetName = "${{ steps.vars.outputs.APK_ASSET_NAME }}";
+            const apkUrl = `https://github.com/${owner}/${repo}/releases/download/${tag}/${apkAssetName}`;
+            const releaseBody = `Download the latest APK: [${apkAssetName}](${apkUrl})`;
+
+            if (!release) {
+              release = await github.rest.repos.createRelease({
+                owner,
+                repo,
+                tag_name: tag,
+                name: releaseName,
+                draft: false,
+                prerelease: false,
+                body: releaseBody,
+              });
+            } else {
+              release = {
+                data: (await github.rest.repos.updateRelease({
+                  owner,
+                  repo,
+                  release_id: release.data.id,
+                  tag_name: tag,
+                  name: releaseName,
+                  draft: false,
+                  prerelease: false,
+                  body: releaseBody,
+                })).data
+              };
+            }
+
+            core.setOutput('upload_url', release.data.upload_url);
+            core.setOutput('release_id', release.data.id);
+
+      - name: Publish nightly asset
+        uses: NanashiTheNameless/deploy-nightly@master
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          release_id: ${{ steps.release.outputs.release_id }}
+          asset_path: ${{ steps.locate_apk.outputs.apk_path }}
+          asset_name: ${{ steps.vars.outputs.APK_ASSET_NAME }}
+          asset_content_type: application/vnd.android.package-archive
+          max_releases: 4
+          ignore_hash: false
+          token: ${{ secrets.GITHUB_TOKEN }}

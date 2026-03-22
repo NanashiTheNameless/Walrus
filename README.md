@@ -29,6 +29,8 @@ Walrus is a standard Android Studio project. At this stage there are no unusual 
 
 TODO: When we refresh and remove the current Google Maps API key from the repo, we'll need to point out that this needs to be generated and set manually if maps are needed.
 
+For signed nightly builds and GitHub Actions keystore setup, see [docs/nightly-signing.md](docs/nightly-signing.md).
+
 ## Codebase
 
 The current layout of Walrus's source code is as follows:
