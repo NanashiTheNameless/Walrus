@@ -29,11 +29,11 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.support.v7.widget.GridLayoutManager;
@@ -59,6 +59,8 @@ import dev.namelessnanashi.walrus.card.QueryUtils;
 import dev.namelessnanashi.walrus.device.ui.BulkReadCardsActivity;
 import dev.namelessnanashi.walrus.device.ui.DevicesActivity;
 import dev.namelessnanashi.walrus.ui.SettingsActivity;
+import dev.namelessnanashi.walrus.util.AppInstallStateUtils;
+import dev.namelessnanashi.walrus.util.FreeDroidWarnCompat;
 
 import java.util.List;
 
@@ -70,6 +72,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper> {
 
     private static final int LOCATION_REQUEST_CODE = 0;
+    private static final String PREF_INSTALL_TOKEN_FORK_NOTICE = "installTokenForkNotice";
 
     private RecyclerView recyclerView;
     private final BroadcastReceiver walletUpdateBroadcastReceiver = new BroadcastReceiver() {
@@ -81,9 +84,6 @@ public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
 
     private SearchView sv;
 
-    private boolean isFirstRun = true;
-    private SharedPreferences mSharedPreferences;
-
     public WalletActivity() {
         super(DatabaseHelper.class);
     }
@@ -94,30 +94,14 @@ public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         setTheme(R.style.App_WithTransitions);
         super.onCreate(savedInstanceState);
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        isFirstRun = mSharedPreferences.getBoolean("isFirstRun", true);
-
-        if(isFirstRun){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.update_notification_title);
-            builder.setMessage(R.string.update_notification_message);
-            builder.setNeutralButton(R.string.update_notification_neutral_button, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    isFirstRun = false;
-                    mSharedPreferences.edit().putBoolean("isFirstRun", isFirstRun).apply();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.setCancelable(false);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
-
-            TextView messageView = dialog.findViewById(android.R.id.message);
-            if (messageView != null) {
-                Linkify.addLinks(messageView, Linkify.WEB_URLS);
-                messageView.setMovementMethod(LinkMovementMethod.getInstance());
-                messageView.setLinkTextColor(ContextCompat.getColor(this, R.color.secondaryLightColor));
-            }
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        long currentInstallToken = AppInstallStateUtils.getCurrentInstallToken(this);
+        long shownForkNoticeInstallToken =
+                preferences.getLong(PREF_INSTALL_TOKEN_FORK_NOTICE, 0L);
+        if (currentInstallToken > shownForkNoticeInstallToken) {
+            showForkNotice(preferences);
+        } else {
+            FreeDroidWarnCompat.showWarningIfNeeded(this);
         }
 
         setContentView(R.layout.activity_wallet);
@@ -191,6 +175,36 @@ public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         }
     }
 
+    private void showForkNotice(SharedPreferences preferences) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.update_notification_title);
+        builder.setMessage(R.string.update_notification_message);
+        builder.setPositiveButton(R.string.update_notification_neutral_button,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        preferences.edit()
+                                .putLong(PREF_INSTALL_TOKEN_FORK_NOTICE,
+                                        AppInstallStateUtils.getCurrentInstallToken(
+                                                WalletActivity.this))
+                                .apply();
+                        FreeDroidWarnCompat.showWarningIfNeeded(WalletActivity.this);
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        TextView messageView = dialog.findViewById(android.R.id.message);
+        if (messageView != null) {
+            Linkify.addLinks(messageView, Linkify.WEB_URLS);
+            messageView.setMovementMethod(LinkMovementMethod.getInstance());
+            messageView.setLinkTextColor(
+                    ContextCompat.getColor(this, R.color.secondaryLightColor));
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {
@@ -233,6 +247,7 @@ public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (sv.getVisibility() != View.GONE) {
             sv.setIconified(true);

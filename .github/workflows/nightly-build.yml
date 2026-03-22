@@ -165,5 +165,4 @@ jobs:
           asset_name: ${{ steps.vars.outputs.APK_ASSET_NAME }}
           asset_content_type: application/vnd.android.package-archive
           max_releases: 4
-          ignore_hash: false
           token: ${{ secrets.GITHUB_TOKEN }}

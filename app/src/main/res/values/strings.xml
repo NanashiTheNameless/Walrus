@@ -47,6 +47,18 @@
     <!-- Update notification button text-->
     <string name="update_notification_neutral_button">Continue</string>
 
+    <!-- FreeDroidWarn-inspired dialog title -->
+    <string name="freedroidwarn_title">Android Freedom Warning</string>
+
+    <!-- FreeDroidWarn-inspired dialog message -->
+    <string name="freedroidwarn_message">Google has announced that, starting in 2026/2027, apps on certified Android devices will require the developer to submit personal identity details directly to Google.\n\nThe maintainer of this fork does not intend to comply with that requirement, so this app may stop working on certified Android devices after that point.\n\nFor background and advocacy information, see Keep Android Open.</string>
+
+    <!-- FreeDroidWarn-inspired button text -->
+    <string name="freedroidwarn_more_info">More info</string>
+
+    <!-- FreeDroidWarn-inspired button text -->
+    <string name="freedroidwarn_solutions">Solutions</string>
+
 
     <!--
         BulkReadCardDataOperationRunner
