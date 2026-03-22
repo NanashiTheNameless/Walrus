@@ -25,10 +25,10 @@
     <data class="MifareReadSetupDialogReadStepItemBinding">
 
         <variable name="readStepItem"
-                  type="com.bugfuzz.android.projectwalrus.card.carddata.ui.MifareReadSetupDialogViewModel.ReadStepItem"/>
+                  type="dev.namelessnanashi.walrus.card.carddata.ui.MifareReadSetupDialogViewModel.ReadStepItem"/>
 
         <variable name="dialogViewModel"
-                  type="com.bugfuzz.android.projectwalrus.card.carddata.ui.MifareReadSetupDialogViewModel"/>
+                  type="dev.namelessnanashi.walrus.card.carddata.ui.MifareReadSetupDialogViewModel"/>
 
 
     </data>

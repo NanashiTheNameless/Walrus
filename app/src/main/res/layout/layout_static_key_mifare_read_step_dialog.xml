@@ -24,11 +24,11 @@
     <!--suppress AndroidUnknownAttribute -->
     <data class="StaticKeyMifareReadStepDialogBinding">
 
-        <import type="com.bugfuzz.android.projectwalrus.card.carddata.MifareCardData.KeySlot"/>
-        <import type="com.bugfuzz.android.projectwalrus.card.carddata.MifareReadStep.KeySlotAttempts"/>
+        <import type="dev.namelessnanashi.walrus.card.carddata.MifareCardData.KeySlot"/>
+        <import type="dev.namelessnanashi.walrus.card.carddata.MifareReadStep.KeySlotAttempts"/>
 
         <variable name="viewModel"
-                  type="com.bugfuzz.android.projectwalrus.card.carddata.ui.StaticKeyMifareReadStepDialogViewModel"/>
+                  type="dev.namelessnanashi.walrus.card.carddata.ui.StaticKeyMifareReadStepDialogViewModel"/>
 
     </data>
 

@@ -34,23 +34,24 @@ def hasReleaseSigning = [releaseKeystoreFile, releaseKeystorePassword, releaseKe
                          releaseKeyPassword].every { it != null && it.toString().trim() }
 
 android {
-    compileSdkVersion 27
+    namespace "dev.namelessnanashi.walrus"
+    compileSdk 30
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_18
+        targetCompatibility JavaVersion.VERSION_18
     }
     defaultConfig {
         applicationId "com.bugfuzz.android.projectwalrus"
-        minSdkVersion 19
-        targetSdkVersion 27
+        minSdk 19
+        targetSdk 27
         versionCode 4
         versionName "0.2.1-localbuild"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "google_maps_key",
                 (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding true
     }
     if (hasReleaseSigning) {
         signingConfigs {
@@ -67,12 +68,10 @@ android {
             applicationIdSuffix '.debug'
             versionNameSuffix '-debug'
             minifyEnabled true
-            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled true
-            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             if (hasReleaseSigning)
                 signingConfig signingConfigs.config
