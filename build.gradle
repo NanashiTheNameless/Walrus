@@ -24,8 +24,7 @@ ext.securityVersions = [
         jdom2               : '2.0.6.1',
         jose4j              : '0.9.6',
         netty               : '4.1.131.Final',
-        okio                : '3.16.4',
-        playServicesLocation: '15.0.1'
+        okio                : '3.16.4'
 ]
 
 buildscript {

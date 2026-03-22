@@ -27,7 +27,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
@@ -39,19 +42,37 @@ import dev.namelessnanashi.walrus.device.CardDevice;
 import dev.namelessnanashi.walrus.device.CardDeviceManager;
 import dev.namelessnanashi.walrus.device.UsbCardDevice;
 import dev.namelessnanashi.walrus.util.GeoUtils;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.List;
 
 public class WalrusApplication extends Application {
 
     @SuppressLint("StaticFieldLeak")
     private static Context context;
 
+    private static final long LOCATION_UPDATE_INTERVAL_MS = 2000L;
+
     private static Location currentBestLocation;
+    private static boolean locationUpdatesStarted;
+
+    private static final LocationListener LOCATION_LISTENER = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            updateBestLocation(location);
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+    };
 
     public static Context getContext() {
         return context;
@@ -61,40 +82,33 @@ public class WalrusApplication extends Application {
         return currentBestLocation != null ? new Location(currentBestLocation) : null;
     }
 
-    public static void startLocationUpdates() {
-        FusedLocationProviderClient fusedLocationProviderClient =
-                LocationServices.getFusedLocationProviderClient(context);
+    private static void updateBestLocation(Location location) {
+        if (location != null && (currentBestLocation == null
+                || GeoUtils.isBetterLocation(location, currentBestLocation))) {
+            currentBestLocation = location;
+        }
+    }
 
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(2000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    public static synchronized void startLocationUpdates() {
+        if (locationUpdatesStarted) {
+            return;
+        }
 
+        LocationManager locationManager =
+                (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null) {
+            return;
+        }
+
+        List<String> providers = locationManager.getProviders(true);
         // CHECKSTYLE:OFF EmptyCatchBlock
         try {
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(
-                    new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (currentBestLocation == null
-                                    || GeoUtils.isBetterLocation(location, currentBestLocation)) {
-                                currentBestLocation = location;
-                            }
-                        }
-                    });
-
-            fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-                    new LocationCallback() {
-                        @Override
-                        public void onLocationResult(LocationResult locationResult) {
-                            for (Location location : locationResult.getLocations()) {
-                                if (currentBestLocation == null
-                                        || GeoUtils.isBetterLocation(location,
-                                        currentBestLocation)) {
-                                    currentBestLocation = location;
-                                }
-                            }
-                        }
-                    }, null);
+            for (String provider : providers) {
+                updateBestLocation(locationManager.getLastKnownLocation(provider));
+                locationManager.requestLocationUpdates(provider, LOCATION_UPDATE_INTERVAL_MS, 0f,
+                        LOCATION_LISTENER);
+            }
+            locationUpdatesStarted = !providers.isEmpty();
         } catch (SecurityException ignored) {
         }
         // CHECKSTYLE:ON EmptyCatchBlock
