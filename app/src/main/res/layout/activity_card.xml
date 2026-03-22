@@ -131,9 +131,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="@android:color/darker_gray"
+                    android:background="@color/primaryLightColor"
                     android:text="@string/unknown"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/primaryTextColor"
                     android:visibility="gone"/>
 
             </FrameLayout>

@@ -25,14 +25,32 @@ if (localKeystorePropertiesFile.exists()) {
     localKeystoreProperties.load(new FileInputStream(localKeystorePropertiesFile))
 }
 
-def releaseKeystoreFile = System.getenv("KEYSTORE_FILE") ?: localKeystoreProperties['storeFile']
-def releaseKeystorePassword =
-        System.getenv("KEYSTORE_PASSWORD") ?: localKeystoreProperties['storePassword']
-def releaseKeyAlias = System.getenv("KEY_ALIAS") ?: localKeystoreProperties['keyAlias']
-def releaseKeyPassword = System.getenv("KEY_PASSWORD") ?: localKeystoreProperties['keyPassword']
+def configValue = { String envName, String propertyKey ->
+    def envValue = providers.environmentVariable(envName).orNull
+    if (envValue != null && envValue.trim()) {
+        return envValue
+    }
+    def localValue = localKeystoreProperties[propertyKey]
+    return localValue != null ? localValue.toString() : null
+}
+def releaseKeystoreFile = configValue("KEYSTORE_FILE", "storeFile")
+def releaseKeystorePassword = configValue("KEYSTORE_PASSWORD", "storePassword")
+def releaseKeyAlias = configValue("KEY_ALIAS", "keyAlias")
+def releaseKeyPassword = configValue("KEY_PASSWORD", "keyPassword")
 def hasReleaseSigning = [releaseKeystoreFile, releaseKeystorePassword, releaseKeyAlias,
                          releaseKeyPassword].every { it != null && it.toString().trim() }
-int buildUnixTime = (System.currentTimeMillis() / 1000L) as int
+def versionCodeOverride = providers.gradleProperty("walrus.versionCode")
+        .orElse(providers.environmentVariable("WALRUS_VERSION_CODE"))
+        .orNull
+int resolvedVersionCode = 1
+if (versionCodeOverride != null && versionCodeOverride.toString().trim()) {
+    try {
+        resolvedVersionCode = Integer.parseInt(versionCodeOverride.toString().trim())
+    } catch (NumberFormatException ignored) {
+        throw new GradleException(
+                "walrus.versionCode / WALRUS_VERSION_CODE must be an integer, got '${versionCodeOverride}'.")
+    }
+}
 
 android {
     namespace = "dev.namelessnanashi.walrus"
@@ -45,11 +63,11 @@ android {
         applicationId = "dev.namelessnanashi.walrus"
         minSdk = 23
         targetSdk = 34
-        versionCode = buildUnixTime
+        versionCode = resolvedVersionCode
         versionName = "0.2.2"
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "google_maps_key",
-                (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
+                providers.gradleProperty("GOOGLE_MAPS_API_KEY").orElse("").get()
     }
     buildFeatures {
         buildConfig = true

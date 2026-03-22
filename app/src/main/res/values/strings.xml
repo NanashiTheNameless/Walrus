@@ -39,13 +39,13 @@
     -->
 
     <!-- Update notification title displayed when the application starts -->
-    <string name="update_notification_title">Important Notification</string>
+    <string name="update_notification_title">Unofficial Fork Notice</string>
 
     <!-- Update notification message displayed when the application starts -->
-    <string name="update_notification_message">This is an UNOFFICIAL build of Walrus.\nSome features may not work as expected.\n\nSource code available at:\n\nhttps://github.com/NanashiTheNameless/Walrus</string>
+    <string name="update_notification_message">You are using an unofficial fork of Walrus.\n\nThis build is not published, reviewed, or supported by Team Walrus. Features, behavior, dependencies, and UI may differ from the original project.\n\nOriginal upstream project:\nhttps://github.com/TeamWalrus/Walrus\n\nThis fork and its issue tracker:\nhttps://github.com/NanashiTheNameless/Walrus\n\nIf you run into a problem with this build, please report it to this fork rather than upstream.</string>
 
     <!-- Update notification button text-->
-    <string name="update_notification_neutral_button">OK</string>
+    <string name="update_notification_neutral_button">Continue</string>
 
 
     <!--

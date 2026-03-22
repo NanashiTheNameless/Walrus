@@ -30,6 +30,9 @@ import dev.namelessnanashi.walrus.card.ui.DeleteAllCardsPreference;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final String OPEN_SOURCE_PREFERENCE_KEY = "pref_key_open_source_licenses";
+    private static final String OPEN_SOURCE_URL = "file:///android_asset/open_source.html";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,17 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.preferences);
+
+            Preference openSourcePreference = findPreference(OPEN_SOURCE_PREFERENCE_KEY);
+            if (openSourcePreference != null) {
+                openSourcePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        startActivity(WebViewActivity.createIntent(getContext(), OPEN_SOURCE_URL));
+                        return true;
+                    }
+                });
+            }
         }
 
         @Override

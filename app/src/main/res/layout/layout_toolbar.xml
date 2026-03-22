@@ -29,6 +29,6 @@
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:transitionName="toolbar"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
     tools:ignore="Overdraw"
     tools:targetApi="lollipop"/>

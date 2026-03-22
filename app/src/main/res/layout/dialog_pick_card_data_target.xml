@@ -24,6 +24,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primaryDarkColor"
     android:orientation="vertical"
     android:paddingEnd="16dp"
     android:paddingStart="16dp">
@@ -40,13 +41,15 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_mode_edit_black_48px"
+            android:tint="@color/primaryTextColor"
             tools:ignore="ContentDescription"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/manual_entry"/>
+            android:text="@string/manual_entry"
+            android:textColor="@color/primaryTextColor"/>
 
     </LinearLayout>
 

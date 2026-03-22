@@ -1,8 +1,18 @@
 # Walrus
-[![Build Status](https://img.shields.io/badge/status-alpha-orange.svg)](https://play.google.com/store/apps/details?id=com.bugfuzz.android.projectwalrus&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
-[![GitHub release](https://img.shields.io/badge/release-v0.2.1-blue.svg)](https://github.com/TeamWalrus/Walrus/releases/)
-[![GPLv3 license](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/TeamWalrus/Walrus/blob/master/LICENSE)
-[![Slack invite](https://img.shields.io/badge/chat-on%20slack-00aac1.svg)](https://join.slack.com/t/walrusapp/shared_invite/enQtNDI0NDc1MDMzNDk0LTk5MTdhNWE4ZjBkNDBkOTkzY2EzMWE0ZWU3MDEwZjYzZmViZDFlZDQ5NDU1ZmZkZTdkMWVjMDVjYzkxZDFjODA)
+
+> [!IMPORTANT]
+> This repository is an unofficial fork of the original Walrus project.
+> It is maintained separately and is not an official Team Walrus release.
+> Behavior, UI, dependencies, and supported features may differ from upstream.
+>
+> Original upstream project:
+> https://github.com/TeamWalrus/Walrus
+>
+> This fork:
+> https://github.com/NanashiTheNameless/Walrus
+>
+> If you are reporting a problem with this build or this repository, please open the issue on this
+> fork rather than on the upstream Team Walrus repository.
 
 ## Intro
 
@@ -12,16 +22,13 @@ Designed for physical security assessors during red team engagements, Walrus sup
 
 ## Installing
 
-<a href="https://play.google.com/store/apps/details?id=com.bugfuzz.android.projectwalrus&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="160"></a>
-
-## Documentation
-
-[Documentation and Getting Started](https://walrus.app/docs/getting-started/). For end-user information such as what Walrus is, and how it can be used in the field, check out the [Walrus website](https://walrus.app/)!
 
 
 ## Development
 
-Walrus is developed by Daniel Underhay and Matthew Daley (a.k.a. [Team Walrus](mailto:team@walrus.app)!) and is [![Open Source](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/TeamWalrus/Walrus/blob/master/LICENSE)
+Walrus was developed by Daniel Underhay and Matthew Daley (a.k.a. [Team Walrus](<mailto:team@walrus.app>)!) and is [![Open Source](<https://badges.frapsoft.com/os/v1/open-source.png?v=10>)](<https://github.com/TeamWalrus/Walrus/blob/master/LICENSE>)
+
+This fork is maintained by [@NanashiTheNameless](<https://github.com/NanashiTheNameless/Walrus>)
 
 ## Building
 
@@ -56,9 +63,11 @@ The current layout of Walrus's source code is as follows:
     * `/util`: Miscellaneous.
 
 ## Hardware
+
 Team Walrus is powered by [Lab401](https://twitter.com/lab_401), our official hardware sponsor 🥳 Check out their [website](https://lab401.com/) for some great deals on hardware!
 
 ## Device Support
+
 Here’s a table of the current devices / card type pairs we support and in what manner.
 
 **Key**: R = reading, W = writing, U = upload
@@ -77,9 +86,10 @@ Here’s a table of the current devices / card type pairs we support and in what
 
 ## Contributing
 
-We welcome all kinds of contributions and bug reports, big or small! Development takes place at our [GitHub repository](https://github.com/TeamWalrus/Walrus). There you can file issues (both bugs and enhancement requests) and submit pull requests.
-Feel free to join our [Slack channel](https://join.slack.com/t/walrusapp/shared_invite/enQtNDI0NDc1MDMzNDk0LTk5MTdhNWE4ZjBkNDBkOTkzY2EzMWE0ZWU3MDEwZjYzZmViZDFlZDQ5NDU1ZmZkZTdkMWVjMDVjYzkxZDFjODA). 
+We welcome all kinds of contributions and bug reports, big or small! Development takes place at our [GitHub repository](https://github.com/NanashiTheNameless/Walrus). There you can file issues (both bugs and enhancement requests) and submit pull requests.
 
 During the initial development of Walrus, changes to the codebase are likely to be frequent and wide-ranging, so if you want to work on a feature, it's wise to reach out first to ensure that your hard work won't be soon obsoleted. After our first full release we hope to gain stability and bring in some of the additional resources expected of a project today, such as a proper test suite and continuous integration.
 
-One area we'd love your help with is contributing translations! If you think you can help us out translating our [Android string resources](https://github.com/TeamWalrus/Walrus/blob/master/app/src/main/res/values/strings.xml) to another language, please get in touch!
+## Note on contributions from AI
+
+AI-generated pull requests are not accepted. All pull requests must be authored by a human, include a clear description of the changes, include tests or verification steps where applicable, and follow the project's contribution guidelines.

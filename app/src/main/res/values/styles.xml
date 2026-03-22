@@ -20,10 +20,21 @@
 
 <resources>
 
-    <style name="App" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="App" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorControlNormal">@color/secondaryColor</item>
+        <item name="colorControlActivated">@color/secondaryLightColor</item>
+        <item name="colorButtonNormal">@color/primaryLightColor</item>
+        <item name="android:colorBackground">@color/primaryDarkColor</item>
+        <item name="android:windowBackground">@color/primaryDarkColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
+        <item name="android:editTextColor">@color/primaryTextColor</item>
+        <item name="android:colorForeground">@color/primaryTextColor</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
@@ -32,17 +43,21 @@
     </style>
 
     <style name="AppPreference.DialogPreference">
-       <item name="android:textColor">@color/primaryColor</item>
+       <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
-    <style name="AppPreference.SettingActivity"  parent="Theme.AppCompat.Light">
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:textColor">#212121</item>
+    <style name="AppPreference.SettingActivity"  parent="Theme.AppCompat">
+        <item name="android:colorBackground">@color/primaryDarkColor</item>
+        <item name="android:windowBackground">@color/primaryDarkColor</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/primaryDarkColor</item>
-        <item name="colorControlNormal">@color/primaryDarkColor</item>
-        <item name="colorControlActivated">@color/primaryColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorControlNormal">@color/secondaryColor</item>
+        <item name="colorControlActivated">@color/secondaryLightColor</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 

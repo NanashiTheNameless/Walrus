@@ -19,6 +19,7 @@
 
 package dev.namelessnanashi.walrus.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,12 @@ public class WebViewActivity extends AppCompatActivity {
     private static final String EXTRA_URL =
             "dev.namelessnanashi.walrus.ui.WebViewActivity.EXTRA_URL";
 
+    public static Intent createIntent(Context context, String url) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(EXTRA_URL, url);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +45,13 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(webView);
 
         Intent intent = getIntent();
+        String url = intent.getData() != null ? intent.getData().toString()
+                : intent.getStringExtra(EXTRA_URL);
+        if (url == null || url.trim().isEmpty()) {
+            finish();
+            return;
+        }
 
-        webView.loadUrl(intent.getData() != null ? intent.getData().toString() :
-                intent.getStringExtra(EXTRA_URL));
+        webView.loadUrl(url);
     }
 }

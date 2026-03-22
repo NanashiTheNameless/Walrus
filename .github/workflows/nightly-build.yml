@@ -83,6 +83,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          WALRUS_VERSION_CODE: ${{ github.run_number }}
         run: |
           ./gradlew --no-daemon assembleRelease --build-cache
 

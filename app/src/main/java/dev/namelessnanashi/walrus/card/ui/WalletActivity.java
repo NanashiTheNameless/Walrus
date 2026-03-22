@@ -31,8 +31,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewCompat;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +48,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.WalrusApplication;
@@ -107,6 +111,13 @@ public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
+
+            TextView messageView = dialog.findViewById(android.R.id.message);
+            if (messageView != null) {
+                Linkify.addLinks(messageView, Linkify.WEB_URLS);
+                messageView.setMovementMethod(LinkMovementMethod.getInstance());
+                messageView.setLinkTextColor(ContextCompat.getColor(this, R.color.secondaryLightColor));
+            }
         }
 
         setContentView(R.layout.activity_wallet);

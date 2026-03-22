@@ -36,7 +36,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:background="@color/primaryLightColor">
 
         <FrameLayout
             android:id="@+id/readStep"
@@ -52,9 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:src="@drawable/ic_reorder_black_24px"
+            android:tint="@color/primaryTextColor"
             tools:ignore="ContentDescription"/>
 
     </FrameLayout>
 
 </layout>
-
