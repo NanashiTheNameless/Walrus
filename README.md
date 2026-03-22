@@ -22,7 +22,40 @@ Designed for physical security assessors during red team engagements, Walrus sup
 
 ## Installing
 
+There are two simple ways to install this fork.
 
+### Option 1: Install a prebuilt APK
+
+1. Download an APK from this fork's release pages:
+   - Nightly builds: https://github.com/NanashiTheNameless/Walrus/releases/tag/nightly
+2. Copy the APK to your Android device if you downloaded it elsewhere.
+3. Open the APK on the device and allow installation from unknown apps if Android asks.
+4. Finish the install and launch Walrus.
+
+### Option 2: Build and install from source
+
+1. Install Android Studio or a local Android SDK setup.
+2. Use JDK 21.
+3. Clone this repository.
+4. Build an APK:
+
+```bash
+./gradlew assembleDebug
+```
+
+For a release build:
+
+```bash
+./gradlew assembleRelease
+```
+
+Generated APKs are written to `app/build/outputs/apk/`.
+
+To install a debug build directly onto a connected device:
+
+```bash
+./gradlew installDebug
+```
 
 ## Development
 
@@ -32,7 +65,7 @@ This fork is maintained by [@NanashiTheNameless](<https://github.com/NanashiTheN
 
 ## Building
 
-Walrus is a standard Android Studio project. Run the Gradle wrapper with JDK 21. This project currently uses Android Gradle Plugin 8.5 and Gradle 8.7, which do not run correctly on newer JDKs such as Java 25. After selecting JDK 21, open the project in Android Studio or run the Gradle wrapper directly.
+Walrus is a standard Android Studio project. Run the Gradle wrapper with JDK 21. This project currently uses Android Gradle Plugin 9.1.0 and Gradle 9.4.1. After selecting JDK 21, open the project in Android Studio or run the Gradle wrapper directly.
 
 TODO: When we refresh and remove the current Google Maps API key from the repo, we'll need to point out that this needs to be generated and set manually if maps are needed.
 

@@ -42,7 +42,7 @@ def hasReleaseSigning = [releaseKeystoreFile, releaseKeystorePassword, releaseKe
 def versionCodeOverride = providers.gradleProperty("walrus.versionCode")
         .orElse(providers.environmentVariable("WALRUS_VERSION_CODE"))
         .orNull
-int resolvedVersionCode = 1
+int resolvedVersionCode = (System.currentTimeMillis() / 1000L) as int
 if (versionCodeOverride != null && versionCodeOverride.toString().trim()) {
     try {
         resolvedVersionCode = Integer.parseInt(versionCodeOverride.toString().trim())
@@ -64,7 +64,7 @@ android {
         minSdk = 23
         targetSdk = 34
         versionCode = resolvedVersionCode
-        versionName = "0.2.2"
+        versionName = "0.2.2-localbuild"
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "google_maps_key",
                 providers.gradleProperty("GOOGLE_MAPS_API_KEY").orElse("").get()
