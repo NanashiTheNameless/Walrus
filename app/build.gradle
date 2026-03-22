@@ -104,7 +104,7 @@ dependencies {
     implementation 'com.j256.ormlite:ormlite-android:5.0'
     implementation 'com.j256.ormlite:ormlite-core:5.0'
     implementation 'io.github.yavski:fab-speed-dial:1.0.6'
-    implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
     implementation 'org.parceler:parceler-api:1.1.6'
     implementation 'org.reflections:reflections:0.10.2'
     implementation 'pub.devrel:easypermissions:3.0.0'
@@ -112,7 +112,7 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:2.14'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
     annotationProcessor 'org.parceler:parceler:1.1.6'
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
