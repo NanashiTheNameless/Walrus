@@ -29,13 +29,10 @@ jobs:
         run: |
           GIT_SHA7=$(git rev-parse --short HEAD)
           DATE=$(date -u +'%Y.%m.%d')
-          APK_ASSET_NAME="Walrus-nightly-${DATE}-${GIT_SHA7}.apk"
           echo "GIT_SHA7=$GIT_SHA7"
           echo "DATE=$DATE"
-          echo "APK_ASSET_NAME=$APK_ASSET_NAME"
           echo "GIT_SHA7=$GIT_SHA7" >> "$GITHUB_OUTPUT"
           echo "DATE=$DATE" >> "$GITHUB_OUTPUT"
-          echo "APK_ASSET_NAME=$APK_ASSET_NAME" >> "$GITHUB_OUTPUT"
 
       - name: Replace "localbuild" in version with commit SHA7
         run: |
@@ -124,7 +121,6 @@ jobs:
             const releaseName = `Nightly (${{ steps.vars.outputs.DATE }})`;
             let release = await findRelease();
 
-            const apkAssetName = "${{ steps.vars.outputs.APK_ASSET_NAME }}";
             const apkUrl = `https://github.com/${owner}/${repo}/releases/download/${tag}/${apkAssetName}`;
             const releaseBody = `Download the latest APK: [${apkAssetName}](${apkUrl})`;
 
@@ -162,7 +158,7 @@ jobs:
           upload_url: ${{ steps.release.outputs.upload_url }}
           release_id: ${{ steps.release.outputs.release_id }}
           asset_path: ${{ steps.locate_apk.outputs.apk_path }}
-          asset_name: ${{ steps.vars.outputs.APK_ASSET_NAME }}
+          asset_name: Walrus-nightly-$$.apk
           asset_content_type: application/vnd.android.package-archive
           max_releases: 2
           token: ${{ secrets.GITHUB_TOKEN }}
