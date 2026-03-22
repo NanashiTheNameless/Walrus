@@ -24,7 +24,6 @@ import android.support.annotation.Size;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.util.MiscUtils;
-import com.google.common.io.BaseEncoding;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -173,7 +172,7 @@ public class MifareCardData extends ISO14443ACardData {
         }
 
         public static Key fromString(String value) {
-            return new Key(BaseEncoding.base16().decode(value.toUpperCase()));
+            return new Key(MiscUtils.hexToBytes(value.toUpperCase()));
         }
 
         @Override

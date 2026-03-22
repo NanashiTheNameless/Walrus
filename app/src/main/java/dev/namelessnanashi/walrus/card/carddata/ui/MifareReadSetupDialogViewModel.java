@@ -29,8 +29,6 @@ import dev.namelessnanashi.walrus.card.carddata.MifareReadStep;
 import dev.namelessnanashi.walrus.card.carddata.StaticKeyMifareReadStep;
 import dev.namelessnanashi.walrus.ui.SimpleBindingListAdapter;
 import dev.namelessnanashi.walrus.util.MiscUtils;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

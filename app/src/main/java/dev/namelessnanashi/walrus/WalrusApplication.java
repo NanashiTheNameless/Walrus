@@ -45,7 +45,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.squareup.leakcanary.LeakCanary;
 
 public class WalrusApplication extends Application {
 
@@ -105,10 +104,22 @@ public class WalrusApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
+        if (BuildConfig.DEBUG) {
+            try {
+                Class<?> leakCanaryClass = Class.forName("com.squareup.leakcanary.LeakCanary");
+                boolean isInAnalyzerProcess = (Boolean) leakCanaryClass
+                        .getMethod("isInAnalyzerProcess", Context.class)
+                        .invoke(null, this);
+                if (isInAnalyzerProcess) {
+                    return;
+                }
+
+                leakCanaryClass.getMethod("install", Application.class).invoke(null, this);
+            } catch (ClassNotFoundException ignored) {
+            } catch (ReflectiveOperationException exception) {
+                throw new RuntimeException("Unable to initialize LeakCanary", exception);
+            }
         }
-        LeakCanary.install(this);
 
         context = getApplicationContext();
 

@@ -25,6 +25,7 @@ import android.text.SpannableStringBuilder;
 
 import org.parceler.ParcelConverter;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -39,6 +40,31 @@ public class MiscUtils {
         }
 
         return result.toString();
+    }
+
+    public static byte[] hexToBytes(String value) {
+        if (value.length() % 2 != 0) {
+            throw new IllegalArgumentException("Invalid hex length");
+        }
+
+        byte[] result = new byte[value.length() / 2];
+        for (int i = 0; i < result.length; ++i) {
+            int high = Character.digit(value.charAt(i * 2), 16);
+            int low = Character.digit(value.charAt(i * 2 + 1), 16);
+            if (high == -1 || low == -1) {
+                throw new IllegalArgumentException("Invalid hex string");
+            }
+
+            result[i] = (byte) ((high << 4) + low);
+        }
+
+        return result;
+    }
+
+    public static byte[] concat(byte[] first, byte[] second) {
+        byte[] result = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
     }
 
     public static Set<Integer> parseIntRanges(String value) {

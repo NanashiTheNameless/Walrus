@@ -39,7 +39,6 @@ import dev.namelessnanashi.walrus.device.chameleonmini.ui.ChameleonMiniRevEReboo
 import dev.namelessnanashi.walrus.util.MiscUtils;
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
-import com.google.common.primitives.Bytes;
 
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
@@ -231,7 +230,7 @@ public class ChameleonMiniRevERebootedDevice extends LineBasedUsbSerialCardDevic
                         } else {
                             toAdd = new byte[16];
                         }
-                        mifare1k = Bytes.concat(mifare1k, toAdd);
+                        mifare1k = MiscUtils.concat(mifare1k, toAdd);
                     }
                     Logger.getAnonymousLogger().info("Mifare1k result: "
                             + MiscUtils.bytesToHex(mifare1k, false));
