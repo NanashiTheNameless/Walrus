@@ -20,7 +20,6 @@
 package dev.namelessnanashi.walrus.card.carddata;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 
 import dev.namelessnanashi.walrus.card.carddata.ui.MifareReadStepDialogFragment;
@@ -95,8 +94,7 @@ public abstract class MifareReadStep implements Serializable {
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Metadata {
-        @LayoutRes
-        int layoutId();
+        String layoutName();
 
         Class<? extends MifareReadStepDialogFragment> dialogFragment();
     }

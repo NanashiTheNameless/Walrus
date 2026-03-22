@@ -35,6 +35,7 @@ import android.widget.TextView;
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.card.Card;
 import dev.namelessnanashi.walrus.card.carddata.CardData;
+import dev.namelessnanashi.walrus.util.MiscUtils;
 import dev.namelessnanashi.walrus.util.UIUtils;
 
 public class WalrusCardView extends FrameLayout {
@@ -164,7 +165,8 @@ public class WalrusCardView extends FrameLayout {
         if (card.cardData != null) {
             CardData.Metadata metadata = card.cardData.getClass().getAnnotation(
                     CardData.Metadata.class);
-            logoView.setImageDrawable(ContextCompat.getDrawable(getContext(), metadata.iconId()));
+            logoView.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                    MiscUtils.getDrawableResId(getContext(), metadata.iconName())));
             logoView.setContentDescription(metadata.name());
             humanReadableTextView.setText(card.cardData.getHumanReadableText());
         } else {

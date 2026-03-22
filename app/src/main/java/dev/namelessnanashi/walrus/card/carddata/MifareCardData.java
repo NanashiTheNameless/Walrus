@@ -40,7 +40,7 @@ import java.util.Random;
 // TODO XXX: check all checks made on all constructors here
 @CardData.Metadata(
         name = "MIFARE",
-        iconId = R.drawable.drawable_mifare
+        iconName = "drawable_mifare"
 )
 public class MifareCardData extends ISO14443ACardData {
 

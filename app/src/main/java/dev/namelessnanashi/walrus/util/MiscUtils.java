@@ -19,8 +19,11 @@
 
 package dev.namelessnanashi.walrus.util;
 
+import android.content.Context;
 import android.arch.core.util.Function;
 import android.os.Parcel;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.LayoutRes;
 import android.text.SpannableStringBuilder;
 
 import org.parceler.ParcelConverter;
@@ -31,6 +34,25 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class MiscUtils {
+
+    @DrawableRes
+    public static int getDrawableResId(Context context, String name) {
+        return getResId(context, name, "drawable");
+    }
+
+    @LayoutRes
+    public static int getLayoutResId(Context context, String name) {
+        return getResId(context, name, "layout");
+    }
+
+    private static int getResId(Context context, String name, String type) {
+        int id = context.getResources().getIdentifier(name, type, context.getPackageName());
+        if (id == 0) {
+            throw new IllegalArgumentException("Resource not found: " + type + "/" + name);
+        }
+
+        return id;
+    }
 
     // TODO: replace with guava?
     public static String bytesToHex(byte[] bytes, boolean upper) {

@@ -49,7 +49,7 @@ import java.util.logging.Logger;
 
 @CardDevice.Metadata(
         name = "Chameleon Mini Rev.G",
-        iconId = R.drawable.drawable_chameleon_mini_rev_g,
+        iconName = "drawable_chameleon_mini_rev_g",
         supportsRead = {MifareCardData.class},
         supportsWrite = {},
         supportsEmulate = {MifareCardData.class}

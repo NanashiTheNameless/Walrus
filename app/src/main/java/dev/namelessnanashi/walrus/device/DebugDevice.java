@@ -34,7 +34,7 @@ import java.lang.reflect.InvocationTargetException;
 
 @CardDevice.Metadata(
         name = "_Debug Device",
-        iconId = R.drawable.drawable_debug_device,
+        iconName = "drawable_debug_device",
         supportsRead = {HIDCardData.class, MifareCardData.class},
         supportsWrite = {HIDCardData.class, MifareCardData.class},
         supportsEmulate = {HIDCardData.class, MifareCardData.class}

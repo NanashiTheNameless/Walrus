@@ -47,6 +47,7 @@ import dev.namelessnanashi.walrus.card.carddata.MifareReadStep;
 import dev.namelessnanashi.walrus.databinding.MifareReadSetupDialogBinding;
 import dev.namelessnanashi.walrus.databinding.MifareReadSetupDialogReadStepItemBinding;
 import dev.namelessnanashi.walrus.ui.SimpleBindingListAdapter;
+import dev.namelessnanashi.walrus.util.MiscUtils;
 
 import java.util.List;
 
@@ -171,7 +172,8 @@ public class MifareReadSetupDialogFragment extends DialogFragment
 
                         ViewDataBinding readStepBinding = DataBindingUtil.inflate(
                                 LayoutInflater.from(holder.itemView.getContext()),
-                                metadata.layoutId(), readStepView, true);
+                                MiscUtils.getLayoutResId(holder.itemView.getContext(),
+                                        metadata.layoutName()), readStepView, true);
 
                         readStepBinding.setVariable(BR.readStep, readStep);
                     }

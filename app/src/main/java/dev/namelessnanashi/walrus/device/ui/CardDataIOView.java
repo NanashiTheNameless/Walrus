@@ -28,6 +28,7 @@ import android.widget.TextView;
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.card.carddata.CardData;
 import dev.namelessnanashi.walrus.device.CardDevice;
+import dev.namelessnanashi.walrus.util.MiscUtils;
 
 public class CardDataIOView extends FrameLayout {
 
@@ -41,7 +42,8 @@ public class CardDataIOView extends FrameLayout {
         ImageView device = findViewById(R.id.device);
         CardDevice.Metadata metadata = cardDeviceClass.getAnnotation(CardDevice.Metadata.class);
 
-        device.setImageDrawable(ContextCompat.getDrawable(getContext(), metadata.iconId()));
+        device.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                MiscUtils.getDrawableResId(getContext(), metadata.iconName())));
         device.setContentDescription(metadata.name());
     }
 
@@ -59,7 +61,8 @@ public class CardDataIOView extends FrameLayout {
         ImageView type = findViewById(R.id.type);
         CardData.Metadata metadata = cardDataClass.getAnnotation(CardData.Metadata.class);
 
-        type.setImageDrawable(ContextCompat.getDrawable(getContext(), metadata.iconId()));
+        type.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                MiscUtils.getDrawableResId(getContext(), metadata.iconName())));
         type.setContentDescription(metadata.name());
     }
 

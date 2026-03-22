@@ -333,38 +333,37 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.editCard:
-                CardActivity.startActivity(this, Mode.EDIT, card, walrusCardView);
-                return true;
-
-            case R.id.duplicateCard:
-                Card duplicatedCard = Card.copyOf(card);
-                duplicatedCard.name = getString(R.string.copy_of, duplicatedCard.name);
-                CardActivity.startActivity(this, Mode.EDIT, duplicatedCard, null);
-                return true;
-
-            case R.id.deleteCard:
-                DeleteCardConfirmDialogFragment.create(0).show(getSupportFragmentManager(),
-                        "delete_card_confirm_dialog");
-                return true;
-
-            case R.id.save:
-                save();
-                supportFinishAfterTransition();
-                return true;
-
-            case R.id.start:
-                startReadCardDataSetup();
-                return true;
-
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.editCard) {
+            CardActivity.startActivity(this, Mode.EDIT, card, walrusCardView);
+            return true;
         }
+        if (itemId == R.id.duplicateCard) {
+            Card duplicatedCard = Card.copyOf(card);
+            duplicatedCard.name = getString(R.string.copy_of, duplicatedCard.name);
+            CardActivity.startActivity(this, Mode.EDIT, duplicatedCard, null);
+            return true;
+        }
+        if (itemId == R.id.deleteCard) {
+            DeleteCardConfirmDialogFragment.create(0).show(getSupportFragmentManager(),
+                    "delete_card_confirm_dialog");
+            return true;
+        }
+        if (itemId == R.id.save) {
+            save();
+            supportFinishAfterTransition();
+            return true;
+        }
+        if (itemId == R.id.start) {
+            startReadCardDataSetup();
+            return true;
+        }
+        if (itemId == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

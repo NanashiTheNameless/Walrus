@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.device.CardDevice;
+import dev.namelessnanashi.walrus.util.MiscUtils;
 
 public class CardDeviceView extends FrameLayout {
 
@@ -41,7 +42,8 @@ public class CardDeviceView extends FrameLayout {
                 CardDevice.Metadata.class);
 
         ImageView image = findViewById(R.id.image);
-        image.setImageDrawable(ContextCompat.getDrawable(getContext(), metadata.iconId()));
+        image.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                MiscUtils.getDrawableResId(getContext(), metadata.iconName())));
         image.setContentDescription(metadata.name());
         ((TextView) findViewById(R.id.name)).setText(metadata.name());
         String status = cardDevice.getStatusText();

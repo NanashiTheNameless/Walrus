@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.Set;
 
 @MifareReadStep.Metadata(
-        layoutId = R.layout.layout_static_key_mifare_read_step,
+        layoutName = "layout_static_key_mifare_read_step",
         dialogFragment = StaticKeyMifareReadStepDialogFragment.class
 )
 public class StaticKeyMifareReadStep extends MifareReadStep {

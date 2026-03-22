@@ -153,16 +153,16 @@ public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.add_new_card:
-                        CardActivity.startActivity(WalletActivity.this,
-                                CardActivity.Mode.EDIT, null, null);
-                        return true;
-
-                    case R.id.bulk_read_cards:
-                        CardActivity.startActivity(WalletActivity.this,
-                                CardActivity.Mode.EDIT_BULK_READ_CARD_TEMPLATE, null, null);
-                        return true;
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.add_new_card) {
+                    CardActivity.startActivity(WalletActivity.this,
+                            CardActivity.Mode.EDIT, null, null);
+                    return true;
+                }
+                if (itemId == R.id.bulk_read_cards) {
+                    CardActivity.startActivity(WalletActivity.this,
+                            CardActivity.Mode.EDIT_BULK_READ_CARD_TEMPLATE, null, null);
+                    return true;
                 }
 
                 return false;
@@ -199,27 +199,26 @@ public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-                sv.setVisibility(View.VISIBLE);
-                sv.requestFocus();
-                return true;
-
-            case R.id.bulk_read_cards:
-                startActivity(new Intent(this, BulkReadCardsActivity.class));
-                return true;
-
-            case R.id.devices:
-                startActivity(new Intent(this, DevicesActivity.class));
-                return true;
-
-            case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.search) {
+            sv.setVisibility(View.VISIBLE);
+            sv.requestFocus();
+            return true;
         }
+        if (itemId == R.id.bulk_read_cards) {
+            startActivity(new Intent(this, BulkReadCardsActivity.class));
+            return true;
+        }
+        if (itemId == R.id.devices) {
+            startActivity(new Intent(this, DevicesActivity.class));
+            return true;
+        }
+        if (itemId == R.id.settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

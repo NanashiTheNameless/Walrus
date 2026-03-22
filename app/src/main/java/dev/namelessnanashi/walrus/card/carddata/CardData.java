@@ -19,7 +19,6 @@
 
 package dev.namelessnanashi.walrus.card.carddata;
 
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 
@@ -56,7 +55,7 @@ public abstract class CardData implements Serializable, Cloneable {
     public @interface Metadata {
         String name();
 
-        @DrawableRes int iconId();
+        String iconName();
 
         Class<? extends DialogFragment> viewDialogFragmentClass() default DialogFragment.class;
 

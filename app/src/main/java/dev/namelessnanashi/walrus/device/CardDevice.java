@@ -22,7 +22,6 @@ package dev.namelessnanashi.walrus.device;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v4.content.LocalBroadcastManager;
@@ -118,7 +117,7 @@ public abstract class CardDevice {
     public @interface Metadata {
         String name();
 
-        @DrawableRes int iconId();
+        String iconName();
 
         Class<? extends CardData>[] supportsRead();
 

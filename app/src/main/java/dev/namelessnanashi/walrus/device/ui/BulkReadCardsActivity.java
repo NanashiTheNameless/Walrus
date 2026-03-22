@@ -45,6 +45,7 @@ import dev.namelessnanashi.walrus.card.carddata.CardData;
 import dev.namelessnanashi.walrus.device.BulkReadCardDataOperationRunner;
 import dev.namelessnanashi.walrus.device.BulkReadCardsService;
 import dev.namelessnanashi.walrus.device.CardDevice;
+import dev.namelessnanashi.walrus.util.MiscUtils;
 
 import java.util.ArrayList;
 
@@ -136,11 +137,13 @@ public class BulkReadCardsActivity extends AppCompatActivity {
                         .getAnnotation(CardData.Metadata.class);
 
                 device.setImageDrawable(ContextCompat.getDrawable(view.getContext(),
-                        cardDeviceMetadata.iconId()));
+                        MiscUtils.getDrawableResId(view.getContext(),
+                                cardDeviceMetadata.iconName())));
                 device.setContentDescription(cardDeviceMetadata.name());
 
                 cardDeviceClass.setImageDrawable(ContextCompat.getDrawable(view.getContext(),
-                        cardDataClassMetadata.iconId()));
+                        MiscUtils.getDrawableResId(view.getContext(),
+                                cardDataClassMetadata.iconName())));
                 cardDeviceClass.setContentDescription(cardDataClassMetadata.name());
 
                 name.setText(cardDeviceMetadata.name());
