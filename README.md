@@ -59,7 +59,7 @@ To install a debug build directly onto a connected device:
 
 ## Development
 
-Walrus was developed by Daniel Underhay and Matthew Daley (a.k.a. [Team Walrus](<mailto:team@walrus.app>)!) and is [![Open Source](<https://badges.frapsoft.com/os/v1/open-source.png?v=10>)](<https://github.com/TeamWalrus/Walrus/blob/master/LICENSE>)
+Walrus was developed by Daniel Underhay and Matthew Daley (a.k.a. [Team Walrus](<mailto:team@walrus.app>)!) and is Open Source
 
 This fork is maintained by [@NanashiTheNameless](<https://github.com/NanashiTheNameless/Walrus>)
 
