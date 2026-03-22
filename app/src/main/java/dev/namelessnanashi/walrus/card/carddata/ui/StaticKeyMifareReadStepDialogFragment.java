@@ -32,6 +32,7 @@ import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.card.carddata.MifareReadStep;
 import dev.namelessnanashi.walrus.card.carddata.StaticKeyMifareReadStep;
 import dev.namelessnanashi.walrus.databinding.StaticKeyMifareReadStepDialogBinding;
+import dev.namelessnanashi.walrus.util.UIUtils;
 
 // TODO XXX: setError on views like component dialogs
 public class StaticKeyMifareReadStepDialogFragment extends MifareReadStepDialogFragment {
@@ -67,6 +68,21 @@ public class StaticKeyMifareReadStepDialogFragment extends MifareReadStepDialogF
         binding.setLifecycleOwner(this);
 
         binding.setViewModel(viewModel);
+
+        binding.blocksToRead.addTextChangedListener(new UIUtils.TextChangeWatcher() {
+            @Override
+            public void onNotIgnoredTextChanged(CharSequence charSequence, int i, int i1,
+                    int i2) {
+                viewModel.blocks.setValue(charSequence.toString());
+            }
+        });
+        binding.key.addTextChangedListener(new UIUtils.TextChangeWatcher() {
+            @Override
+            public void onNotIgnoredTextChanged(CharSequence charSequence, int i, int i1,
+                    int i2) {
+                viewModel.key.setValue(charSequence.toString());
+            }
+        });
 
         viewModel.getIsValid().observe(this, new Observer<Boolean>() {
             @Override

@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text|textNoSuggestions"
-            android:text="@={viewModel.blocks}"/>
+            android:text="@{viewModel.blocks}"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text|textNoSuggestions"
-            android:text="@={viewModel.key}"/>
+            android:text="@{viewModel.key}"/>
 
         <TextView
             android:layout_width="match_parent"
