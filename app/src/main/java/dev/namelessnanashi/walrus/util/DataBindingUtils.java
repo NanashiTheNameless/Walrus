@@ -19,9 +19,9 @@
 
 package dev.namelessnanashi.walrus.util;
 
-import android.databinding.BindingAdapter;
 import android.support.annotation.DrawableRes;
 import android.widget.ImageView;
+import androidx.databinding.BindingAdapter;
 
 public class DataBindingUtils {
 

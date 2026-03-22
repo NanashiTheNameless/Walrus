@@ -19,8 +19,6 @@
 
 package dev.namelessnanashi.walrus.ui;
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.recyclerview.extensions.ListAdapter;
@@ -28,6 +26,8 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
 public abstract class SimpleBindingListAdapter<T extends SimpleBindingListAdapter.Item>
         extends ListAdapter<T, SimpleBindingListAdapter.BindingViewHolder> {
