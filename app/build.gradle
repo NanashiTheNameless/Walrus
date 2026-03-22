@@ -39,18 +39,7 @@ def releaseKeyAlias = configValue("KEY_ALIAS", "keyAlias")
 def releaseKeyPassword = configValue("KEY_PASSWORD", "keyPassword")
 def hasReleaseSigning = [releaseKeystoreFile, releaseKeystorePassword, releaseKeyAlias,
                          releaseKeyPassword].every { it != null && it.toString().trim() }
-def versionCodeOverride = providers.gradleProperty("walrus.versionCode")
-        .orElse(providers.environmentVariable("WALRUS_VERSION_CODE"))
-        .orNull
 int resolvedVersionCode = (System.currentTimeMillis() / 1000L) as int
-if (versionCodeOverride != null && versionCodeOverride.toString().trim()) {
-    try {
-        resolvedVersionCode = Integer.parseInt(versionCodeOverride.toString().trim())
-    } catch (NumberFormatException ignored) {
-        throw new GradleException(
-                "walrus.versionCode / WALRUS_VERSION_CODE must be an integer, got '${versionCodeOverride}'.")
-    }
-}
 
 android {
     namespace = "dev.namelessnanashi.walrus"
