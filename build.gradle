@@ -17,10 +17,58 @@
  * along with Walrus.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ext.securityVersions = [
+        commonsLang3        : '3.20.0',
+        httpclient          : '4.5.14',
+        httpmime            : '4.5.14',
+        jdom2               : '2.0.6.1',
+        jose4j              : '0.9.6',
+        netty               : '4.1.131.Final',
+        okio                : '3.16.4',
+        playServicesLocation: '15.0.1'
+]
+
 buildscript {
     repositories {
         google()
         mavenCentral()
+    }
+    configurations.classpath {
+        resolutionStrategy.eachDependency { details ->
+            def requested = details.requested
+            if (requested.group == 'io.netty') {
+                details.useVersion '4.1.131.Final'
+                details.because('Pin Netty modules to a patched 4.1.x release')
+                return
+            }
+
+            switch ("${requested.group}:${requested.name}") {
+                case 'org.apache.commons:commons-lang3':
+                    details.useVersion '3.20.0'
+                    details.because('Avoid older Commons Lang versions on transitive classpaths')
+                    break
+                case 'org.apache.httpcomponents:httpclient':
+                    details.useVersion '4.5.14'
+                    details.because('Keep Apache HttpClient on the latest 4.5.x line available')
+                    break
+                case 'org.apache.httpcomponents:httpmime':
+                    details.useVersion '4.5.14'
+                    details.because('Keep Apache HttpMime aligned with the pinned HttpClient release')
+                    break
+                case 'org.bitbucket.b_c:jose4j':
+                    details.useVersion '0.9.6'
+                    details.because('Upgrade bundletool transitive JOSE dependency')
+                    break
+                case 'org.jdom:jdom2':
+                    details.useVersion '2.0.6.1'
+                    details.because('Upgrade Jetifier transitive JDOM dependency')
+                    break
+                case 'com.squareup.okio:okio':
+                    details.useVersion '3.16.4'
+                    details.because('Avoid older Okio runtime versions')
+                    break
+            }
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:9.1.0'
@@ -36,6 +84,43 @@ allprojects {
         }
         maven {
             url = uri("https://jitpack.io")
+        }
+    }
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            def requested = details.requested
+            if (requested.group == 'io.netty') {
+                details.useVersion rootProject.ext.securityVersions.netty
+                details.because('Pin Netty modules to a patched 4.1.x release')
+                return
+            }
+
+            switch ("${requested.group}:${requested.name}") {
+                case 'org.apache.commons:commons-lang3':
+                    details.useVersion rootProject.ext.securityVersions.commonsLang3
+                    details.because('Avoid older Commons Lang versions on transitive classpaths')
+                    break
+                case 'org.apache.httpcomponents:httpclient':
+                    details.useVersion rootProject.ext.securityVersions.httpclient
+                    details.because('Keep Apache HttpClient on the latest 4.5.x line available')
+                    break
+                case 'org.apache.httpcomponents:httpmime':
+                    details.useVersion rootProject.ext.securityVersions.httpmime
+                    details.because('Keep Apache HttpMime aligned with the pinned HttpClient release')
+                    break
+                case 'org.bitbucket.b_c:jose4j':
+                    details.useVersion rootProject.ext.securityVersions.jose4j
+                    details.because('Upgrade bundletool transitive JOSE dependency')
+                    break
+                case 'org.jdom:jdom2':
+                    details.useVersion rootProject.ext.securityVersions.jdom2
+                    details.because('Upgrade Jetifier transitive JDOM dependency')
+                    break
+                case 'com.squareup.okio:okio':
+                    details.useVersion rootProject.ext.securityVersions.okio
+                    details.because('Avoid older Okio runtime versions')
+                    break
+            }
         }
     }
 }
