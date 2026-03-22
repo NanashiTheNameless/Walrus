@@ -43,7 +43,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
 
-        <receiver android:name=".device.CardDeviceManager$UsbBroadcastReceiver">
+        <receiver
+            android:name=".device.CardDeviceManager$UsbBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED"/>
@@ -65,6 +67,7 @@
 
         <activity
             android:name=".card.ui.WalletActivity"
+            android:exported="true"
             android:theme="@style/App.WithTransitions.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

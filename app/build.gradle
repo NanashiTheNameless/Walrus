@@ -32,6 +32,7 @@ def releaseKeyAlias = System.getenv("KEY_ALIAS") ?: localKeystoreProperties['key
 def releaseKeyPassword = System.getenv("KEY_PASSWORD") ?: localKeystoreProperties['keyPassword']
 def hasReleaseSigning = [releaseKeystoreFile, releaseKeystorePassword, releaseKeyAlias,
                          releaseKeyPassword].every { it != null && it.toString().trim() }
+int buildUnixTime = (System.currentTimeMillis() / 1000L) as int
 
 android {
     namespace "dev.namelessnanashi.walrus"
@@ -43,9 +44,9 @@ android {
     defaultConfig {
         applicationId "dev.namelessnanashi.walrus"
         minSdk 19
-        targetSdk 27
-        versionCode 4
-        versionName "0.2.1-localbuild"
+        targetSdk 34
+        versionCode buildUnixTime
+        versionName "0.2.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "google_maps_key",
                 (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
@@ -78,6 +79,10 @@ android {
                 signingConfig signingConfigs.config
         }
     }
+}
+
+configurations.configureEach {
+    exclude group: 'com.google.guava', module: 'listenablefuture'
 }
 
 dependencies {

@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -102,8 +103,10 @@ public enum CardDeviceManager {
                     } else {
                         Intent permissionIntent = new Intent(ACTION_USB_PERMISSION_RESULT);
                         permissionIntent.setClass(context, UsbPermissionReceiver.class);
+                        int pendingIntentFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                                ? PendingIntent.FLAG_MUTABLE : 0;
                         usbManager.requestPermission(usbDevice, PendingIntent.getBroadcast(
-                                context, 0, permissionIntent, 0));
+                                context, 0, permissionIntent, pendingIntentFlags));
 
                         askingForUsbPermission = true;
                     }

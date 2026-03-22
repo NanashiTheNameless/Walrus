@@ -86,8 +86,6 @@ public class MifareReadSetupDialogFragment extends DialogFragment
 
         MifareReadSetupDialogBinding binding = MifareReadSetupDialogBinding.bind(
                 dialog.getCustomView());
-        binding.setLifecycleOwner(this);
-
         binding.setViewModel(viewModel);
 
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(

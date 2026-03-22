@@ -25,7 +25,7 @@ Walrus is developed by Daniel Underhay and Matthew Daley (a.k.a. [Team Walrus](m
 
 ## Building
 
-Walrus is a standard Android Studio project. Build it with JDK 21 or another Java 18+ JDK, then open the project in Android Studio or run the Gradle wrapper directly.
+Walrus is a standard Android Studio project. Run the Gradle wrapper with JDK 21. This project currently uses Android Gradle Plugin 8.5 and Gradle 8.7, which do not run correctly on newer JDKs such as Java 25. After selecting JDK 21, open the project in Android Studio or run the Gradle wrapper directly.
 
 TODO: When we refresh and remove the current Google Maps API key from the repo, we'll need to point out that this needs to be generated and set manually if maps are needed.
 

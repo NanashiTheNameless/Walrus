@@ -29,6 +29,7 @@ import android.support.annotation.Nullable;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import dev.namelessnanashi.walrus.R;
+import dev.namelessnanashi.walrus.card.carddata.MifareCardData;
 import dev.namelessnanashi.walrus.card.carddata.MifareReadStep;
 import dev.namelessnanashi.walrus.card.carddata.StaticKeyMifareReadStep;
 import dev.namelessnanashi.walrus.databinding.StaticKeyMifareReadStepDialogBinding;
@@ -65,9 +66,12 @@ public class StaticKeyMifareReadStepDialogFragment extends MifareReadStepDialogF
 
         StaticKeyMifareReadStepDialogBinding binding = StaticKeyMifareReadStepDialogBinding.bind(
                 dialog.getCustomView());
-        binding.setLifecycleOwner(this);
 
-        binding.setViewModel(viewModel);
+        binding.blocksToRead.setText(viewModel.blocks.getValue());
+        binding.key.setText(viewModel.key.getValue());
+        MifareReadStep.KeySlotAttempts initialKeySlotAttempts = viewModel.keySlotAttempts.getValue();
+        binding.slotA.setChecked(initialKeySlotAttempts != null && initialKeySlotAttempts.hasSlotA());
+        binding.slotB.setChecked(initialKeySlotAttempts != null && initialKeySlotAttempts.hasSlotB());
 
         binding.blocksToRead.addTextChangedListener(new UIUtils.TextChangeWatcher() {
             @Override
@@ -83,6 +87,10 @@ public class StaticKeyMifareReadStepDialogFragment extends MifareReadStepDialogF
                 viewModel.key.setValue(charSequence.toString());
             }
         });
+        binding.slotA.setOnCheckedChangeListener((buttonView, isChecked) ->
+                viewModel.onSlotCheckedChanged(MifareCardData.KeySlot.A, isChecked));
+        binding.slotB.setOnCheckedChangeListener((buttonView, isChecked) ->
+                viewModel.onSlotCheckedChanged(MifareCardData.KeySlot.B, isChecked));
 
         viewModel.getIsValid().observe(this, new Observer<Boolean>() {
             @Override
