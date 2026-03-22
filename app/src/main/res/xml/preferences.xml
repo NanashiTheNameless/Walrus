@@ -48,7 +48,7 @@
     <PreferenceCategory android:title="@string/about_settings_preference">
 
         <Preference android:title="@string/open_source_preference">
-            <intent android:action=".ui.WebViewActivity">
+            <intent android:action="dev.namelessnanashi.walrus.ui.WebViewActivity">
                 <!--suppress AndroidElementNotAllowed -->
                 <extra
                     android:name="dev.namelessnanashi.walrus.ui.WebViewActivity.EXTRA_URL"
