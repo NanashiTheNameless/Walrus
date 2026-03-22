@@ -95,10 +95,6 @@ The current layout of Walrus's source code is as follows:
 
     * `/util`: Miscellaneous.
 
-## Hardware
-
-Team Walrus is powered by [Lab401](https://twitter.com/lab_401), our official hardware sponsor 🥳 Check out their [website](https://lab401.com/) for some great deals on hardware!
-
 ## Device Support
 
 Here’s a table of the current devices / card type pairs we support and in what manner.
