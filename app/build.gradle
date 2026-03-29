@@ -119,7 +119,7 @@ dependencies {
     implementation "org.apache.commons:commons-lang3:${rootProject.ext.securityVersions.commonsLang3}"
     implementation 'org.parceler:parceler-api:1.1.13'
     implementation 'org.reflections:reflections:0.10.2'
-    implementation 'pub.devrel:easypermissions:1.3.0'
+    implementation 'pub.devrel:easypermissions:3.0.0'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
     annotationProcessor 'org.parceler:parceler:1.1.13'
     testImplementation 'junit:junit:4.13.2'
