@@ -22,11 +22,13 @@ package dev.namelessnanashi.walrus.ui;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.card.ui.DeleteAllCardsPreference;
+import dev.namelessnanashi.walrus.util.AppFontManager;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -47,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.preferences);
+            configureFontPreference();
 
             Preference openSourcePreference = findPreference(OPEN_SOURCE_PREFERENCE_KEY);
             if (openSourcePreference != null) {
@@ -58,6 +61,33 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
             }
+        }
+
+        private void configureFontPreference() {
+            final ListPreference fontPreference =
+                    findPreference(AppFontManager.PREFERENCE_KEY_APP_FONT);
+            if (fontPreference == null) {
+                return;
+            }
+
+            AppFontManager.configurePreference(requireContext(), fontPreference);
+            fontPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    AppFontManager.updatePreferenceSummary(requireContext(), fontPreference,
+                            newValue != null ? newValue.toString() : null);
+                    requireActivity().getWindow().getDecorView().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isAdded()) {
+                                return;
+                            }
+                            AppFontManager.applyToActivity(requireActivity());
+                        }
+                    });
+                    return true;
+                }
+            });
         }
 
         @Override

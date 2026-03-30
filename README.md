@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > This repository is an unofficial fork of the original Walrus project.
 > It is maintained separately and is not an official Team Walrus release.
-> Behavior, UI, dependencies, and supported features may differ from upstream.
+> Behavior, UI, dependencies, and supported features **WILL** differ from upstream.
 >
 > Original upstream project:
 > https://github.com/TeamWalrus/Walrus
@@ -19,6 +19,8 @@
 Walrus is an Android app for contactless card cloning devices such as the Proxmark3 and Chameleon Mini. Using a simple interface in the style of Google Pay, access control cards can be read into a wallet to be written or emulated later.
 
 Designed for physical security assessors during red team engagements, Walrus supports basic tasks such as card reading, writing and emulation, as well as device-specific functionality such as antenna tuning and device configuration. More advanced functionality such as location tagging makes handling multiple targets easy, while bulk reading allows the stealthy capture of multiple cards while “war-walking” a target.
+
+This fork currently supports Android 10 (API 29) and newer.
 
 ## Installing
 
@@ -72,7 +74,7 @@ Generated APKs are written to `app/build/outputs/apk/`.
 
 ## Development
 
-Walrus was developed by Daniel Underhay and Matthew Daley (a.k.a. [Team Walrus](<mailto:team@walrus.app>)!) and is Open Source
+Walrus was originally developed by Daniel Underhay and Matthew Daley (a.k.a. [Team Walrus](<mailto:team@walrus.app>)!) and is Open Source
 
 This fork is maintained by [@NanashiTheNameless](<https://github.com/NanashiTheNameless/Walrus>)
 
@@ -93,27 +95,40 @@ For signed nightly builds and GitHub Actions keystore setup, see [docs/nightly-s
 
 ## Codebase
 
-The current layout of Walrus's source code is as follows:
+The repo is still centered around a single Android app module, but this fork has a few extra moving pieces worth calling out:
 
-* `/app/src/main`
+- `/app/src/main/java/dev/namelessnanashi/walrus`: Main application code.
+  - `/card`: Wallet models, persistence, card-data types, and card editing/view flows.
+  - `/device`: Device discovery, shared device abstractions, bulk-read logic, and device-specific implementations.
+  - `/device/proxmark3`: Proxmark3 support.
+  - `/device/chameleonmini`: Chameleon Mini support.
+  - `/ui`: Shared activities like settings, web views, and the built-in map screen.
+  - `/util`: Utility and compatibility helpers.
+- `/app/src/main/java/com/afollestad/materialdialogs`: Local compatibility shim for the old Material Dialogs API used by the app.
+- `/app/src/main/res`: Android resources, including layouts, drawables, strings, preferences, and bundled fonts.
+- `/app/src/main/assets`: Bundled static assets, including the in-app open source acknowledgements page.
+- `/app/src/test`: JVM unit tests.
+- `/.github/workflows`: CI and nightly build automation.
+- `/docs`: Project-specific maintenance and release docs.
+- `/setup.sh` and `/build.sh`: Local SDK/bootstrap/build helpers for command-line development.
 
-  * `/assets`: Any non-resource assets, like the open source license listing.
+## Open Source Acknowledgements
 
-  * `/res`: Resource files.
+This fork includes upstream Walrus code, vendored compatibility code, bundled fonts, third-party libraries, and map/data attributions.
 
-  * `/java/dev/namelessnanashi/walrus`: Actual code lives here!
+The authoritative shipped acknowledgements page is:
 
-    * `/card`: Code to do with persistent data (i.e. the wallet). The `Card` class, the base `CardData` class and various card data type classes, database models and database helpers are here.
+- `/app/src/main/assets/open_source.html`
 
-    * `/device`: Device-agnostic and device-specific driver code. The important `CardDeviceManager` lives here alongside the base `CardDevice` class and its child classes for various basic kinds of device (serial, line-based, etc.). Code to handle bulk reading is also located here.
+That page is also exposed inside the app through `Settings -> Open source acknowledgements`.
 
-      * `/proxmark3`: Proxmark3 driver code.
+The main externally sourced pieces currently called out there are:
 
-      * `/chameleonmini`: Surprise! Chameleon Mini driver code.
-
-    * `/ui`: Code to do with other UI.
-
-    * `/util`: Miscellaneous.
+- Team Walrus / upstream Walrus
+- 0xType 0xProto
+- AndroidX and Material Components
+- MapLibre, OpenFreeMap, and OpenStreetMap
+- the remaining direct runtime libraries bundled with the app
 
 ## Device Support
 
@@ -135,9 +150,7 @@ Here’s a table of the current devices / card type pairs we support and in what
 
 ## Contributing
 
-We welcome all kinds of contributions and bug reports, big or small! Development takes place at our [GitHub repository](https://github.com/NanashiTheNameless/Walrus). There you can file issues (both bugs and enhancement requests) and submit pull requests.
-
-During the initial development of Walrus, changes to the codebase are likely to be frequent and wide-ranging, so if you want to work on a feature, it's wise to reach out first to ensure that your hard work won't be soon obsoleted. After our first full release we hope to gain stability and bring in some of the additional resources expected of a project today, such as a proper test suite and continuous integration.
+This fork welcomes all kinds of contributions and bug reports, big or small! Development takes place at the fork's [GitHub repository](https://github.com/NanashiTheNameless/Walrus). There you can file issues (both bugs and enhancement requests) and submit pull requests.
 
 ## Note on contributions from AI
 

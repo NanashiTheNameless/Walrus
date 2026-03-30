@@ -29,9 +29,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -41,6 +39,7 @@ import dev.namelessnanashi.walrus.card.carddata.HIDCardData;
 import dev.namelessnanashi.walrus.device.CardDevice;
 import dev.namelessnanashi.walrus.device.CardDeviceManager;
 import dev.namelessnanashi.walrus.device.UsbCardDevice;
+import dev.namelessnanashi.walrus.util.AppFontManager;
 import dev.namelessnanashi.walrus.util.GeoUtils;
 
 import java.util.List;
@@ -136,6 +135,7 @@ public class WalrusApplication extends Application {
         }
 
         context = getApplicationContext();
+        AppFontManager.install(this);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences_chameleon_mini_rev_g, false);
         PreferenceManager.setDefaultValues(this, R.xml.preferences_chameleon_mini_rev_e_rebooted, false);
@@ -164,7 +164,6 @@ public class WalrusApplication extends Application {
             String toast;
             long[] timings;
             int[] amplitudes;
-            long singleTiming;
 
             if (intent.getBooleanExtra(CardDeviceManager.EXTRA_DEVICE_WAS_ADDED, false)) {
                 CardDevice cardDevice = CardDeviceManager.INSTANCE.getCardDevices().get(
@@ -178,14 +177,12 @@ public class WalrusApplication extends Application {
 
                 timings = new long[]{200, 200, 200, 200, 200};
                 amplitudes = new int[]{255, 0, 255, 0, 255};
-                singleTiming = 300;
             } else {
                 toast = getString(R.string.device_disconnected,
                         intent.getStringExtra(CardDeviceManager.EXTRA_DEVICE_NAME));
 
                 timings = new long[]{500, 200, 500, 200, 500};
                 amplitudes = new int[]{255, 0, 255, 0, 255};
-                singleTiming = 900;
             }
 
             Toast.makeText(context, toast, Toast.LENGTH_LONG).show();
@@ -194,11 +191,8 @@ public class WalrusApplication extends Application {
             if (sharedPref.getBoolean("pref_key_on_device_connected_vibrate", true)) {
                 Vibrator vibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
                 if (vibrator != null) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        vibrator.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1));
-                    } else {
-                        vibrator.vibrate(singleTiming);
-                    }
+                    vibrator.vibrate(android.os.VibrationEffect.createWaveform(
+                            timings, amplitudes, -1));
                 }
             }
         }

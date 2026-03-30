@@ -1,22 +1,3 @@
-/*
- * Copyright 2018 Daniel Underhay & Matthew Daley.
- *
- * This file is part of Walrus.
- *
- * Walrus is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Walrus is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Walrus.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package dev.namelessnanashi.walrus.util;
 
 import android.app.AlertDialog;
@@ -38,7 +19,7 @@ public final class FreeDroidWarnCompat {
     private static final String PREF_INSTALL_TOKEN_WARN = "installTokenWarn";
     private static final String INFO_URL = "https://keepandroidopen.org/";
     private static final String SOLUTIONS_URL =
-            "https://github.com/keepandroidopen/FreeDroidWarn?tab=readme-ov-file#solutions";
+            "https://github.com/keepandroidopen/FreeDroidWarn/blob/master/README.md#solutions";
 
     private FreeDroidWarnCompat() {
     }
@@ -72,6 +53,7 @@ public final class FreeDroidWarnCompat {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+        AppFontManager.applyToDialog(alertDialog);
 
         Button neutralButton = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
         if (neutralButton != null) {

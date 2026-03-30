@@ -27,11 +27,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -59,17 +62,41 @@ public class ChoiceComponent extends ContainerComponent {
         viewGroup.setOrientation(LinearLayout.VERTICAL);
 
         spinner = new Spinner(context);
-        viewGroup.addView(spinner);
+        FrameLayout spinnerContainer = new FrameLayout(context);
+        spinnerContainer.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        spinnerContainer.setBackgroundResource(R.drawable.drawable_choice_spinner_background);
+        viewGroup.addView(spinnerContainer);
+
+        spinner.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        spinner.setPadding(0, 0, 0, 0);
+        spinner.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(context, android.R.color.transparent)));
+        spinner.setPrompt(title);
+        spinnerContainer.addView(spinner);
+
+        ImageView dropDownIndicator = new ImageView(context);
+        FrameLayout.LayoutParams indicatorLayoutParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.END | Gravity.CENTER_VERTICAL);
+        int indicatorMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
+                spinner.getResources().getDisplayMetrics());
+        indicatorLayoutParams.setMargins(0, 0, indicatorMargin, 0);
+        dropDownIndicator.setLayoutParams(indicatorLayoutParams);
+        dropDownIndicator.setImageDrawable(ContextCompat.getDrawable(context,
+                R.drawable.ic_arrow_drop_down_white_24px));
+        dropDownIndicator.setImageTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(context, R.color.primaryTextColor)));
+        dropDownIndicator.setClickable(false);
+        dropDownIndicator.setFocusable(false);
+        spinnerContainer.addView(dropDownIndicator);
 
         viewGroup.addView(MultiComponent.createSpacer(context));
 
         final ViewGroup choiceViewGroup = new FrameLayout(context);
         viewGroup.addView(choiceViewGroup);
 
-        spinner.setPadding(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
-                spinner.getResources().getDisplayMetrics()), 0, 0);
-        spinner.setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(context, R.color.secondaryColor)));
         spinner.setPopupBackgroundDrawable(new ColorDrawable(
                 ContextCompat.getColor(context, R.color.primaryDarkColor)));
 
@@ -112,6 +139,7 @@ public class ChoiceComponent extends ContainerComponent {
                 View choiceView = getChoiceComponent().getView();
                 if (choiceView != null) {
                     choiceViewGroup.addView(choiceView);
+                    showKeyboardForFirstTextEditor(choiceView);
                 }
 
                 if (onComponentChangeCallback != null) {
@@ -168,6 +196,48 @@ public class ChoiceComponent extends ContainerComponent {
 
     public Component getChoiceComponent() {
         return choices.get(getChoicePosition()).component;
+    }
+
+    private void showKeyboardForFirstTextEditor(@NonNull View rootView) {
+        rootView.post(() -> {
+            View textEditor = findFirstTextEditor(rootView);
+            if (textEditor == null || !textEditor.isShown()) {
+                return;
+            }
+
+            textEditor.requestFocus();
+
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (inputMethodManager != null) {
+                inputMethodManager.showSoftInput(textEditor, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+    }
+
+    @Nullable
+    private View findFirstTextEditor(@Nullable View view) {
+        if (view == null || view.getVisibility() != View.VISIBLE || !view.isEnabled()) {
+            return null;
+        }
+
+        if (view.onCheckIsTextEditor()) {
+            return view;
+        }
+
+        if (!(view instanceof ViewGroup)) {
+            return null;
+        }
+
+        ViewGroup viewGroup = (ViewGroup) view;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View textEditor = findFirstTextEditor(viewGroup.getChildAt(i));
+            if (textEditor != null) {
+                return textEditor;
+            }
+        }
+
+        return null;
     }
 
     public static class Choice {

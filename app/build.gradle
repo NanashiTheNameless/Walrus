@@ -50,10 +50,10 @@ android {
     }
     defaultConfig {
         applicationId = "dev.namelessnanashi.walrus"
-        minSdk = 23
+        minSdk = 29
         targetSdk = 34
         versionCode = resolvedVersionCode
-        versionName = "1.0.0-localbuild"
+        versionName = "1.0.1-localbuild"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -109,6 +109,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.felhr85:usbserial:6.1.0'
     implementation 'com.j256.ormlite:ormlite-android:6.1'
+    implementation 'org.maplibre.gl:android-sdk:12.2.1'
     implementation('io.github.yavski:fab-speed-dial:1.0.6') {
         exclude group: 'com.android.support'
     }

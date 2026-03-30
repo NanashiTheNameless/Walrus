@@ -20,6 +20,7 @@
 package dev.namelessnanashi.walrus.card;
 
 import android.location.Location;
+import androidx.annotation.Keep;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.WalrusApplication;
@@ -32,6 +33,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @DatabaseTable()
+@Keep
 @SuppressWarnings("WeakerAccess")
 public class Card implements Serializable {
     public static final String NAME_FIELD_NAME = "name";
@@ -58,6 +60,7 @@ public class Card implements Serializable {
     @DatabaseField
     public Double cardLocationLng;
 
+    @Keep
     public Card() {
         name = WalrusApplication.getContext().getString(R.string.default_card_name);
     }

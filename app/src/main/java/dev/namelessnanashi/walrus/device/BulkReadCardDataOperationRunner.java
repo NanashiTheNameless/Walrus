@@ -22,9 +22,7 @@ package dev.namelessnanashi.walrus.device;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Handler;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import androidx.preference.PreferenceManager;
 import androidx.annotation.Nullable;
@@ -110,11 +108,7 @@ public class BulkReadCardDataOperationRunner implements Runnable,
         if (sharedPref.getBoolean("pref_key_bulk_read_vibrate", true)) {
             Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             if (vibrator != null) {
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createOneShot(300, 255));
-                } else {
-                    vibrator.vibrate(300);
-                }
+                vibrator.vibrate(android.os.VibrationEffect.createOneShot(300, 255));
             }
         }
 

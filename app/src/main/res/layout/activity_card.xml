@@ -116,6 +116,7 @@
                 android:textColor="@color/secondaryColor"/>
 
             <FrameLayout
+                android:id="@+id/locationDisplay"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginTop="4dp">
@@ -151,7 +152,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:onClick="onOpenLocationMapClick"
-                        android:text="@string/open_in_openstreetmap"/>
+                        android:text="@string/view_on_map"/>
 
                 </LinearLayout>
 
@@ -166,6 +167,48 @@
                     android:visibility="gone"/>
 
             </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/locationEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/primaryLightColor"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location_edit_help"
+                    android:textColor="@color/secondaryTextColor"/>
+
+                <EditText
+                    android:id="@+id/locationLatEditor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="@string/latitude"
+                    android:inputType="numberDecimal|numberSigned"/>
+
+                <EditText
+                    android:id="@+id/locationLngEditor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="@string/longitude"
+                    android:inputType="numberDecimal|numberSigned"/>
+
+                <Button
+                    android:id="@+id/openEditedLocationMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:onClick="onOpenLocationMapClick"
+                    android:text="@string/pick_on_map"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/notesTitle"

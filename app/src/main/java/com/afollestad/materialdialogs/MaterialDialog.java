@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.EnumMap;
+
+import dev.namelessnanashi.walrus.util.AppFontManager;
 
 public class MaterialDialog extends AlertDialog {
 
@@ -102,6 +106,10 @@ public class MaterialDialog extends AlertDialog {
                     ContextCompat.getColor(getContext(), backgroundColorResId)));
         }
 
+        if (customView != null && getWindow() != null) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        }
+
         syncTextColor(android.R.id.message, contentColorResId);
         syncTextColor(androidx.appcompat.R.id.alertTitle, titleColorResId);
 
@@ -119,6 +127,9 @@ public class MaterialDialog extends AlertDialog {
                         ContextCompat.getColor(getContext(), colorResId));
             }
         }
+
+        ensureSoftInputForTextEditor();
+        AppFontManager.applyToDialog(this);
     }
 
     @Nullable
@@ -154,6 +165,58 @@ public class MaterialDialog extends AlertDialog {
         if (textView != null) {
             textView.setTextColor(ContextCompat.getColor(getContext(), colorResId));
         }
+    }
+
+    private void ensureSoftInputForTextEditor() {
+        View textEditor = findFirstTextEditor(customView);
+        if (textEditor == null) {
+            return;
+        }
+
+        if (getWindow() != null) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+
+        textEditor.post(() -> {
+            if (!textEditor.isShown()) {
+                return;
+            }
+
+            textEditor.requestFocus();
+
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) getContext().getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+            if (inputMethodManager != null) {
+                inputMethodManager.showSoftInput(textEditor, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+    }
+
+    @Nullable
+    private View findFirstTextEditor(@Nullable View view) {
+        if (view == null || view.getVisibility() != View.VISIBLE || !view.isEnabled()) {
+            return null;
+        }
+
+        if (view.onCheckIsTextEditor()) {
+            return view;
+        }
+
+        if (!(view instanceof ViewGroup)) {
+            return null;
+        }
+
+        ViewGroup viewGroup = (ViewGroup) view;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View textEditor = findFirstTextEditor(viewGroup.getChildAt(i));
+            if (textEditor != null) {
+                return textEditor;
+            }
+        }
+
+        return null;
     }
 
     private static int toAlertDialogButton(@NonNull DialogAction action) {

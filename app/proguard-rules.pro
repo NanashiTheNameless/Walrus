@@ -37,6 +37,12 @@
 -keep class * extends dev.namelessnanashi.walrus.card.carddata.CardData {
     public <init>();
 }
+-keep @com.j256.ormlite.table.DatabaseTable class * {
+    public <init>();
+}
+-keepclassmembers class * {
+    @com.j256.ormlite.field.DatabaseField <fields>;
+}
 -keep class * extends android.support.v4.app.DialogFragment {
     public <init>();
 }

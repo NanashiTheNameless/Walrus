@@ -21,6 +21,8 @@
 <resources>
 
     <style name="App" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:fontFamily">@font/font_0xproto</item>
+        <item name="fontFamily">@font/font_0xproto</item>
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/secondaryColor</item>
@@ -43,10 +45,14 @@
     </style>
 
     <style name="AppPreference.DialogPreference">
+       <item name="android:fontFamily">@font/font_0xproto</item>
+       <item name="fontFamily">@font/font_0xproto</item>
        <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
     <style name="AppPreference.SettingActivity"  parent="Theme.AppCompat">
+        <item name="android:fontFamily">@font/font_0xproto</item>
+        <item name="fontFamily">@font/font_0xproto</item>
         <item name="android:colorBackground">@color/primaryDarkColor</item>
         <item name="android:windowBackground">@color/primaryDarkColor</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>

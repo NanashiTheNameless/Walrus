@@ -38,6 +38,15 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/appearance_settings_preference">
+
+        <ListPreference
+            android:defaultValue="font_0xproto"
+            android:key="pref_key_app_font"
+            android:title="@string/app_font_preference_title"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/wallet_settings_preference">
 
         <dev.namelessnanashi.walrus.card.ui.DeleteAllCardsPreference

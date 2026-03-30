@@ -25,7 +25,6 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.UiThread;
 import androidx.fragment.app.DialogFragment;
@@ -66,7 +65,8 @@ import dev.namelessnanashi.walrus.device.ui.CardDeviceAdapter;
 import dev.namelessnanashi.walrus.device.ui.PickCardDataTargetDialogFragment;
 import dev.namelessnanashi.walrus.device.ui.ReadCardDataOperationFragment;
 import dev.namelessnanashi.walrus.device.ui.WriteOrEmulateCardDataOperationFragment;
-import dev.namelessnanashi.walrus.ui.WebViewActivity;
+import dev.namelessnanashi.walrus.ui.OpenStreetMapActivity;
+import dev.namelessnanashi.walrus.util.AppFontManager;
 import dev.namelessnanashi.walrus.util.UIUtils;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -74,7 +74,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
@@ -92,11 +91,18 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     private static final String PICK_CARD_DEVICE_DIALOG_FRAGMENT_TAG = "pick_card_device_dialog";
     private static final String PICK_CARD_DATA_CLASS_DIALOG_FRAGMENT_TAG =
             "pick_card_data_class_dialog";
-    private static final String OPEN_STREET_MAP_URL =
-            "https://www.openstreetmap.org/?mlat=%1$.6f&mlon=%2$.6f#map=16/%1$.6f/%2$.6f";
+    private static final int PICK_LOCATION_REQUEST_CODE = 100;
+    private static final double MIN_LATITUDE = -90d;
+    private static final double MAX_LATITUDE = 90d;
+    private static final double MIN_LONGITUDE = -180d;
+    private static final double MAX_LONGITUDE = 180d;
 
     private final UIUtils.TextChangeWatcher notesEditorDirtier = new TextChangeDirtier();
     private final UIUtils.TextChangeWatcher walrusCardViewNameDirtier = new TextChangeDirtier();
+    private final UIUtils.TextChangeWatcher locationLatEditorWatcher =
+            new LocationEditorChangeWatcher();
+    private final UIUtils.TextChangeWatcher locationLngEditorWatcher =
+            new LocationEditorChangeWatcher();
 
     private Mode mode;
     private Card card;
@@ -105,8 +111,13 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     private WalrusCardView walrusCardView;
     private TextView notes;
     private EditText notesEditor;
+    private View locationDisplay;
     private View locationMap;
+    private View locationEditor;
     private TextView locationCoordinates;
+    private EditText locationLatEditor;
+    private EditText locationLngEditor;
+    private View openEditedLocationMap;
 
     public CardActivity() {
         super(DatabaseHelper.class);
@@ -118,8 +129,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         intent.putExtra(EXTRA_MODE, mode);
         intent.putExtra(EXTRA_CARD, card);
 
-        if (transitionView != null
-                && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (transitionView != null) {
             List<Pair<View, String>> sharedElements = new ArrayList<>();
 
             View view = activity.findViewById(android.R.id.statusBarBackground);
@@ -205,8 +215,13 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         walrusCardView = findViewById(R.id.card);
         notes = findViewById(R.id.notes);
         notesEditor = findViewById(R.id.notesEditor);
+        locationDisplay = findViewById(R.id.locationDisplay);
         locationMap = findViewById(R.id.locationMap);
+        locationEditor = findViewById(R.id.locationEditor);
         locationCoordinates = findViewById(R.id.locationCoordinates);
+        locationLatEditor = findViewById(R.id.locationLatEditor);
+        locationLngEditor = findViewById(R.id.locationLngEditor);
+        openEditedLocationMap = findViewById(R.id.openEditedLocationMap);
 
         walrusCardView.setCard(card);
         walrusCardView.setEditable(mode != Mode.VIEW);
@@ -215,17 +230,22 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
             case VIEW:
                 findViewById(R.id.editButtons).setVisibility(View.GONE);
                 findViewById(R.id.notesEditor).setVisibility(View.GONE);
+                locationEditor.setVisibility(View.GONE);
                 break;
 
             case EDIT:
                 findViewById(R.id.viewButtons).setVisibility(View.GONE);
                 findViewById(R.id.notes).setVisibility(View.GONE);
+                locationDisplay.setVisibility(View.GONE);
+                locationEditor.setVisibility(View.VISIBLE);
                 break;
 
             case EDIT_BULK_READ_CARD_TEMPLATE:
                 findViewById(R.id.viewButtons).setVisibility(View.GONE);
                 findViewById(R.id.editButtons).setVisibility(View.GONE);
                 findViewById(R.id.notes).setVisibility(View.GONE);
+                locationDisplay.setVisibility(View.GONE);
+                locationEditor.setVisibility(View.VISIBLE);
                 break;
         }
 
@@ -256,6 +276,8 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     private void updateUI() {
         notesEditorDirtier.ignoreNext();
         walrusCardViewNameDirtier.ignoreNext();
+        locationLatEditorWatcher.ignoreNext();
+        locationLngEditorWatcher.ignoreNext();
 
         walrusCardView.setCard(card);
 
@@ -277,21 +299,107 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
 
         notes.setText(card.notes);
         notesEditor.setText(card.notes);
+        locationLatEditor.setText(card.cardLocationLat != null
+                ? Double.toString(card.cardLocationLat) : "");
+        locationLngEditor.setText(card.cardLocationLng != null
+                ? Double.toString(card.cardLocationLng) : "");
+        updateEditedLocationButtonState();
     }
 
     public void onOpenLocationMapClick(View view) {
-        if (card.cardLocationLat == null || card.cardLocationLng == null) {
+        Pair<Double, Double> locationCoordinates = getLocationToOpen(false);
+        if (mode == Mode.VIEW
+                && (locationCoordinates.first == null || locationCoordinates.second == null)) {
             return;
         }
 
-        String openStreetMapUrl = String.format(Locale.US, OPEN_STREET_MAP_URL,
-                card.cardLocationLat, card.cardLocationLng);
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(openStreetMapUrl));
-        if (browserIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(browserIntent);
+        Intent mapIntent = OpenStreetMapActivity.createIntent(this, locationCoordinates.first,
+                locationCoordinates.second, mode != Mode.VIEW);
+        if (mode == Mode.VIEW) {
+            startActivity(mapIntent);
         } else {
-            startActivity(WebViewActivity.createIntent(this, openStreetMapUrl));
+            startActivityForResult(mapIntent, PICK_LOCATION_REQUEST_CODE);
         }
+    }
+
+    private Pair<Double, Double> getLocationToOpen(boolean showErrors) {
+        if (mode == Mode.VIEW) {
+            return new Pair<>(card.cardLocationLat, card.cardLocationLng);
+        }
+
+        Pair<Double, Double> editedLocation = parseEditedLocation(showErrors);
+        if (editedLocation != null
+                && editedLocation.first != null
+                && editedLocation.second != null) {
+            return editedLocation;
+        }
+
+        return new Pair<>(card.cardLocationLat, card.cardLocationLng);
+    }
+
+    private Pair<Double, Double> parseEditedLocation(boolean showErrors) {
+        String latitudeText = locationLatEditor.getText().toString().trim();
+        String longitudeText = locationLngEditor.getText().toString().trim();
+
+        if (showErrors) {
+            locationLatEditor.setError(null);
+            locationLngEditor.setError(null);
+        }
+
+        if (latitudeText.isEmpty() && longitudeText.isEmpty()) {
+            return new Pair<>(null, null);
+        }
+
+        if (latitudeText.isEmpty() || longitudeText.isEmpty()) {
+            if (showErrors) {
+                if (latitudeText.isEmpty()) {
+                    locationLatEditor.setError(getString(R.string.enter_both_coordinates));
+                }
+                if (longitudeText.isEmpty()) {
+                    locationLngEditor.setError(getString(R.string.enter_both_coordinates));
+                }
+            }
+            return null;
+        }
+
+        Double latitude = parseCoordinate(latitudeText, MIN_LATITUDE, MAX_LATITUDE,
+                locationLatEditor, R.string.invalid_latitude, showErrors);
+        Double longitude = parseCoordinate(longitudeText, MIN_LONGITUDE, MAX_LONGITUDE,
+                locationLngEditor, R.string.invalid_longitude, showErrors);
+
+        if (latitude == null || longitude == null) {
+            return null;
+        }
+
+        return new Pair<>(latitude, longitude);
+    }
+
+    private Double parseCoordinate(String value, double minValue, double maxValue,
+            EditText editText, int errorStringId, boolean showErrors) {
+        try {
+            double coordinate = Double.parseDouble(value);
+            if (coordinate < minValue || coordinate > maxValue) {
+                if (showErrors) {
+                    editText.setError(getString(errorStringId));
+                }
+                return null;
+            }
+
+            return coordinate;
+        } catch (NumberFormatException e) {
+            if (showErrors) {
+                editText.setError(getString(errorStringId));
+            }
+            return null;
+        }
+    }
+
+    private void updateEditedLocationButtonState() {
+        if (mode == Mode.VIEW) {
+            return;
+        }
+
+        openEditedLocationMap.setEnabled(true);
     }
 
     @Override
@@ -303,12 +411,37 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode != PICK_LOCATION_REQUEST_CODE || resultCode != RESULT_OK) {
+            return;
+        }
+
+        Pair<Double, Double> pickedLocation = OpenStreetMapActivity.getLocationResult(data);
+        if (pickedLocation == null) {
+            return;
+        }
+
+        locationLatEditorWatcher.ignoreNext();
+        locationLngEditorWatcher.ignoreNext();
+        locationLatEditor.setError(null);
+        locationLngEditor.setError(null);
+        locationLatEditor.setText(Double.toString(pickedLocation.first));
+        locationLngEditor.setText(Double.toString(pickedLocation.second));
+        dirty = true;
+        updateEditedLocationButtonState();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
         if (firstResume) {
             notesEditor.addTextChangedListener(notesEditorDirtier);
             walrusCardView.editableNameView.addTextChangedListener(walrusCardViewNameDirtier);
+            locationLatEditor.addTextChangedListener(locationLatEditorWatcher);
+            locationLngEditor.addTextChangedListener(locationLngEditorWatcher);
 
             firstResume = false;
         }
@@ -332,9 +465,14 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         }
 
         // TODO: get acquire date (allow change)
-        // TODO: get location (allow change)
 
         card.notes = notesEditor.getText().toString();
+        Pair<Double, Double> editedLocation = parseEditedLocation(true);
+        if (editedLocation == null) {
+            return;
+        }
+        card.cardLocationLat = editedLocation.first;
+        card.cardLocationLng = editedLocation.second;
 
         getHelper().getCardDao().createOrUpdate(card);
         LocalBroadcastManager.getInstance(this).sendBroadcast(
@@ -646,7 +784,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     @SuppressLint("MissingSuperCall")
     public void onBackPressed() {
         if (mode != Mode.VIEW && dirty) {
-            new AlertDialog.Builder(this).setMessage(mode == Mode.EDIT
+            AlertDialog dialog = new AlertDialog.Builder(this).setMessage(mode == Mode.EDIT
                     ? R.string.discard_card_changes : R.string.discard_bulk_read_changes)
                     .setCancelable(true)
                     .setPositiveButton(R.string.discard_button,
@@ -667,6 +805,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
                                 }
                             })
                     .show();
+            AppFontManager.applyToDialog(dialog);
         } else {
             supportFinishAfterTransition();
         }
@@ -687,6 +826,17 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         @Override
         public void onNotIgnoredTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             dirty = true;
+        }
+    }
+
+    private class LocationEditorChangeWatcher extends UIUtils.TextChangeWatcher {
+
+        @Override
+        public void onNotIgnoredTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            dirty = true;
+            locationLatEditor.setError(null);
+            locationLngEditor.setError(null);
+            updateEditedLocationButtonState();
         }
     }
 }

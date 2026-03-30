@@ -105,6 +105,21 @@
         color: var(--muted);
     }
 
+    .artifact-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 20px;
+    }
+
+    .artifact {
+        padding: 6px 10px;
+        background: var(--surfaceAlt);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        line-height: 1.3;
+    }
+
     tt, code {
         color: #ECECF0;
         font-family: monospace;
@@ -134,7 +149,7 @@
 </head>
 <body>
 <div class="page">
-<h1>Walrus - Open Source Licenses</h1>
+<h1>Walrus - Open Source Acknowledgements &amp; Licenses</h1>
 
 <div class="notice">
     <strong>Unofficial fork</strong>
@@ -159,28 +174,67 @@
     </p>
 </div>
 
+<p>
+    This page covers the bundled app code, vendored compatibility code, direct runtime
+    dependencies, bundled fonts, and required map/data attributions shipped with this fork.
+</p>
+
 <hr>
 
-<h2><a href="https://github.com/TeamWalrus/Walrus">Walrus</a> - project source code</h2>
+<h2><a href="https://github.com/TeamWalrus/Walrus">Walrus</a> - <a href="https://github.com/TeamWalrus/Walrus/blob/master/LICENSE">GPLv3 or later</a></h2>
 <p>
     The Walrus source code is available on GitHub at
     <a href="https://github.com/TeamWalrus/Walrus">github.com/TeamWalrus/Walrus</a>.
 </p>
 
-<h2><a href="https://commons.apache.org/proper/commons-lang/">Apache Commons Lang</a> - <tt>org.apache.commons:commons-lang3</tt>
-</h2>
-<h2><a href="https://github.com/googlesamples/easypermissions">EasyPermissions</a> - <tt>pub.devrel:easypermissions</tt>
-</h2>
-<h2><a href="https://github.com/yavski/fab-speed-dial">fab-speed-dial</a> - <tt>io.github.yavski:fab-speed-dial</tt>
-</h2>
-<h2><a href="https://github.com/keepandroidopen/FreeDroidWarn">FreeDroidWarn</a> - adapted from <tt>keepandroidopen/FreeDroidWarn</tt>
-</h2>
-<h2><a href="https://github.com/square/leakcanary">LeakCanary</a> - <tt>com.squareup.leakcanary:leakcanary-android</tt>,
-    <tt>com.squareup.leakcanary:leakcanary-android-no-op</tt></h2>
-<h2><a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a> - <tt>com.github.PhilJay:MPAndroidChart</tt>
-</h2>
-<h2><a href="https://github.com/johncarl81/parceler">Parceler</a> - <tt>org.parceler:parceler</tt>,
-    <tt>org.parceler:parceler-api</tt></h2>
+<h2><a href="https://github.com/0xType/0xProto">0xProto</a> - <a href="https://github.com/0xType/0xProto/blob/main/LICENSE">SIL Open Font License 1.1</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">bundled font: 0xProto</tt>
+</div>
+<h2><a href="https://developer.android.com/jetpack/androidx">AndroidX libraries</a> - <a href="https://github.com/androidx/androidx/blob/androidx-main/LICENSE.txt">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">androidx.appcompat:appcompat</tt>
+    <tt class="artifact">androidx.annotation:annotation</tt>
+    <tt class="artifact">androidx.cardview:cardview</tt>
+    <tt class="artifact">androidx.constraintlayout:constraintlayout</tt>
+    <tt class="artifact">androidx.core:core</tt>
+    <tt class="artifact">androidx.lifecycle:lifecycle-extensions</tt>
+    <tt class="artifact">androidx.localbroadcastmanager:localbroadcastmanager</tt>
+    <tt class="artifact">androidx.preference:preference</tt>
+    <tt class="artifact">androidx.recyclerview:recyclerview</tt>
+</div>
+<h2><a href="https://github.com/material-components/material-components-android">Material Components for Android</a> - <a href="https://github.com/material-components/material-components-android/blob/master/LICENSE">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">com.google.android.material:material</tt>
+</div>
+<h2><a href="https://commons.apache.org/proper/commons-lang/">Apache Commons Lang</a> - <a href="https://github.com/apache/commons-lang/blob/master/LICENSE.txt">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">org.apache.commons:commons-lang3</tt>
+</div>
+<h2><a href="https://github.com/googlesamples/easypermissions">EasyPermissions</a> - <a href="https://github.com/googlesamples/easypermissions/blob/master/LICENSE">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">pub.devrel:easypermissions</tt>
+</div>
+<h2><a href="https://github.com/yavski/fab-speed-dial">fab-speed-dial</a> - <a href="https://github.com/yavski/fab-speed-dial/blob/master/LICENSE">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">io.github.yavski:fab-speed-dial</tt>
+</div>
+<h2><a href="https://github.com/keepandroidopen/FreeDroidWarn">FreeDroidWarn</a> - <a href="https://github.com/keepandroidopen/FreeDroidWarn/blob/master/LICENSE">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">adapted from keepandroidopen/FreeDroidWarn</tt>
+</div>
+<h2><a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a> - <a href="https://github.com/PhilJay/MPAndroidChart#license">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">com.github.PhilJay:MPAndroidChart</tt>
+</div>
+<h2><a href="https://github.com/square/okio">Okio</a> - <a href="https://github.com/square/okio/blob/master/LICENSE.txt">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">com.squareup.okio:okio</tt>
+</div>
+<h2><a href="https://github.com/afollestad/material-dialogs">Material Dialogs</a> - <a href="https://github.com/afollestad/material-dialogs/blob/main/LICENSE.md">Apache License 2.0</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">vendored compatibility shim: com.afollestad.materialdialogs</tt>
+</div>
 <pre>
                               Apache License
                         Version 2.0, January 2004
@@ -387,8 +441,74 @@ limitations under the License.
 
 <hr>
 
-<h2><a href="http://ormlite.com/">OrmLite</a> - <tt>com.j256.ormlite:ormlite-core</tt>, <tt>com.j256.ormlite:ormlite-android</tt>
-</h2>
+<h2><a href="https://maplibre.org/projects/android/">MapLibre Android SDK</a> - <a href="https://github.com/maplibre/maplibre-native/blob/main/LICENSE.md">BSD 2-Clause License</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">org.maplibre.gl:android-sdk</tt>
+</div>
+<pre>
+BSD 2-Clause License
+
+Copyright (c) 2014-2025, MapLibre contributors
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</pre>
+
+<hr>
+
+<h2><a href="https://openfreemap.org/">OpenFreeMap</a> - <a href="https://github.com/hyperknot/openfreemap/blob/main/LICENSE.md">MIT License</a></h2>
+<p>
+    Walrus uses OpenFreeMap&apos;s public MapLibre style endpoint for its built-in map features.
+    OpenFreeMap requires attribution in the form
+    <tt>OpenFreeMap &copy; OpenMapTiles Data from OpenStreetMap</tt>.
+</p>
+<p>
+    OpenFreeMap usage information is available at
+    <a href="https://openfreemap.org/quick_start/">openfreemap.org/quick_start</a> and
+    terms are available at <a href="https://openfreemap.org/tos">openfreemap.org/tos</a>.
+    The OpenFreeMap project is published under the MIT License at
+    <a href="https://github.com/hyperknot/openfreemap/blob/main/LICENSE.md">github.com/hyperknot/openfreemap/blob/main/LICENSE.md</a>.
+</p>
+
+<hr>
+
+<h2><a href="https://www.openstreetmap.org/">OpenStreetMap</a> - <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL v1.0</a></h2>
+<p>
+    Walrus uses OpenStreetMap data through OpenFreeMap.
+    Map data is &copy; OpenStreetMap contributors and is available under the
+    <a href="https://opendatacommons.org/licenses/odbl/1-0/">Open Database License (ODbL) v1.0</a>.
+</p>
+<p>
+    OpenStreetMap attribution and usage information is available at
+    <a href="https://www.openstreetmap.org/copyright">openstreetmap.org/copyright</a>.
+</p>
+
+<hr>
+
+<h2><a href="http://ormlite.com/">OrmLite</a> - <a href="https://ormlite.com/license.html">ISC License</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">com.j256.ormlite:ormlite-core</tt>
+    <tt class="artifact">com.j256.ormlite:ormlite-android</tt>
+</div>
 <pre>
 ISC License
 
@@ -406,8 +526,10 @@ The author may be contacted via http://ormlite.com/
 
 <hr>
 
-<h2><a href="https://github.com/ronmamo/reflections">Reflections</a> - <tt>org.reflections:reflections</tt>
-</h2>
+<h2><a href="https://github.com/ronmamo/reflections">Reflections</a> - <a href="https://github.com/ronmamo/reflections/blob/master/COPYING.txt">WTFPL</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">org.reflections:reflections</tt>
+</div>
 <pre>
            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
                    Version 2, December 2004
@@ -426,8 +548,10 @@ as the name is changed.
 
 <hr>
 
-<h2><a href="https://github.com/felHR85/UsbSerial">UsbSerial</a> -
-    <tt>com.github.felHR85:UsbSerial</tt></h2>
+<h2><a href="https://github.com/felHR85/UsbSerial">UsbSerial</a> - <a href="https://github.com/felHR85/UsbSerial/blob/master/LICENSE">MIT License</a></h2>
+<div class="artifact-list">
+    <tt class="artifact">com.github.felhr85:usbserial</tt>
+</div>
 <pre>
 Copyright (c) 2014 Felipe Herranz
 

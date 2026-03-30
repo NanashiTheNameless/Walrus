@@ -28,7 +28,6 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
@@ -129,7 +128,7 @@ public class BulkReadCardsService extends Service {
         final NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (notificationManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        if (notificationManager != null
                 && notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
             notificationManager.createNotificationChannel(
                     new NotificationChannel(CHANNEL_ID,
@@ -144,12 +143,10 @@ public class BulkReadCardsService extends Service {
                 .setOngoing(true)
                 .setProgress(0, 0, true)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(Notification.CATEGORY_SERVICE)
                 .setContentIntent(TaskStackBuilder.create(this)
                         .addNextIntentWithParentStack(new Intent(this, BulkReadCardsActivity.class))
                         .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            notificationBuilder.setCategory(Notification.CATEGORY_SERVICE);
-        }
 
         return notificationBuilder.build();
     }

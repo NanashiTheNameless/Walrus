@@ -60,6 +60,7 @@ import dev.namelessnanashi.walrus.device.ui.BulkReadCardsActivity;
 import dev.namelessnanashi.walrus.device.ui.DevicesActivity;
 import dev.namelessnanashi.walrus.ui.SettingsActivity;
 import dev.namelessnanashi.walrus.util.AppInstallStateUtils;
+import dev.namelessnanashi.walrus.util.AppFontManager;
 import dev.namelessnanashi.walrus.util.FreeDroidWarnCompat;
 
 import java.util.List;
@@ -195,6 +196,7 @@ public class WalletActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+        AppFontManager.applyToDialog(dialog);
 
         TextView messageView = dialog.findViewById(android.R.id.message);
         if (messageView != null) {

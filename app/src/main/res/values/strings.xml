@@ -166,8 +166,47 @@
     <!-- Coordinates shown for a stored card location -->
     <string name="location_coordinates">Lat %1$.5f, Lng %2$.5f</string>
 
+    <!-- Helper text shown when editing saved coordinates -->
+    <string name="location_edit_help">Edit the saved latitude and longitude, or leave both blank to clear the stored location.</string>
+
+    <!-- Label for a latitude input field -->
+    <string name="latitude">Latitude</string>
+
+    <!-- Label for a longitude input field -->
+    <string name="longitude">Longitude</string>
+
+    <!-- Error shown when only one coordinate field is filled in -->
+    <string name="enter_both_coordinates">Enter both latitude and longitude, or leave both blank.</string>
+
+    <!-- Error shown when latitude is outside the valid range -->
+    <string name="invalid_latitude">Latitude must be between -90 and 90.</string>
+
+    <!-- Error shown when longitude is outside the valid range -->
+    <string name="invalid_longitude">Longitude must be between -180 and 180.</string>
+
     <!-- Button label for opening a card location in OpenStreetMap -->
     <string name="open_in_openstreetmap">Open in OpenStreetMap</string>
+
+    <!-- Button label for viewing a stored location on the built-in map -->
+    <string name="view_on_map">View on map</string>
+
+    <!-- Button label for choosing a location on the built-in map -->
+    <string name="pick_on_map">Pick on map</string>
+
+    <!-- Activity title for the built-in OpenStreetMap screen -->
+    <string name="openstreetmap_activity_name">Map</string>
+
+    <!-- Instruction text for picking a point on the built-in map -->
+    <string name="openstreetmap_pick_help">Tap the map to place or move the saved location.</string>
+
+    <!-- Shown when no marker has been picked yet -->
+    <string name="no_location_selected">No location selected yet.</string>
+
+    <!-- Button label for accepting a picked location -->
+    <string name="use_this_location">Use this location</string>
+
+    <!-- Attribution shown on the built-in OpenStreetMap screen -->
+    <string name="openstreetmap_attribution">OpenFreeMap © OpenMapTiles Data from OpenStreetMap</string>
 
     <!-- Section header -->
     <string name="notes">Notes</string>
@@ -402,7 +441,7 @@
     -->
 
     <!-- Component label -->
-    <string name="hid_format">Format</string>
+    <string name="hid_format">HID card format</string>
 
     <!-- Format type -->
     <string name="hid_raw">Raw</string>
@@ -549,6 +588,26 @@
     <string name="on_device_connected_preference">Vibrate on device connect / disconnect</string>
 
     <!-- Preference group title -->
+    <string name="appearance_settings_preference">Appearance</string>
+
+    <!-- Preference title -->
+    <string name="app_font_preference_title">App font</string>
+
+    <!-- Preference summary -->
+    <string name="app_font_preference_summary">Current font: %1$s</string>
+
+    <!-- Preference option -->
+    <string name="app_font_option_0xproto">0xProto (Default)</string>
+
+    <!-- Preference option -->
+    <string name="app_font_option_system_default">System default</string>
+
+    <!-- Preference option -->
+    <string name="app_font_option_saved_system_font_unavailable">
+        Saved system font (unavailable)
+    </string>
+
+    <!-- Preference group title -->
     <string name="wallet_settings_preference">Wallet</string>
 
     <!-- Preference title -->
@@ -558,7 +617,7 @@
     <string name="about_settings_preference">About</string>
 
     <!-- Preference title -->
-    <string name="open_source_preference">Open source licenses</string>
+    <string name="open_source_preference">Open source acknowledgements</string>
 
 
     <!--
