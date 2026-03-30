@@ -20,7 +20,7 @@
 package dev.namelessnanashi.walrus.card.carddata.binaryformat;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import dev.namelessnanashi.walrus.card.carddata.ui.component.Component;
 import dev.namelessnanashi.walrus.card.carddata.ui.component.MultiComponent;

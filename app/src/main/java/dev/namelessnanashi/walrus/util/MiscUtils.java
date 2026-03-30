@@ -20,13 +20,10 @@
 package dev.namelessnanashi.walrus.util;
 
 import android.content.Context;
-import android.arch.core.util.Function;
-import android.os.Parcel;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.LayoutRes;
+import androidx.arch.core.util.Function;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.LayoutRes;
 import android.text.SpannableStringBuilder;
-
-import org.parceler.ParcelConverter;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -162,18 +159,5 @@ public class MiscUtils {
 
         builder.append(text);
         builder.setSpan(what, startPos, builder.length(), flags);
-    }
-
-    public static class ShortParcelConverter implements ParcelConverter<Short> {
-
-        @Override
-        public void toParcel(Short input, Parcel parcel) {
-            parcel.writeInt(input);
-        }
-
-        @Override
-        public Short fromParcel(Parcel parcel) {
-            return (short) parcel.readInt();
-        }
     }
 }

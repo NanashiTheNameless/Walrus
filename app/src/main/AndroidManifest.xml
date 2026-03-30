@@ -23,8 +23,11 @@
 
     <uses-feature android:name="android.hardware.usb.host"/>
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
@@ -56,7 +59,8 @@
 
         <service
             android:name=".device.BulkReadCardsService"
-            android:exported="false">
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice">
         </service>
 
         <activity
@@ -122,10 +126,6 @@
                 android:name="androidx.profileinstaller.ProfileInstallerInitializer"
                 tools:node="remove"/>
         </provider>
-
-        <receiver
-            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-            tools:node="remove"/>
 
     </application>
 

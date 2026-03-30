@@ -19,10 +19,10 @@
 
 package dev.namelessnanashi.walrus.card.carddata.ui;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.support.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.annotation.Nullable;
 
 import dev.namelessnanashi.walrus.card.carddata.MifareCardData;
 import dev.namelessnanashi.walrus.card.carddata.MifareReadStep;
@@ -139,7 +139,7 @@ public class MifareReadSetupDialogViewModel extends ViewModel {
     }
 
     public static class ReadStepItem implements
-            SimpleBindingListAdapter.Item<MifareReadStep> {
+            SimpleBindingListAdapter.Item<ReadStepItem> {
 
         public final int id;
         public final MifareReadStep readStep;
@@ -155,8 +155,11 @@ public class MifareReadSetupDialogViewModel extends ViewModel {
         }
 
         @Override
-        public MifareReadStep getContents() {
-            return readStep;
+        public boolean areContentsTheSame(ReadStepItem other) {
+            return new EqualsBuilder()
+                    .append(id, other.id)
+                    .append(readStep, other.readStep)
+                    .isEquals();
         }
 
         @Override

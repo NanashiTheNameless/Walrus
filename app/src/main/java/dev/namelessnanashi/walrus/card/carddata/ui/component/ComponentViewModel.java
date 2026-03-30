@@ -19,9 +19,9 @@
 
 package dev.namelessnanashi.walrus.card.carddata.ui.component;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
 
 class ComponentViewModel extends ViewModel {
 

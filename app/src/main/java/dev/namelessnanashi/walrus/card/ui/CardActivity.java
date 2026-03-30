@@ -19,6 +19,7 @@
 
 package dev.namelessnanashi.walrus.card.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
@@ -26,14 +27,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.UiThread;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.UiThread;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,8 +70,6 @@ import dev.namelessnanashi.walrus.ui.WebViewActivity;
 import dev.namelessnanashi.walrus.util.UIUtils;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -117,7 +116,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         Intent intent = new Intent(activity, CardActivity.class);
 
         intent.putExtra(EXTRA_MODE, mode);
-        intent.putExtra(EXTRA_CARD, Parcels.wrap(card));
+        intent.putExtra(EXTRA_CARD, card);
 
         if (transitionView != null
                 && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -160,7 +159,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
         mode = (Mode) intent.getSerializableExtra(EXTRA_MODE);
 
         if (savedInstanceState == null) {
-            card = Parcels.unwrap(intent.getParcelableExtra(EXTRA_CARD));
+            card = (Card) intent.getSerializableExtra(EXTRA_CARD);
 
             if (card == null) {
                 card = new Card();
@@ -173,7 +172,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
                 }
             }
         } else {
-            card = Parcels.unwrap(savedInstanceState.getParcelable("card"));
+            card = (Card) savedInstanceState.getSerializable("card");
             dirty = savedInstanceState.getBoolean("dirty");
         }
 
@@ -183,7 +182,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
                 break;
 
             case EDIT:
-                setTitle(intent.getParcelableExtra(EXTRA_CARD) == null ? R.string.new_card :
+                setTitle(intent.getSerializableExtra(EXTRA_CARD) == null ? R.string.new_card :
                         R.string.edit_card);
                 break;
 
@@ -299,7 +298,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putParcelable("card", Parcels.wrap(card));
+        outState.putSerializable("card", card);
         outState.putBoolean("dirty", dirty);
     }
 
@@ -406,7 +405,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
 
         Bundle args = new Bundle();
         args.putString("title", getString(R.string.view_card_data_title, cardDataMetadata.name()));
-        args.putParcelable("source_and_sink", Parcels.wrap(card.cardData));
+        args.putSerializable("source_and_sink", card.cardData);
         args.putBoolean("editable", false);
         viewDialogFragment.setArguments(args);
 
@@ -553,7 +552,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
             Bundle args = new Bundle();
             args.putString("title", getString(R.string.edit_card_data_title,
                     cardDataMetadata.name()));
-            args.putParcelable("source_and_sink", Parcels.wrap(cardData));
+            args.putSerializable("source_and_sink", cardData);
             args.putBoolean("clean", clean);
             args.putBoolean("editable", true);
             args.putInt("callback_id", 0);
@@ -644,6 +643,7 @@ public class CardActivity extends OrmLiteBaseAppCompatActivity<DatabaseHelper>
     }
 
     @Override
+    @SuppressLint("MissingSuperCall")
     public void onBackPressed() {
         if (mode != Mode.VIEW && dirty) {
             new AlertDialog.Builder(this).setMessage(mode == Mode.EDIT

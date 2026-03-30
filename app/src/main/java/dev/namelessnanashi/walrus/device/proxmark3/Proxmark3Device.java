@@ -19,15 +19,15 @@
 
 package dev.namelessnanashi.walrus.device.proxmark3;
 
-import android.arch.lifecycle.Observer;
+import androidx.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
-import android.support.annotation.Keep;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.annotation.WorkerThread;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Keep;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.annotation.WorkerThread;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Pair;
 
 import dev.namelessnanashi.walrus.R;
@@ -47,10 +47,9 @@ import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -101,7 +100,12 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
 
     @Override
     protected Pair<Proxmark3Command, Integer> sliceIncoming(byte[] in) {
-        return Proxmark3Command.slice(in);
+        Proxmark3Command.SliceResult sliced = Proxmark3Command.slice(in);
+        if (sliced == null) {
+            return null;
+        }
+
+        return new Pair<>(sliced.command, sliced.consumedBytes);
     }
 
     @Override
@@ -502,8 +506,7 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
         }
     }
 
-    @Parcel
-    public static class TuneResult {
+    public static class TuneResult implements Serializable {
 
         public final boolean lf;
         public final boolean hf;
@@ -514,7 +517,6 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
         public final Float peakV;
         public final Float hfVoltage;
 
-        @ParcelConstructor
         TuneResult(boolean lf, boolean hf, float[] lfVoltages, Float v125, Float v134, Float peakF,
                 Float peakV, Float hfVoltage) {
             this.lf = lf;

@@ -20,9 +20,9 @@
 package dev.namelessnanashi.walrus.card.carddata;
 
 import android.content.Context;
-import android.support.annotation.IntRange;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.IntRange;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -39,8 +39,6 @@ import dev.namelessnanashi.walrus.card.carddata.ui.component.MultiComponent;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.parceler.Parcel;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +46,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-@Parcel
 @CardData.Metadata(
         name = "HID",
         iconName = "drawable_hid",

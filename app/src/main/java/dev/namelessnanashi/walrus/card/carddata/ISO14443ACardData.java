@@ -19,17 +19,15 @@
 
 package dev.namelessnanashi.walrus.card.carddata;
 
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import dev.namelessnanashi.walrus.util.MiscUtils;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.parceler.Parcel;
-import org.parceler.ParcelPropertyConverter;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -37,7 +35,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @SuppressWarnings({"WeakerAccess", "checkstyle:abbreviationaswordinname"})
-@Parcel
 public class ISO14443ACardData extends CardData {
 
     private static final TypeMatcher[] TYPE_MATCHERS;
@@ -95,7 +92,6 @@ public class ISO14443ACardData extends CardData {
         };
     }
 
-    @ParcelPropertyConverter(MiscUtils.ShortParcelConverter.class)
     public short atqa;
     public BigInteger uid;
     public byte sak;

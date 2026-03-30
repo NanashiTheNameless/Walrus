@@ -22,11 +22,11 @@ package dev.namelessnanashi.walrus.device.chameleonmini;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
-import android.support.v7.preference.PreferenceManager;
-import android.support.annotation.Keep;
-import android.support.annotation.UiThread;
-import android.support.annotation.WorkerThread;
-import android.support.v7.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
+import androidx.annotation.Keep;
+import androidx.annotation.UiThread;
+import androidx.annotation.WorkerThread;
+import androidx.appcompat.app.AppCompatActivity;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.card.carddata.CardData;

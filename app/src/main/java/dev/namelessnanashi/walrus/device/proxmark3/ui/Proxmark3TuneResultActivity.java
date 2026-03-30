@@ -23,10 +23,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.IdRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,8 +37,6 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +49,7 @@ public class Proxmark3TuneResultActivity extends AppCompatActivity {
 
     public static void startActivity(Context context, Proxmark3Device.TuneResult tuneResult) {
         Intent intent = new Intent(context, Proxmark3TuneResultActivity.class);
-        intent.putExtra(EXTRA_TUNE_RESULT, Parcels.wrap(tuneResult));
+        intent.putExtra(EXTRA_TUNE_RESULT, tuneResult);
         context.startActivity(intent);
     }
 
@@ -61,8 +59,8 @@ public class Proxmark3TuneResultActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_proxmark3_tune_results);
 
-        Proxmark3Device.TuneResult tuneResult = Parcels.unwrap(getIntent().getParcelableExtra(
-                EXTRA_TUNE_RESULT));
+        Proxmark3Device.TuneResult tuneResult =
+                (Proxmark3Device.TuneResult) getIntent().getSerializableExtra(EXTRA_TUNE_RESULT);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();

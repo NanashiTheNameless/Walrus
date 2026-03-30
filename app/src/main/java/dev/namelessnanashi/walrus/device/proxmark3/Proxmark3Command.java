@@ -19,9 +19,9 @@
 
 package dev.namelessnanashi.walrus.device.proxmark3;
 
-import android.support.annotation.LongDef;
-import android.support.annotation.Size;
-import android.util.Pair;
+import android.annotation.SuppressLint;
+import androidx.annotation.LongDef;
+import androidx.annotation.Size;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -34,6 +34,17 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 class Proxmark3Command {
+
+    static final class SliceResult {
+
+        final Proxmark3Command command;
+        final int consumedBytes;
+
+        SliceResult(Proxmark3Command command, int consumedBytes) {
+            this.command = command;
+            this.consumedBytes = consumedBytes;
+        }
+    }
 
     private static final int LONG_BYTE_LENGTH = 8;
     private static final int SHORT_BYTE_LENGTH = 2;
@@ -113,8 +124,8 @@ class Proxmark3Command {
         this(op, new long[3]);
     }
 
-    static Pair<Proxmark3Command, Integer> slice(byte[] bytes) {
-        Pair<Proxmark3Command, Integer> response = sliceResponse(bytes);
+    static SliceResult slice(byte[] bytes) {
+        SliceResult response = sliceResponse(bytes);
         if (response != null) {
             return response;
         }
@@ -123,10 +134,11 @@ class Proxmark3Command {
             return null;
         }
 
-        return new Pair<>(fromOldBytes(bytes), OLD_FRAME_LENGTH);
+        return new SliceResult(fromOldBytes(bytes), OLD_FRAME_LENGTH);
     }
 
-    private static Pair<Proxmark3Command, Integer> sliceResponse(byte[] bytes) {
+    @SuppressLint("WrongConstant")
+    private static SliceResult sliceResponse(byte[] bytes) {
         if (!startsWith(bytes, RESPONSE_MAGIC)) {
             return null;
         }
@@ -164,12 +176,12 @@ class Proxmark3Command {
 
             byte[] data = ArrayUtils.subarray(payload, LEGACY_ARGS_BYTE_LENGTH, payload.length);
 
-            return new Pair<>(new Proxmark3Command(op, args, data, data.length, true,
+            return new SliceResult(new Proxmark3Command(op, args, data, data.length, true,
                     status, reason), frameLength);
         }
 
-        return new Pair<>(new Proxmark3Command(op, new long[3], payload, payload.length, false,
-                status, reason), frameLength);
+        return new SliceResult(new Proxmark3Command(op, new long[3], payload, payload.length,
+                false, status, reason), frameLength);
     }
 
     private static boolean startsWith(byte[] bytes, byte[] prefix) {

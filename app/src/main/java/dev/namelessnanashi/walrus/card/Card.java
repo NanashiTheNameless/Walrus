@@ -28,14 +28,12 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import org.parceler.Parcel;
-
+import java.io.Serializable;
 import java.util.Date;
 
 @DatabaseTable()
-@Parcel
 @SuppressWarnings("WeakerAccess")
-public class Card {
+public class Card implements Serializable {
     public static final String NAME_FIELD_NAME = "name";
 
     @DatabaseField(generatedId = true)

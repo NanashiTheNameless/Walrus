@@ -21,9 +21,9 @@ package dev.namelessnanashi.walrus.device;
 
 import android.content.Context;
 import android.os.SystemClock;
-import android.support.annotation.UiThread;
-import android.support.annotation.WorkerThread;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.UiThread;
+import androidx.annotation.WorkerThread;
+import androidx.appcompat.app.AppCompatActivity;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.card.carddata.CardData;

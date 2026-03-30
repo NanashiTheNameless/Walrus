@@ -19,8 +19,8 @@
 
 package dev.namelessnanashi.walrus.device;
 
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.WalrusApplication;

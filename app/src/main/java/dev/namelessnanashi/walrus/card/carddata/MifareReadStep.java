@@ -20,7 +20,7 @@
 package dev.namelessnanashi.walrus.card.carddata;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import dev.namelessnanashi.walrus.card.carddata.ui.MifareReadStepDialogFragment;
 import dev.namelessnanashi.walrus.device.CardDeviceOperation;

@@ -24,11 +24,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.Toast;
 
 import dev.namelessnanashi.walrus.R;
@@ -61,7 +61,6 @@ public class DevicesActivity extends AppCompatActivity
         }
 
         RecyclerView recyclerView = findViewById(R.id.card_device_list);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
     }
 

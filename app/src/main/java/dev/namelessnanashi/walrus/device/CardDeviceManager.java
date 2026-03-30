@@ -27,7 +27,7 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import dev.namelessnanashi.walrus.device.chameleonmini.ChameleonMiniRevGDevice;
 import dev.namelessnanashi.walrus.device.chameleonmini.ChameleonMiniRevERebootedDevice;

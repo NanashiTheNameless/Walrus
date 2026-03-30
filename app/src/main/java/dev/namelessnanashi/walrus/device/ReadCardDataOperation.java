@@ -20,8 +20,8 @@
 package dev.namelessnanashi.walrus.device;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.StringRes;
+import androidx.annotation.WorkerThread;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.card.carddata.CardData;

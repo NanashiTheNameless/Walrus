@@ -20,7 +20,7 @@
 package dev.namelessnanashi.walrus.card.carddata.ui;
 
 import android.content.Context;
-import android.support.v4.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 
 import dev.namelessnanashi.walrus.card.carddata.MifareReadStep;
 

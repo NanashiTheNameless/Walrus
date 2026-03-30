@@ -20,13 +20,13 @@
 package dev.namelessnanashi.walrus.card.carddata.ui.component;
 
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.core.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,8 +37,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import dev.namelessnanashi.walrus.R;
-
-import org.parceler.Parcels;
 
 import java.util.TreeSet;
 
@@ -59,8 +57,8 @@ public class ComponentDialogFragment extends DialogFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ComponentSourceAndSink componentSourceAndSink = Parcels.unwrap(getArguments().getParcelable(
-                "source_and_sink"));
+        ComponentSourceAndSink componentSourceAndSink =
+                (ComponentSourceAndSink) getArguments().getSerializable("source_and_sink");
         viewModel = ViewModelProviders.of(this,
                 new ComponentViewModel.Factory(componentSourceAndSink)).get(
                         ComponentViewModel.class);

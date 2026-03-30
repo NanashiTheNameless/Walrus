@@ -31,14 +31,12 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.card.Card;
 import dev.namelessnanashi.walrus.device.ui.BulkReadCardsActivity;
-
-import org.parceler.Parcels;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -70,7 +68,7 @@ public class BulkReadCardsService extends Service {
         Intent intent = new Intent(context, BulkReadCardsService.class);
 
         intent.putExtra(EXTRA_READ_CARD_DATA_OPERATION, readCardDataOperation);
-        intent.putExtra(EXTRA_CARD_TEMPLATE, Parcels.wrap(cardTemplate));
+        intent.putExtra(EXTRA_CARD_TEMPLATE, cardTemplate);
 
         context.startService(intent);
     }
@@ -94,7 +92,7 @@ public class BulkReadCardsService extends Service {
                 this,
                 (ReadCardDataOperation) intent.getSerializableExtra(
                         EXTRA_READ_CARD_DATA_OPERATION),
-                (Card) Parcels.unwrap(intent.getParcelableExtra(EXTRA_CARD_TEMPLATE)),
+                (Card) intent.getSerializableExtra(EXTRA_CARD_TEMPLATE),
                 new BulkReadCardDataOperationRunner.OnStopCallback() {
                     @Override
                     public void onStop(final BulkReadCardDataOperationRunner runner) {

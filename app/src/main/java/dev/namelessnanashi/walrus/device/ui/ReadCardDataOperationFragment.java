@@ -21,7 +21,7 @@ package dev.namelessnanashi.walrus.device.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.WorkerThread;
 
 import dev.namelessnanashi.walrus.card.carddata.CardData;
 import dev.namelessnanashi.walrus.device.ReadCardDataOperation;

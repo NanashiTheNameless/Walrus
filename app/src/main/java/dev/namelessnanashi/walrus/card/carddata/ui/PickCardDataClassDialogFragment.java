@@ -22,8 +22,8 @@ package dev.namelessnanashi.walrus.card.carddata.ui;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import dev.namelessnanashi.walrus.R;

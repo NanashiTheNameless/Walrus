@@ -19,8 +19,6 @@
 
 package dev.namelessnanashi.walrus.device.proxmark3;
 
-import android.util.Pair;
-
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
@@ -44,11 +42,11 @@ public class Proxmark3CommandTest {
         bb.putLong(0);
         bb.put("Iceman".getBytes());
 
-        Pair<Proxmark3Command, Integer> sliced = Proxmark3Command.slice(frame);
+        Proxmark3Command.SliceResult sliced = Proxmark3Command.slice(frame);
 
         assertNotNull(sliced);
-        assertEquals(544, sliced.second.intValue());
-        assertEquals("Iceman", sliced.first.dataAsString());
+        assertEquals(544, sliced.consumedBytes);
+        assertEquals("Iceman", sliced.command.dataAsString());
     }
 
     @Test
@@ -69,16 +67,16 @@ public class Proxmark3CommandTest {
         bb.put(payload);
         bb.putShort((short) 0x3362);
 
-        Pair<Proxmark3Command, Integer> sliced = Proxmark3Command.slice(frame);
+        Proxmark3Command.SliceResult sliced = Proxmark3Command.slice(frame);
 
         assertNotNull(sliced);
-        assertEquals(frame.length, sliced.second.intValue());
-        assertEquals(Proxmark3Command.ACK, sliced.first.op);
-        assertEquals(1, sliced.first.args[0]);
-        assertEquals(2, sliced.first.args[1]);
-        assertEquals(3, sliced.first.args[2]);
-        assertArrayEquals(payload, sliced.first.data);
-        assertEquals("ABC", sliced.first.dataAsString());
+        assertEquals(frame.length, sliced.consumedBytes);
+        assertEquals(Proxmark3Command.ACK, sliced.command.op);
+        assertEquals(1, sliced.command.args[0]);
+        assertEquals(2, sliced.command.args[1]);
+        assertEquals(3, sliced.command.args[2]);
+        assertArrayEquals(payload, sliced.command.data);
+        assertEquals("ABC", sliced.command.dataAsString());
     }
 
     @Test
