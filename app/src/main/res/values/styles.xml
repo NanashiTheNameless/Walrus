@@ -67,7 +67,17 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
-    <style name="App.WithTransitions"/>
+    <style name="App.WithTransitions">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/transition_window_fade</item>
+        <item name="android:windowExitTransition">@transition/transition_window_fade</item>
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/transition_shared_element
+        </item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/transition_shared_element
+        </item>
+    </style>
 
     <style name="App.WithTransitions.LauncherActivity">
         <item name="android:windowBackground">@drawable/drawable_launch_screen</item>
