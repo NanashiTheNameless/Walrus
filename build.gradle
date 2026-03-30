@@ -43,27 +43,27 @@ buildscript {
 
             switch ("${requested.group}:${requested.name}") {
                 case 'org.apache.commons:commons-lang3':
-                    details.useVersion rootProject.ext.securityVersions.commonsLang3
+                    details.useVersion '3.20.0'
                     details.because('Avoid older Commons Lang versions on transitive classpaths')
                     break
                 case 'org.apache.httpcomponents:httpclient':
-                    details.useVersion rootProject.ext.securityVersions.httpclient
+                    details.useVersion '4.5.14'
                     details.because('Keep Apache HttpClient on the latest 4.5.x line available')
                     break
                 case 'org.apache.httpcomponents:httpmime':
-                    details.useVersion rootProject.ext.securityVersions.httpmime
+                    details.useVersion '4.5.14'
                     details.because('Keep Apache HttpMime aligned with the pinned HttpClient release')
                     break
                 case 'org.bitbucket.b_c:jose4j':
-                    details.useVersion rootProject.ext.securityVersions.jose4j
+                    details.useVersion '0.9.6'
                     details.because('Upgrade bundletool transitive JOSE dependency')
                     break
                 case 'org.jdom:jdom2':
-                    details.useVersion rootProject.ext.securityVersions.jdom2
+                    details.useVersion '2.0.6.1'
                     details.because('Upgrade Jetifier transitive JDOM dependency')
                     break
                 case 'com.squareup.okio:okio':
-                    details.useVersion rootProject.ext.securityVersions.okio
+                    details.useVersion '3.17.0'
                     details.because('Avoid older Okio runtime versions')
                     break
             }
