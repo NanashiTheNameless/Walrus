@@ -23,7 +23,7 @@ ext.securityVersions = [
         httpmime            : '4.5.14',
         jdom2               : '2.0.6.1',
         jose4j              : '0.9.6',
-        netty               : '4.1.131.Final',
+        netty               : '4.1.132.Final',
         okio                : '3.16.4'
 ]
 
@@ -36,7 +36,7 @@ buildscript {
         resolutionStrategy.eachDependency { details ->
             def requested = details.requested
             if (requested.group == 'io.netty') {
-                details.useVersion '4.1.131.Final'
+                details.useVersion '4.1.132.Final'
                 details.because('Pin Netty modules to a patched 4.1.x release')
                 return
             }
