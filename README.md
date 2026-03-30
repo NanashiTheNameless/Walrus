@@ -22,6 +22,32 @@ Designed for physical security assessors during red team engagements, Walrus sup
 
 This fork currently supports Android 10 (API 29) and newer.
 
+## Translations
+
+English: 
+Non-English translations in this fork are currently machine-translated first passes.
+Corrections, improvements, and native-speaker reviews are welcomed and appreciated.
+
+Deutsch: 
+Die nicht-englischen Übersetzungen in diesem Fork sind derzeit maschinell erstellte Erstfassungen.
+Korrekturen, Verbesserungen und Überprüfungen durch Muttersprachler sind willkommen und werden sehr geschätzt.
+
+Español: 
+Las traducciones no inglesas de este fork son actualmente borradores iniciales traducidos automáticamente.
+Las correcciones, mejoras y revisiones por hablantes nativos son bienvenidas y muy agradecidas.
+
+Français:
+Les traductions non anglaises de ce fork sont actuellement des premières versions traduites automatiquement.
+Les corrections, améliorations et relectures par des locuteurs natifs sont les bienvenues et très appréciées.
+
+Português (Brasil): 
+As traduções não inglesas deste fork são atualmente versões iniciais traduzidas por máquina.
+Correções, melhorias e revisões por falantes nativos são bem-vindas e muito apreciadas.
+
+日本語: 
+このフォークの英語以外の翻訳は、現在のところ機械翻訳による初稿です。
+修正、改善、ネイティブスピーカーによるレビューを歓迎しており、とてもありがたく思います。
+
 ## Installing
 
 There are two simple ways to install this fork.

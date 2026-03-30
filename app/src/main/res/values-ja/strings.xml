@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="update_notification_title">非公式フォークに関するお知らせ</string>
+    <string name="update_notification_message">現在使用しているのは Walrus の非公式フォークです。\n\nこのビルドは Team Walrus によって公開、審査、サポートされていません。機能、挙動、依存関係、UI は元のプロジェクトと異なる場合があります。\n\n元の upstream プロジェクト:\nhttps://github.com/TeamWalrus/Walrus\n\nこのフォークとその issue tracker:\nhttps://github.com/NanashiTheNameless/Walrus\n\nこのビルドで問題が発生した場合は、upstream ではなくこのフォークに報告してください。</string>
+    <string name="update_notification_neutral_button">続行</string>
+    <string name="freedroidwarn_title">Android の自由に関する警告</string>
+    <string name="freedroidwarn_message">Google は、2026/2027 年以降、認証済み Android 端末上のアプリでは、開発者が個人の本人確認情報を Google に直接提出する必要があると発表しました。\n\nこのフォークのメンテナーはその要件に従う予定がないため、その時点以降、このアプリは認証済み Android 端末で動作しなくなる可能性があります。\n\n背景や提言に関する情報については Keep Android Open を参照してください。</string>
+    <string name="freedroidwarn_more_info">詳細情報</string>
+    <string name="freedroidwarn_solutions">解決策</string>
+    <string name="failed_bulk_reading">カードの一括読み取り中に失敗しました:\n<xliff:g id="amount">%1$s</xliff:g></string>
+    <string name="bulk_read_cards_activity_name">カード一括読み取り</string>
+    <string name="stop_button">停止</string>
+    <string name="back_button">戻る</string>
+    <plurals name="num_cards_read">
+        <item quantity="other"><xliff:g id="amount">%1$d</xliff:g> 枚読み取り済み</item>
+    </plurals>
+    <string name="bulk_reading_cards">カードを一括読み取り中</string>
+    <string name="device_gone">切断されたデバイス</string>
+    <string name="bulk_read_notification_channel_name">カード一括読み取り</string>
+    <plurals name="bulk_reading_from">
+        <item quantity="other"><xliff:g id="amount">%1$d</xliff:g> 台のデバイスからカードを読み取り中</item>
+    </plurals>
+    <string name="default_card_name">無題のカード</string>
+    <string name="delete_button">削除</string>
+    <string name="view_card_data">データを表示</string>
+    <string name="write_card_data">書き込み</string>
+    <string name="emulate_card_data">エミュレート</string>
+    <string name="read_card_data">データを設定</string>
+    <string name="date_acquired">取得日</string>
+    <string name="location">位置</string>
+    <string name="unknown">不明</string>
+    <string name="openstreetmap_label">OpenStreetMap</string>
+    <string name="location_coordinates">緯度 <xliff:g id="latitude">%1$.5f</xliff:g>、経度 <xliff:g id="longitude">%2$.5f</xliff:g></string>
+    <string name="location_edit_help">保存された緯度と経度を編集するか、両方を空欄のままにして保存済みの位置情報を削除します。</string>
+    <string name="latitude">緯度</string>
+    <string name="longitude">経度</string>
+    <string name="enter_both_coordinates">緯度と経度の両方を入力するか、両方を空欄のままにしてください。</string>
+    <string name="invalid_latitude">緯度は -90 から 90 の範囲で入力してください。</string>
+    <string name="invalid_longitude">経度は -180 から 180 の範囲で入力してください。</string>
+    <string name="open_in_openstreetmap">OpenStreetMap で開く</string>
+    <string name="view_on_map">地図で表示</string>
+    <string name="pick_on_map">地図で選択</string>
+    <string name="openstreetmap_activity_name">地図</string>
+    <string name="openstreetmap_pick_help">地図をタップして保存する位置を配置または移動します。</string>
+    <string name="no_location_selected">まだ位置が選択されていません。</string>
+    <string name="use_this_location">この位置を使う</string>
+    <string name="openstreetmap_attribution">OpenFreeMap © OpenMapTiles OpenStreetMap のデータを使用</string>
+    <string name="notes">メモ</string>
+    <string name="view_card">カードを表示</string>
+    <string name="new_card">新しいカード</string>
+    <string name="edit_card">カードを編集</string>
+    <string name="set_template">テンプレートを設定</string>
+    <string name="card_name_required">カード名は必須です</string>
+    <string name="copy_of"><xliff:g id="name">%1$s</xliff:g> のコピー</string>
+    <string name="delete_card">カードを削除</string>
+    <string name="delete_message">この操作は元に戻せません。続行しますか？</string>
+    <string name="cancel_button">キャンセル</string>
+    <string name="no_card_devices">接続されているカードデバイスがありません</string>
+    <string name="no_device_can_write">接続されたデバイスでこの種類のカードを書き込めるものはありません</string>
+    <string name="no_device_can_emulate">接続されたデバイスでこの種類のカードをエミュレートできるものはありません</string>
+    <string name="choose_card_type">カード種別を選択</string>
+    <string name="discard_card_changes">カードへの変更を破棄しますか？</string>
+    <string name="discard_bulk_read_changes">一括読み取りカードテンプレートを破棄しますか？</string>
+    <string name="discard_button">破棄</string>
+    <string name="writing_card">カードを書き込み中</string>
+    <string name="emulating_card">カードをエミュレート中</string>
+    <string name="performing_operation">操作を実行中</string>
+    <string name="waiting_for_card">カードを待機中</string>
+    <string name="no_card_data">カードにデータがありません</string>
+    <string name="no_view_card_dialog">この種類のカードには詳細ビューがありません</string>
+    <string name="edit_card_data_title"><xliff:g id="card_data_class">%1$s</xliff:g> データの手動入力</string>
+    <string name="view_card_data_title"><xliff:g id="card_data_class">%1$s</xliff:g> データ</string>
+    <string name="read_description">読み取り</string>
+    <string name="write_description">書き込み</string>
+    <string name="failed_to_write">カードの書き込みに失敗しました:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="failed_to_emulate">カードのエミュレートに失敗しました:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="failed_to_read">カードの読み取りに失敗しました:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="failed_to_perform_operation">操作の実行に失敗しました:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="version">バージョン情報</string>
+    <string name="retrieving">取得中…</string>
+    <string name="failed_get_version">バージョンの取得に失敗しました:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="idle">待機中</string>
+    <string name="device_busy">デバイスは使用中です</string>
+    <string name="reading">読み取り中</string>
+    <string name="getting_version">バージョンを取得中</string>
+    <string name="get_version_timeout">バージョン取得がタイムアウトしました</string>
+    <string name="device_is_gone">デバイスが切断されました</string>
+    <string name="command_error">コマンド <xliff:g id="command">%1$s</xliff:g> への予期しない応答:\n<xliff:g id="error">%2$s</xliff:g></string>
+    <string name="emulating">エミュレート中</string>
+    <string name="warning">警告!</string>
+    <string name="delete_all_cards">すべてのカードが削除されます。この操作は元に戻せません。続行しますか？</string>
+    <string name="all_cards_deleted">すべてのカードを削除しました</string>
+    <string name="devices_activity_name">デバイス</string>
+    <string name="device_has_no_settings">このデバイスには設定がありません</string>
+    <string name="invalid_fixed_value">固定値が無効です</string>
+    <string name="hid_format">HID カード形式</string>
+    <string name="hid_raw">Raw</string>
+    <string name="hid_26_bit">HID 26-bit (H10301)</string>
+    <string name="hid_34_bit">HID 34-bit (H10306)</string>
+    <string name="hid_35_bit_corporate_1000">HID 35-bit Corporate 1000</string>
+    <string name="hid_37_bit">HID 37-bit (H10302)</string>
+    <string name="hid_37_bit_with_facility_code">Facility Code 付き HID 37-bit (H10304)</string>
+    <string name="hid_data">データ (hex)</string>
+    <string name="hid_facility_code">Facility Code</string>
+    <string name="hid_card_number">カード番号</string>
+    <string name="hid_format_autodetected">この形式は自動検出されました</string>
+    <string name="start">開始</string>
+    <string name="save">保存</string>
+    <string name="delete">削除</string>
+    <string name="duplicate">複製</string>
+    <string name="add_new_card">新しいカードを追加</string>
+    <string name="bulk_read_cards">カードを一括読み取り</string>
+    <string name="devices">デバイス</string>
+    <string name="settings">設定</string>
+    <string name="search_cards">カードを検索</string>
+    <string name="setup_mifare_read">MIFARE 読み取り設定</string>
+    <string name="add">追加</string>
+    <string name="read_steps">読み取り手順</string>
+    <string name="invalid_parity">パリティが無効です</string>
+    <string name="choose_source">ソースを選択</string>
+    <string name="choose_sink">保存先を選択</string>
+    <string name="choose_target">対象を選択</string>
+    <string name="manual_entry">手動入力</string>
+    <string name="bulk_read_settings_preference">カード一括読み取り</string>
+    <string name="bulk_read_vibrate_preference">カード読み取り時に振動する</string>
+    <string name="devices_settings_preference">デバイス</string>
+    <string name="on_device_connected_preference">デバイス接続 / 切断時に振動する</string>
+    <string name="appearance_settings_preference">外観</string>
+    <string name="app_font_preference_title">アプリのフォント</string>
+    <string name="app_font_preference_summary">現在のフォント: <xliff:g id="font">%1$s</xliff:g></string>
+    <string name="app_font_option_0xproto">0xProto (既定)</string>
+    <string name="app_font_option_system_default">システム既定</string>
+    <string name="app_font_option_saved_system_font_unavailable">保存されたシステムフォント (利用不可)</string>
+    <string name="wallet_settings_preference">ウォレット</string>
+    <string name="delete_all_cards_preference">すべてのカードを削除</string>
+    <string name="about_settings_preference">情報</string>
+    <string name="open_source_preference">オープンソース謝辞</string>
+    <string name="card_slot_preference">カードスロット</string>
+    <string name="card_slot_preference_message">エミュレーションに使用する <xliff:g>Chameleon Mini</xliff:g> のカードスロット</string>
+    <string name="tune">チューニング</string>
+    <string name="tune_lf">LF をチューニング</string>
+    <string name="tune_hf">HF をチューニング</string>
+    <string name="tuning_progress">チューニング中…</string>
+    <string name="failed_to_tune">チューニングに失敗しました:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="writing">書き込み中</string>
+    <string name="write_card_timeout">カード書き込みがタイムアウトしました</string>
+    <string name="tuning">チューニング中</string>
+    <string name="tune_timeout">チューニングがタイムアウトしました</string>
+    <string name="proxmark3_tune_result_activity_name"><xliff:g>Proxmark3</xliff:g> - チューニング結果</string>
+    <string name="lf">LF</string>
+    <string name="optimal">最適</string>
+    <string name="tune_peak_voltage"><xliff:g id="voltage">%1$.3fV</xliff:g>、<xliff:g id="frequency">%2$.3fkHz</xliff:g> で到達</string>
+    <string name="tune_ok">OK</string>
+    <string name="tune_marginal">要注意</string>
+    <string name="tune_unusable">使用不可</string>
+    <string name="settings_activity_name">設定</string>
+    <string name="add_mifare_static_key_read_step">固定キー読み取り手順を追加</string>
+    <string name="edit_mifare_static_key_read_step">固定キー読み取り手順を編集</string>
+    <string name="blocks_to_read">読み取るブロック</string>
+    <string name="key">キー</string>
+    <string name="key_slots">キースロット</string>
+    <string name="both">両方</string>
+    <string name="failed_open_usb_connection">USB 接続を開けませんでした</string>
+    <string name="failed_open_usb_serial_device">USB シリアルデバイスを開けませんでした</string>
+    <string name="cant_be_empty">空にできません</string>
+    <string name="invalid_hex_value">無効な 16 進数です</string>
+    <string name="too_many_bits">ビット数が多すぎます</string>
+    <string name="location_rationale">Walrus は任意で端末の位置情報を使用し、取得したカードの場所を記録できます。</string>
+    <string name="device_disconnected"><xliff:g id="device">%1$s</xliff:g> が切断されました</string>
+    <string name="device_connected"><xliff:g id="device">%1$s</xliff:g> が接続されました</string>
+</resources>

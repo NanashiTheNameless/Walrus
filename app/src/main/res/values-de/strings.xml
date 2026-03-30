@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="update_notification_title">Hinweis zu inoffiziellem Fork</string>
+    <string name="update_notification_message">Sie verwenden einen inoffiziellen Fork von Walrus.\n\nDieser Build wird nicht von Team Walrus veröffentlicht, geprüft oder unterstützt. Funktionen, Verhalten, Abhängigkeiten und Benutzeroberfläche können vom Originalprojekt abweichen.\n\nOriginales Upstream-Projekt:\nhttps://github.com/TeamWalrus/Walrus\n\nDieser Fork und sein Issue-Tracker:\nhttps://github.com/NanashiTheNameless/Walrus\n\nWenn Sie mit diesem Build auf ein Problem stoßen, melden Sie es bitte diesem Fork statt dem Upstream-Projekt.</string>
+    <string name="update_notification_neutral_button">Fortfahren</string>
+    <string name="freedroidwarn_title">Android-Freiheitswarnung</string>
+    <string name="freedroidwarn_message">Google hat angekündigt, dass Apps auf zertifizierten Android-Geräten ab 2026/2027 verlangen werden, dass der Entwickler persönliche Identitätsdaten direkt an Google übermittelt.\n\nDer Maintainer dieses Forks beabsichtigt nicht, diese Anforderung zu erfüllen. Daher könnte diese App auf zertifizierten Android-Geräten ab diesem Zeitpunkt nicht mehr funktionieren.\n\nHintergrundinformationen und weiterführende Hinweise finden Sie bei Keep Android Open.</string>
+    <string name="freedroidwarn_more_info">Mehr Infos</string>
+    <string name="freedroidwarn_solutions">Lösungen</string>
+    <string name="failed_bulk_reading">Fehler beim stapelweisen Lesen von Karten:\n<xliff:g id="amount">%1$s</xliff:g></string>
+    <string name="bulk_read_cards_activity_name">Stapelweises Kartenlesen</string>
+    <string name="stop_button">Stopp</string>
+    <string name="back_button">Zurück</string>
+    <plurals name="num_cards_read">
+        <item quantity="one"><xliff:g id="amount">%1$d</xliff:g> Karte gelesen</item>
+        <item quantity="other"><xliff:g id="amount">%1$d</xliff:g> Karten gelesen</item>
+    </plurals>
+    <string name="bulk_reading_cards">Karten werden stapelweise gelesen</string>
+    <string name="device_gone">Getrenntes Gerät</string>
+    <string name="bulk_read_notification_channel_name">Stapelweises Kartenlesen</string>
+    <plurals name="bulk_reading_from">
+        <item quantity="one">Karten werden von <xliff:g id="amount">%1$d</xliff:g> Gerät gelesen</item>
+        <item quantity="other">Karten werden von <xliff:g id="amount">%1$d</xliff:g> Geräten gelesen</item>
+    </plurals>
+    <string name="default_card_name">Unbenannte Karte</string>
+    <string name="delete_button">Löschen</string>
+    <string name="view_card_data">Daten anzeigen</string>
+    <string name="write_card_data">Schreiben</string>
+    <string name="emulate_card_data">Emulieren</string>
+    <string name="read_card_data">Daten festlegen</string>
+    <string name="date_acquired">Erfasst am</string>
+    <string name="location">Standort</string>
+    <string name="unknown">Unbekannt</string>
+    <string name="openstreetmap_label">OpenStreetMap</string>
+    <string name="location_coordinates">Breite <xliff:g id="latitude">%1$.5f</xliff:g>, Länge <xliff:g id="longitude">%2$.5f</xliff:g></string>
+    <string name="location_edit_help">Bearbeiten Sie den gespeicherten Breiten- und Längengrad oder lassen Sie beide Felder leer, um den gespeicherten Standort zu löschen.</string>
+    <string name="latitude">Breitengrad</string>
+    <string name="longitude">Längengrad</string>
+    <string name="enter_both_coordinates">Geben Sie Breiten- und Längengrad ein oder lassen Sie beide Felder leer.</string>
+    <string name="invalid_latitude">Der Breitengrad muss zwischen -90 und 90 liegen.</string>
+    <string name="invalid_longitude">Der Längengrad muss zwischen -180 und 180 liegen.</string>
+    <string name="open_in_openstreetmap">In OpenStreetMap öffnen</string>
+    <string name="view_on_map">Auf Karte anzeigen</string>
+    <string name="pick_on_map">Auf Karte auswählen</string>
+    <string name="openstreetmap_activity_name">Karte</string>
+    <string name="openstreetmap_pick_help">Tippen Sie auf die Karte, um den gespeicherten Standort zu setzen oder zu verschieben.</string>
+    <string name="no_location_selected">Noch kein Standort ausgewählt.</string>
+    <string name="use_this_location">Diesen Standort verwenden</string>
+    <string name="openstreetmap_attribution">OpenFreeMap © OpenMapTiles Daten von OpenStreetMap</string>
+    <string name="notes">Notizen</string>
+    <string name="view_card">Karte anzeigen</string>
+    <string name="new_card">Neue Karte</string>
+    <string name="edit_card">Karte bearbeiten</string>
+    <string name="set_template">Vorlage festlegen</string>
+    <string name="card_name_required">Kartenname ist erforderlich</string>
+    <string name="copy_of">Kopie von <xliff:g id="name">%1$s</xliff:g></string>
+    <string name="delete_card">Karte löschen</string>
+    <string name="delete_message">Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?</string>
+    <string name="cancel_button">Abbrechen</string>
+    <string name="no_card_devices">Keine Kartengeräte verbunden</string>
+    <string name="no_device_can_write">Kein verbundenes Gerät kann diese Art von Karte schreiben</string>
+    <string name="no_device_can_emulate">Kein verbundenes Gerät kann diese Art von Karte emulieren</string>
+    <string name="choose_card_type">Kartentyp auswählen</string>
+    <string name="discard_card_changes">Änderungen an der Karte verwerfen?</string>
+    <string name="discard_bulk_read_changes">Vorlage für stapelweises Lesen verwerfen?</string>
+    <string name="discard_button">Verwerfen</string>
+    <string name="writing_card">Karte wird geschrieben</string>
+    <string name="emulating_card">Karte wird emuliert</string>
+    <string name="performing_operation">Vorgang wird ausgeführt</string>
+    <string name="waiting_for_card">Warte auf Karte</string>
+    <string name="no_card_data">Karte hat keine Kartendaten</string>
+    <string name="no_view_card_dialog">Für diesen Kartentyp gibt es keine Detailansicht</string>
+    <string name="edit_card_data_title">Manuelle Eingabe der <xliff:g id="card_data_class">%1$s</xliff:g>-Daten</string>
+    <string name="view_card_data_title"><xliff:g id="card_data_class">%1$s</xliff:g>-Daten</string>
+    <string name="read_description">Lesen</string>
+    <string name="write_description">Schreiben</string>
+    <string name="failed_to_write">Schreiben der Karte fehlgeschlagen:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="failed_to_emulate">Emulieren der Karte fehlgeschlagen:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="failed_to_read">Lesen der Karte fehlgeschlagen:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="failed_to_perform_operation">Vorgang fehlgeschlagen:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="version">Versionsinformationen</string>
+    <string name="retrieving">Abrufen…</string>
+    <string name="failed_get_version">Versionsabruf fehlgeschlagen:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="idle">Leerlauf</string>
+    <string name="device_busy">Gerät ist beschäftigt</string>
+    <string name="reading">Lesen</string>
+    <string name="getting_version">Version wird abgerufen</string>
+    <string name="get_version_timeout">Zeitüberschreitung beim Abrufen der Version</string>
+    <string name="device_is_gone">Gerät ist nicht mehr vorhanden</string>
+    <string name="command_error">Unerwartete Antwort auf Befehl <xliff:g id="command">%1$s</xliff:g>:\n<xliff:g id="error">%2$s</xliff:g></string>
+    <string name="emulating">Emulieren</string>
+    <string name="warning">Warnung!</string>
+    <string name="delete_all_cards">Alle Karten werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?</string>
+    <string name="all_cards_deleted">Alle Karten gelöscht</string>
+    <string name="devices_activity_name">Geräte</string>
+    <string name="device_has_no_settings">Gerät hat keine Einstellungen</string>
+    <string name="invalid_fixed_value">Ungültiger fester Wert</string>
+    <string name="hid_format">HID-Kartenformat</string>
+    <string name="hid_raw">Rohdaten</string>
+    <string name="hid_26_bit">HID 26-Bit (H10301)</string>
+    <string name="hid_34_bit">HID 34-Bit (H10306)</string>
+    <string name="hid_35_bit_corporate_1000">HID 35-Bit Corporate 1000</string>
+    <string name="hid_37_bit">HID 37-Bit (H10302)</string>
+    <string name="hid_37_bit_with_facility_code">HID 37-Bit mit Facility Code (H10304)</string>
+    <string name="hid_data">Daten (hex)</string>
+    <string name="hid_facility_code">Facility Code</string>
+    <string name="hid_card_number">Kartennummer</string>
+    <string name="hid_format_autodetected">Dieses Format wurde automatisch erkannt</string>
+    <string name="start">Start</string>
+    <string name="save">Speichern</string>
+    <string name="delete">Löschen</string>
+    <string name="duplicate">Duplizieren</string>
+    <string name="add_new_card">Neue Karte hinzufügen</string>
+    <string name="bulk_read_cards">Karten stapelweise lesen</string>
+    <string name="devices">Geräte</string>
+    <string name="settings">Einstellungen</string>
+    <string name="search_cards">Karten durchsuchen</string>
+    <string name="setup_mifare_read">MIFARE-Lesen einrichten</string>
+    <string name="add">Hinzufügen</string>
+    <string name="read_steps">Leseschritte</string>
+    <string name="invalid_parity">Ungültige Parität</string>
+    <string name="choose_source">Quelle auswählen</string>
+    <string name="choose_sink">Ziel auswählen</string>
+    <string name="choose_target">Ziel auswählen</string>
+    <string name="manual_entry">Manuelle Eingabe</string>
+    <string name="bulk_read_settings_preference">Stapelweises Kartenlesen</string>
+    <string name="bulk_read_vibrate_preference">Beim Lesen einer Karte vibrieren</string>
+    <string name="devices_settings_preference">Geräte</string>
+    <string name="on_device_connected_preference">Bei Geräteverbindung / -trennung vibrieren</string>
+    <string name="appearance_settings_preference">Erscheinungsbild</string>
+    <string name="app_font_preference_title">App-Schriftart</string>
+    <string name="app_font_preference_summary">Aktuelle Schriftart: <xliff:g id="font">%1$s</xliff:g></string>
+    <string name="app_font_option_0xproto">0xProto (Standard)</string>
+    <string name="app_font_option_system_default">Systemstandard</string>
+    <string name="app_font_option_saved_system_font_unavailable">Gespeicherte Systemschriftart (nicht verfügbar)</string>
+    <string name="wallet_settings_preference">Wallet</string>
+    <string name="delete_all_cards_preference">Alle Karten löschen</string>
+    <string name="about_settings_preference">Über</string>
+    <string name="open_source_preference">Open-Source-Danksagungen</string>
+    <string name="card_slot_preference">Kartenslot</string>
+    <string name="card_slot_preference_message">Kartenslot von <xliff:g>Chameleon Mini</xliff:g>, der zur Emulation verwendet wird</string>
+    <string name="tune">Abstimmen</string>
+    <string name="tune_lf">LF abstimmen</string>
+    <string name="tune_hf">HF abstimmen</string>
+    <string name="tuning_progress">Abstimmung…</string>
+    <string name="failed_to_tune">Abstimmung fehlgeschlagen:\n<xliff:g id="error">%1$s</xliff:g></string>
+    <string name="writing">Schreiben</string>
+    <string name="write_card_timeout">Zeitüberschreitung beim Schreiben der Karte</string>
+    <string name="tuning">Abstimmen</string>
+    <string name="tune_timeout">Zeitüberschreitung bei der Abstimmung</string>
+    <string name="proxmark3_tune_result_activity_name"><xliff:g>Proxmark3</xliff:g> - Abstimmungsergebnisse</string>
+    <string name="lf">LF</string>
+    <string name="optimal">Optimal</string>
+    <string name="tune_peak_voltage"><xliff:g id="voltage">%1$.3fV</xliff:g>, erreicht bei <xliff:g id="frequency">%2$.3fkHz</xliff:g></string>
+    <string name="tune_ok">OK</string>
+    <string name="tune_marginal">Grenzwertig</string>
+    <string name="tune_unusable">Unbrauchbar</string>
+    <string name="settings_activity_name">Einstellungen</string>
+    <string name="add_mifare_static_key_read_step">Statischen Schlüssel-Leseschritt hinzufügen</string>
+    <string name="edit_mifare_static_key_read_step">Statischen Schlüssel-Leseschritt bearbeiten</string>
+    <string name="blocks_to_read">Zu lesende Blöcke</string>
+    <string name="key">Schlüssel</string>
+    <string name="key_slots">Schlüsselslots</string>
+    <string name="both">beide</string>
+    <string name="failed_open_usb_connection">USB-Verbindung konnte nicht geöffnet werden</string>
+    <string name="failed_open_usb_serial_device">Serielles USB-Gerät konnte nicht geöffnet werden</string>
+    <string name="cant_be_empty">Darf nicht leer sein</string>
+    <string name="invalid_hex_value">Ungültige Hex-Ziffer</string>
+    <string name="too_many_bits">Zu viele Bits</string>
+    <string name="location_rationale">Walrus kann optional den Standort Ihres Geräts verwenden, damit der Ort erfasster Karten gespeichert werden kann.</string>
+    <string name="device_disconnected"><xliff:g id="device">%1$s</xliff:g> getrennt</string>
+    <string name="device_connected"><xliff:g id="device">%1$s</xliff:g> verbunden</string>
+</resources>
