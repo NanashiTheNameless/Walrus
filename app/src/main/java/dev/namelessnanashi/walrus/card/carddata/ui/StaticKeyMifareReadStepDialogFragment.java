@@ -52,6 +52,12 @@ public class StaticKeyMifareReadStepDialogFragment extends MifareReadStepDialogF
         final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title(staticReadStep != null ? R.string.edit_mifare_static_key_read_step :
                         R.string.add_mifare_static_key_read_step)
+                .titleColorRes(R.color.primaryTextColor)
+                .contentColorRes(R.color.primaryTextColor)
+                .backgroundColorRes(R.color.primaryDarkColor)
+                .positiveColorRes(R.color.primaryTextColor)
+                .negativeColorRes(R.color.secondaryTextColor)
+                .widgetColorRes(R.color.secondaryColor)
                 .customView(R.layout.layout_static_key_mifare_read_step_dialog, true)
                 .positiveText(staticReadStep != null ? android.R.string.ok : R.string.add)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {

@@ -97,6 +97,7 @@ public abstract class UsbSerialCardDevice<T> extends UsbCardDevice {
     protected void setReceiving(boolean receiving) {
         if (receiving) {
             receiveQueue.clear();
+            buffer = new byte[0];
         }
 
         this.receiving = receiving;

@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -28,6 +29,59 @@ public class Proxmark3CommandTest {
         assertNotNull(sliced);
         assertEquals(544, sliced.consumedBytes);
         assertEquals("Iceman", sliced.command.dataAsString());
+    }
+
+    @Test
+    public void versionAsStringParsesStructuredNgVersionReplies() {
+        byte[] versionString = ("[\u001B[33mARM\u001B[0m]\n"
+                + "Bootrom.... mock-bootrom\n"
+                + "OS......... mock-os\n").getBytes(StandardCharsets.UTF_8);
+        byte[] frame = new byte[10 + 12 + versionString.length + 2];
+        ByteBuffer bb = ByteBuffer.wrap(frame);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+
+        bb.put(new byte[]{0x50, 0x4d, 0x33, 0x62});
+        bb.putShort((short) (0x8000 | (12 + versionString.length)));
+        bb.put((byte) 0);
+        bb.put((byte) 0);
+        bb.putShort((short) Proxmark3Command.VERSION);
+        bb.putInt(0x270B0A4F);
+        bb.putInt(0x1234);
+        bb.putInt(versionString.length);
+        bb.put(versionString);
+        bb.putShort((short) 0x3362);
+
+        Proxmark3Command.SliceResult sliced = Proxmark3Command.slice(frame);
+
+        assertNotNull(sliced);
+        assertEquals(frame.length, sliced.consumedBytes);
+        assertEquals(Proxmark3Command.VERSION, sliced.command.op);
+        assertEquals("[ARM]\nBootrom.... mock-bootrom\nOS......... mock-os\n",
+                sliced.command.versionAsString());
+    }
+
+    @Test
+    public void dataAsStringStripsNgDebugFlagsAndAnsiCodes() {
+        byte[] debugString = "\u001B[33mStopped\u001B[0m".getBytes(StandardCharsets.UTF_8);
+        byte[] frame = new byte[10 + 2 + debugString.length + 2];
+        ByteBuffer bb = ByteBuffer.wrap(frame);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+
+        bb.put(new byte[]{0x50, 0x4d, 0x33, 0x62});
+        bb.putShort((short) (0x8000 | (2 + debugString.length)));
+        bb.put((byte) 0);
+        bb.put((byte) 0);
+        bb.putShort((short) Proxmark3Command.DEBUG_PRINT_STRING);
+        bb.putShort((short) 0x0003);
+        bb.put(debugString);
+        bb.putShort((short) 0x3362);
+
+        Proxmark3Command.SliceResult sliced = Proxmark3Command.slice(frame);
+
+        assertNotNull(sliced);
+        assertEquals(frame.length, sliced.consumedBytes);
+        assertEquals(Proxmark3Command.DEBUG_PRINT_STRING, sliced.command.op);
+        assertEquals("Stopped", sliced.command.dataAsString());
     }
 
     @Test

@@ -69,10 +69,16 @@ public class MifareReadSetupDialogFragment extends DialogFragment
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        viewModel = ViewModelProviders.of(this).get(MifareReadSetupDialogViewModel.class);
+        viewModel = getViewModel();
 
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.setup_mifare_read)
+                .titleColorRes(R.color.primaryTextColor)
+                .contentColorRes(R.color.primaryTextColor)
+                .backgroundColorRes(R.color.primaryDarkColor)
+                .positiveColorRes(R.color.primaryTextColor)
+                .negativeColorRes(R.color.secondaryTextColor)
+                .widgetColorRes(R.color.secondaryColor)
                 .customView(R.layout.layout_mifare_read_setup_dialog, true)
                 .positiveText(R.string.start)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -229,6 +235,10 @@ public class MifareReadSetupDialogFragment extends DialogFragment
     }
 
     public MifareReadSetupDialogViewModel getViewModel() {
+        if (viewModel == null) {
+            viewModel = ViewModelProviders.of(this).get(MifareReadSetupDialogViewModel.class);
+        }
+
         return viewModel;
     }
 }

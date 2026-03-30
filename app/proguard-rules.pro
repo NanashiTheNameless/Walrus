@@ -23,6 +23,18 @@
 # Keep annotations (for devices and OrmLite, etc.)
 -keepattributes *Annotation*
 
+# Keep fields used by Java serialization. Walrus passes operations, cards, and read steps
+# through Bundles/Intents as Serializable.
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    static final java.io.ObjectStreamField[] serialPersistentFields;
+    !static !transient <fields>;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+
 # Work around https://sourceforge.net/p/proguard/bugs/531/#e9ed
 -keepclassmembers,allowshrinking class android.support.** {
     !static final <fields>;
@@ -43,12 +55,15 @@
 -keepclassmembers class * {
     @com.j256.ormlite.field.DatabaseField <fields>;
 }
--keep class * extends android.support.v4.app.DialogFragment {
+-keep class * extends androidx.fragment.app.DialogFragment {
     public <init>();
 }
 -keep class * extends dev.namelessnanashi.walrus.card.carddata.ui.MifareReadStepDialogFragment {
     public <init>();
 }
+-keep @dev.namelessnanashi.walrus.card.carddata.CardData$Metadata class * { *; }
+-keep @dev.namelessnanashi.walrus.device.CardDevice$Metadata class * { *; }
+-keep @dev.namelessnanashi.walrus.card.carddata.MifareReadStep$Metadata class * { *; }
 -keep interface dev.namelessnanashi.walrus.card.carddata.ui.component.ComponentSourceAndSink
 -keep class * implements dev.namelessnanashi.walrus.card.carddata.ui.component.ComponentSourceAndSink { *; }
 

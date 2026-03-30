@@ -31,6 +31,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import dev.namelessnanashi.walrus.R;
@@ -69,7 +70,7 @@ public class BulkReadCardsService extends Service {
         intent.putExtra(EXTRA_READ_CARD_DATA_OPERATION, readCardDataOperation);
         intent.putExtra(EXTRA_CARD_TEMPLATE, cardTemplate);
 
-        context.startService(intent);
+        ContextCompat.startForegroundService(context, intent);
     }
 
     @Override
@@ -84,14 +85,24 @@ public class BulkReadCardsService extends Service {
     }
 
     private void handleStartCommand(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+
         final NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        ReadCardDataOperation readCardDataOperation =
+                (ReadCardDataOperation) intent.getSerializableExtra(
+                        EXTRA_READ_CARD_DATA_OPERATION);
+        Card cardTemplate = (Card) intent.getSerializableExtra(EXTRA_CARD_TEMPLATE);
+        if (readCardDataOperation == null || cardTemplate == null) {
+            return;
+        }
 
         BulkReadCardDataOperationRunner runner = new BulkReadCardDataOperationRunner(
                 this,
-                (ReadCardDataOperation) intent.getSerializableExtra(
-                        EXTRA_READ_CARD_DATA_OPERATION),
-                (Card) intent.getSerializableExtra(EXTRA_CARD_TEMPLATE),
+                readCardDataOperation,
+                cardTemplate,
                 new BulkReadCardDataOperationRunner.OnStopCallback() {
                     @Override
                     public void onStop(final BulkReadCardDataOperationRunner runner) {
@@ -146,7 +157,8 @@ public class BulkReadCardsService extends Service {
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .setContentIntent(TaskStackBuilder.create(this)
                         .addNextIntentWithParentStack(new Intent(this, BulkReadCardsActivity.class))
-                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT
+                                | PendingIntent.FLAG_IMMUTABLE));
 
         return notificationBuilder.build();
     }

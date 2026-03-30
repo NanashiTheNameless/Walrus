@@ -29,6 +29,7 @@ import android.util.TypedValue;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import dev.namelessnanashi.walrus.R;
 import dev.namelessnanashi.walrus.device.CardDataIOOperation;
 import dev.namelessnanashi.walrus.device.ReadCardDataOperation;
 
@@ -75,6 +76,12 @@ public class CardDataIOOperationDialogFragment extends DialogFragment {
 
         return new MaterialDialog.Builder(getActivity())
                 .title(cardDataIOOperation.getWaitingStringId())
+                .titleColorRes(R.color.primaryTextColor)
+                .contentColorRes(R.color.primaryTextColor)
+                .backgroundColorRes(R.color.primaryDarkColor)
+                .positiveColorRes(R.color.primaryTextColor)
+                .negativeColorRes(R.color.secondaryTextColor)
+                .widgetColorRes(R.color.secondaryColor)
                 .negativeText(cardDataIOOperation.getStopStringId())
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override

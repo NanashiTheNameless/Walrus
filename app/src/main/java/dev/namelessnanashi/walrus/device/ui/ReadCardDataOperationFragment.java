@@ -22,6 +22,7 @@ package dev.namelessnanashi.walrus.device.ui;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.WorkerThread;
+import androidx.fragment.app.FragmentActivity;
 
 import dev.namelessnanashi.walrus.card.carddata.CardData;
 import dev.namelessnanashi.walrus.device.ReadCardDataOperation;
@@ -62,10 +63,16 @@ public class ReadCardDataOperationFragment extends CardDataIOOperationFragment
     @Override
     @WorkerThread
     public void onResult(final CardData cardData) {
-        getActivity().runOnUiThread(new Runnable() {
+        final FragmentActivity activity = getActivity();
+        if (activity == null) {
+            stop();
+            return;
+        }
+
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ((OnResultCallback) getActivity()).onResult(cardData,
+                ((OnResultCallback) activity).onResult(cardData,
                         getArguments().getInt("callback_id"));
             }
         });

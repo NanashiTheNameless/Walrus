@@ -22,6 +22,7 @@ package dev.namelessnanashi.walrus.device.ui;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public abstract class CardDataIOOperationFragment extends Fragment
 
     private static final String CARD_DATA_IO_OPERATION_DIALOG_FRAGMENT_TAG =
             "card_data_io_operation_card_data_io_operation_dialog";
+    private static final String UNKNOWN_ERROR = "Unknown error";
 
     private volatile boolean stop;
 
@@ -54,16 +56,9 @@ public abstract class CardDataIOOperationFragment extends Fragment
                 try {
                     executeOperation();
                 } catch (final IOException exception) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(
-                                    getActivity(),
-                                    getActivity().getString(cardDataIOOperation.getErrorStringId(),
-                                            exception.getMessage()),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    showError(cardDataIOOperation, exception);
+                } catch (final RuntimeException exception) {
+                    showError(cardDataIOOperation, exception);
                 }
 
                 FragmentManager fragmentManager = getChildFragmentManager();
@@ -81,6 +76,29 @@ public abstract class CardDataIOOperationFragment extends Fragment
                 getChildFragmentManager(), CARD_DATA_IO_OPERATION_DIALOG_FRAGMENT_TAG);
 
         setRetainInstance(true);
+    }
+
+    private void showError(final CardDataIOOperation cardDataIOOperation,
+            final Exception exception) {
+        final FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String message = exception.getMessage();
+                if (message == null || message.isEmpty()) {
+                    message = UNKNOWN_ERROR;
+                }
+
+                Toast.makeText(
+                        activity,
+                        activity.getString(cardDataIOOperation.getErrorStringId(), message),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void stop() {

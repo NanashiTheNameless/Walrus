@@ -12,7 +12,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 class Proxmark3Command {
 
@@ -40,10 +42,14 @@ class Proxmark3Command {
     private static final int RESPONSE_MIN_LENGTH = RESPONSE_HEADER_LENGTH + SHORT_BYTE_LENGTH;
     private static final int COMMAND_HEADER_LENGTH = MAGIC_BYTE_LENGTH + SHORT_BYTE_LENGTH
             + SHORT_BYTE_LENGTH;
+    private static final int DEBUG_PRINT_FLAGS_LENGTH = Short.BYTES;
+    private static final int VERSION_RESPONSE_HEADER_LENGTH = 3 * Integer.BYTES;
     private static final int COMMAND_CRC_PLACEHOLDER = 0x3361;
     private static final int NG_LENGTH_FLAG = 1 << 15;
     private static final byte[] COMMAND_MAGIC = new byte[]{0x50, 0x4d, 0x33, 0x61};
     private static final byte[] RESPONSE_MAGIC = new byte[]{0x50, 0x4d, 0x33, 0x62};
+    private static final Pattern ANSI_ESCAPE_PATTERN =
+            Pattern.compile("\u001B\\[[0-?]*[ -/]*[@-~]");
 
     static final long ACK = 0xff;
     static final long DEBUG_PRINT_STRING = 0x100;
@@ -229,15 +235,55 @@ class Proxmark3Command {
     }
 
     public String dataAsString() {
-        int length = Math.min(dataLength, data.length);
-        for (int i = 0; i < length; ++i) {
+        int offset = 0;
+        int maxLength = dataLength;
+        if (op == DEBUG_PRINT_STRING && !usesLegacyArgs() && dataLength >= DEBUG_PRINT_FLAGS_LENGTH) {
+            offset = DEBUG_PRINT_FLAGS_LENGTH;
+            maxLength -= DEBUG_PRINT_FLAGS_LENGTH;
+        }
+
+        return sanitizeTerminalOutput(extractDataAsString(offset, maxLength));
+    }
+
+    public String versionAsString() {
+        if (op != VERSION || dataLength < VERSION_RESPONSE_HEADER_LENGTH) {
+            return dataAsString();
+        }
+
+        ByteBuffer bb = ByteBuffer.wrap(data);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+
+        bb.getInt(); // hardware id
+        bb.getInt(); // used section size
+
+        int maxVersionLength = dataLength - VERSION_RESPONSE_HEADER_LENGTH;
+        long versionLength = bb.getInt() & 0xffffffffL;
+        if (versionLength <= 0 || versionLength > maxVersionLength) {
+            return dataAsString();
+        }
+
+        return sanitizeTerminalOutput(
+                extractDataAsString(VERSION_RESPONSE_HEADER_LENGTH, (int) versionLength));
+    }
+
+    private String extractDataAsString(int offset, int maxLength) {
+        if (offset < 0 || maxLength < 0 || offset > dataLength) {
+            throw new IllegalArgumentException("Invalid string bounds");
+        }
+
+        int length = Math.min(offset + maxLength, Math.min(dataLength, data.length));
+        for (int i = offset; i < length; ++i) {
             if (data[i] == 0) {
                 length = i;
                 break;
             }
         }
 
-        return new String(ArrayUtils.subarray(data, 0, length));
+        return new String(ArrayUtils.subarray(data, offset, length), StandardCharsets.UTF_8);
+    }
+
+    private static String sanitizeTerminalOutput(String value) {
+        return ANSI_ESCAPE_PATTERN.matcher(value).replaceAll("");
     }
 
     boolean usesLegacyArgs() {

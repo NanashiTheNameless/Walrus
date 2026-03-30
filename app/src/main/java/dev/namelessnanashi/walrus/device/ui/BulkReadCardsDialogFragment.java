@@ -41,6 +41,7 @@ import dev.namelessnanashi.walrus.device.BulkReadCardsService;
 public class BulkReadCardsDialogFragment extends DialogFragment {
 
     private BulkReadCardsService.ServiceBinder bulkReadCardsServiceBinder;
+    private boolean bulkReadCardsServiceBound;
 
     private final BroadcastReceiver serviceUpdateBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -58,7 +59,7 @@ public class BulkReadCardsDialogFragment extends DialogFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             BulkReadCardDataOperationRunner runner = getRunner();
-            if (runner != null) {
+            if (runner != null && cardDataIOView != null) {
                 cardDataIOView.setStatus(getResources().getQuantityString(
                         R.plurals.num_cards_read, runner.getNumberOfCardsRead(),
                         runner.getNumberOfCardsRead()));
@@ -69,20 +70,27 @@ public class BulkReadCardsDialogFragment extends DialogFragment {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
             bulkReadCardsServiceBinder = (BulkReadCardsService.ServiceBinder) binder;
+            bulkReadCardsServiceBound = true;
 
             BulkReadCardDataOperationRunner runner = getRunner();
-            if (runner != null) {
+            if (runner != null && runner.getCardDevice() != null) {
                 cardDataIOView.setCardDeviceClass(runner.getCardDevice().getClass());
                 cardDataIOView.setCardDataClass(runner.getCardDataClass());
                 cardDataIOView.setStatus(getResources().getQuantityString(
                         R.plurals.num_cards_read, runner.getNumberOfCardsRead(),
                         runner.getNumberOfCardsRead()));
+            } else {
+                Dialog dialog = getDialog();
+                if (dialog != null) {
+                    dialog.cancel();
+                }
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             bulkReadCardsServiceBinder = null;
+            bulkReadCardsServiceBound = false;
 
             Dialog dialog = getDialog();
             if (dialog != null) {
@@ -111,6 +119,12 @@ public class BulkReadCardsDialogFragment extends DialogFragment {
 
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.bulk_reading_cards)
+                .titleColorRes(R.color.primaryTextColor)
+                .contentColorRes(R.color.primaryTextColor)
+                .backgroundColorRes(R.color.primaryDarkColor)
+                .positiveColorRes(R.color.primaryTextColor)
+                .negativeColorRes(R.color.secondaryTextColor)
+                .widgetColorRes(R.color.secondaryColor)
                 .customView(cardDataIOView, false)
                 .positiveText(R.string.stop_button)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -130,8 +144,10 @@ public class BulkReadCardsDialogFragment extends DialogFragment {
     public void onResume() {
         super.onResume();
 
-        getActivity().bindService(new Intent(getActivity(), BulkReadCardsService.class),
-                bulkReadCardsServiceConnection, 0);
+        bulkReadCardsServiceBound = getActivity().bindService(
+                new Intent(getActivity(), BulkReadCardsService.class),
+                bulkReadCardsServiceConnection,
+                0);
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(
                 getActivity());
@@ -152,7 +168,10 @@ public class BulkReadCardsDialogFragment extends DialogFragment {
         localBroadcastManager.unregisterReceiver(serviceUpdateBroadcastReceiver);
         localBroadcastManager.unregisterReceiver(runnerUpdateBroadcastReceiver);
 
-        getActivity().unbindService(bulkReadCardsServiceConnection);
+        if (bulkReadCardsServiceBound) {
+            getActivity().unbindService(bulkReadCardsServiceConnection);
+            bulkReadCardsServiceBound = false;
+        }
     }
 
     private BulkReadCardDataOperationRunner getRunner() {

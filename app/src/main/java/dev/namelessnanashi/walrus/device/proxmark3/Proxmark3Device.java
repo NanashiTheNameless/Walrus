@@ -76,6 +76,8 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
         implements CardDevice.Versioned, MifareReadStep.BlockSource {
 
     private static final long DEFAULT_TIMEOUT = 20 * 1000;
+    private static final int ISO14443A_SELECT_RESPONSE_MIN_LENGTH = 15;
+    private static final int MIFARE_BLOCK_RESPONSE_LENGTH = MifareCardData.Block.SIZE;
     private static final Pattern TAG_ID = Pattern.compile("TAG ID: ([0-9a-fA-F]+)");
 
     private final Semaphore semaphore = new Semaphore(1);
@@ -83,8 +85,6 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
     @Keep
     public Proxmark3Device(Context context, UsbDevice usbDevice) throws IOException {
         super(context, usbDevice, context.getString(R.string.idle));
-
-        send(new Proxmark3Command(Proxmark3Command.VERSION));
     }
 
     @Override
@@ -151,21 +151,41 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
             ((OnOperationCreatedCallback) activity).onOperationCreated(new ReadHIDOperation(this),
                     callbackId);
         } else if (cardDataClass == MifareCardData.class) {
-            MifareReadSetupDialogFragment dialog = MifareReadSetupDialogFragment.create(callbackId);
+            activity.getWindow().getDecorView().post(new Runnable() {
+                @Override
+                public void run() {
+                    if (activity.isFinishing()) {
+                        return;
+                    }
 
-            dialog.show(activity.getSupportFragmentManager(),
-                    "proxmark3_device_mifare_read_setup_dialog");
-            activity.getSupportFragmentManager().executePendingTransactions();
+                    final MifareReadSetupDialogFragment dialog =
+                            MifareReadSetupDialogFragment.create(callbackId);
 
-            dialog.getViewModel().getSelectedReadSteps().observeForever(
-                    new Observer<List<MifareReadStep>>() {
-                        @Override
-                        public void onChanged(@Nullable List<MifareReadStep> readSteps) {
-                            ((OnOperationCreatedCallback) activity).onOperationCreated(
-                                    new ReadMifareOperation(Proxmark3Device.this, readSteps),
-                                    callbackId);
-                        }
-                    });
+                    dialog.show(activity.getSupportFragmentManager(),
+                            "proxmark3_device_mifare_read_setup_dialog");
+                    activity.getSupportFragmentManager().executePendingTransactions();
+
+                    final Observer<List<MifareReadStep>> observer =
+                            new Observer<List<MifareReadStep>>() {
+                                @Override
+                                public void onChanged(@Nullable List<MifareReadStep> readSteps) {
+                                    if (readSteps == null) {
+                                        return;
+                                    }
+
+                                    dialog.getViewModel().getSelectedReadSteps()
+                                            .removeObserver(this);
+                                    dialog.dismissAllowingStateLoss();
+
+                                    ((OnOperationCreatedCallback) activity).onOperationCreated(
+                                            new ReadMifareOperation(Proxmark3Device.this,
+                                                    readSteps),
+                                            callbackId);
+                                }
+                            };
+                    dialog.getViewModel().getSelectedReadSteps().observe(activity, observer);
+                }
+            });
         } else {
             throw new RuntimeException("Invalid card data class");
         }
@@ -181,17 +201,18 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
                         key.key),
                 new ReceiveSink<Proxmark3Command, Pair<Boolean, MifareCardData.Block>>() {
                     @Override
-                    public Pair<Boolean, MifareCardData.Block> onReceived(Proxmark3Command in) {
-                        if (in.op != Proxmark3Command.ACK) {
+                    public Pair<Boolean, MifareCardData.Block> onReceived(Proxmark3Command in)
+                            throws IOException {
+                        if (in.op != Proxmark3Command.ACK
+                                && in.op != Proxmark3Command.MIFARE_READBL) {
                             return null;
                         }
 
-                        if ((in.args[0] & 0xff) == 0) {
+                        if (!hasSuccessfulMifareBlockRead(in)) {
                             return new Pair<>(false, null);
                         }
 
-                        return new Pair<>(true, new MifareCardData.Block(ArrayUtils.subarray(
-                                in.data, 0, MifareCardData.Block.SIZE)));
+                        return new Pair<>(true, parseMifareBlockData(in));
                     }
                 });
 
@@ -228,7 +249,7 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
                 throw new IOException(context.getString(R.string.get_version_timeout));
             }
 
-            return version.dataAsString();
+            return version.versionAsString();
         } finally {
             releaseAndSetStatus();
         }
@@ -276,6 +297,60 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
         } finally {
             releaseAndSetStatus();
         }
+    }
+
+    static boolean hasSuccessfulIso14443ASelect(Proxmark3Command result) {
+        return result.usesLegacyArgs() ? result.args[0] != 0
+                : result.isSuccessful() && result.data.length > 0;
+    }
+
+    static boolean hasSuccessfulMifareBlockRead(Proxmark3Command result) {
+        return result.usesLegacyArgs() ? (result.args[0] & 0xff) != 0
+                : result.isSuccessful() && result.data.length > 0;
+    }
+
+    static ISO14443ACardData parseIso14443ACardData(Proxmark3Command result)
+            throws IOException {
+        if (result.data.length < ISO14443A_SELECT_RESPONSE_MIN_LENGTH) {
+            throw new IOException("Incomplete ISO14443A card response");
+        }
+
+        ByteBuffer bb = ByteBuffer.wrap(result.data);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+
+        byte[] uidBytes = new byte[10];
+        bb.get(uidBytes);
+
+        int uidLength = bb.get() & 0xff;
+        if (uidLength > uidBytes.length) {
+            throw new IOException("Invalid ISO14443A UID length");
+        }
+
+        ISO14443ACardData iso14443APart = new ISO14443ACardData();
+        iso14443APart.uid = uidLength == 0 ? BigInteger.ZERO
+                : new BigInteger(1, ArrayUtils.subarray(uidBytes, 0, uidLength));
+        iso14443APart.atqa = bb.getShort();
+        iso14443APart.sak = bb.get();
+
+        int atsLength = bb.get() & 0xff;
+        if (bb.remaining() < atsLength) {
+            throw new IOException("Incomplete ISO14443A ATS");
+        }
+
+        iso14443APart.ats = new byte[atsLength];
+        bb.get(iso14443APart.ats);
+
+        return iso14443APart;
+    }
+
+    static MifareCardData.Block parseMifareBlockData(Proxmark3Command result)
+            throws IOException {
+        if (result.data.length < MIFARE_BLOCK_RESPONSE_LENGTH) {
+            throw new IOException("Incomplete MIFARE block response");
+        }
+
+        return new MifareCardData.Block(ArrayUtils.subarray(
+                result.data, 0, MIFARE_BLOCK_RESPONSE_LENGTH));
     }
 
     private static class ReadHIDOperation extends ReadCardDataOperation {
@@ -419,28 +494,18 @@ public class Proxmark3Device extends UsbSerialCardDevice<Proxmark3Command>
                     Proxmark3Command result = proxmark3Device.sendThenReceiveCommands(
                             new Proxmark3Command(Proxmark3Command.READER_ISO_14443A,
                                     new long[]{Proxmark3Command.ISO14A_CONNECT, 0, 0}),
-                            new CommandWaiter(DEFAULT_TIMEOUT, Proxmark3Command.ACK));
+                            new CommandWaiter(DEFAULT_TIMEOUT, Proxmark3Command.ACK,
+                                    Proxmark3Command.READER_ISO_14443A));
 
                     if (result == null) {
                         break;
                     }
 
-                    if (result.args[0] == 0) {
+                    if (!hasSuccessfulIso14443ASelect(result)) {
                         continue;
                     }
 
-                    ISO14443ACardData iso14443APart = new ISO14443ACardData();
-
-                    ByteBuffer bb = ByteBuffer.wrap(result.data);
-                    bb.order(ByteOrder.LITTLE_ENDIAN);
-
-                    byte[] uidBytes = new byte[10];
-                    bb.get(uidBytes);
-                    iso14443APart.uid = new BigInteger(ArrayUtils.subarray(uidBytes, 0, bb.get()));
-                    iso14443APart.atqa = bb.getShort();
-                    iso14443APart.sak = bb.get();
-                    iso14443APart.ats = new byte[bb.get()];
-                    bb.get(iso14443APart.ats);
+                    ISO14443ACardData iso14443APart = parseIso14443ACardData(result);
 
                     if (!iso14443APart.equals(lastIso14443APart)) {
                         MifareCardData mifareCardData = new MifareCardData(iso14443APart, null);

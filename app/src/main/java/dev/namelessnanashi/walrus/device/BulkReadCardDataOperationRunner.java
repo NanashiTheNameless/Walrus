@@ -46,6 +46,7 @@ public class BulkReadCardDataOperationRunner implements Runnable,
     public static final String ACTION_UPDATE =
             "dev.namelessnanashi.walrus.device.BulkReadCardDataOperationRunner"
                     + ".ACTION_UPDATE";
+    private static final String UNKNOWN_ERROR = "Unknown error";
     private static int nextId;
     private final int id;
     private final Context context;
@@ -81,19 +82,13 @@ public class BulkReadCardDataOperationRunner implements Runnable,
         try {
             readCardDataOperation.execute(context, this, this);
         } catch (final IOException exception) {
-            new Handler(context.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context,
-                            context.getString(R.string.failed_bulk_reading, exception.getMessage()),
-                            Toast.LENGTH_LONG).show();
-                }
-            });
+            showError(exception);
+        } catch (final RuntimeException exception) {
+            showError(exception);
+        } finally {
+            OpenHelperManager.releaseHelper();
+            onStopCallback.onStop(this);
         }
-
-        OpenHelperManager.releaseHelper();
-
-        onStopCallback.onStop(this);
     }
 
     @Override
@@ -120,13 +115,33 @@ public class BulkReadCardDataOperationRunner implements Runnable,
         new Handler(context.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                LocalBroadcastManager localBroadcastManager =
-                        LocalBroadcastManager.getInstance(context);
+                try {
+                    LocalBroadcastManager localBroadcastManager =
+                            LocalBroadcastManager.getInstance(context);
 
-                databaseHelper.getCardDao().create(card);
-                localBroadcastManager.sendBroadcast(new Intent(QueryUtils.ACTION_WALLET_UPDATE));
+                    databaseHelper.getCardDao().create(card);
+                    localBroadcastManager.sendBroadcast(new Intent(QueryUtils.ACTION_WALLET_UPDATE));
 
-                localBroadcastManager.sendBroadcast(new Intent(ACTION_UPDATE));
+                    localBroadcastManager.sendBroadcast(new Intent(ACTION_UPDATE));
+                } catch (RuntimeException exception) {
+                    showError(exception);
+                }
+            }
+        });
+    }
+
+    private void showError(final Exception exception) {
+        new Handler(context.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                String message = exception.getMessage();
+                if (message == null || message.isEmpty()) {
+                    message = UNKNOWN_ERROR;
+                }
+
+                Toast.makeText(context,
+                        context.getString(R.string.failed_bulk_reading, message),
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
