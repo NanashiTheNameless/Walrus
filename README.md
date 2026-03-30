@@ -138,24 +138,6 @@ The repo is still centered around a single Android app module, but this fork has
 - `/docs`: Project-specific maintenance and release docs.
 - `/setup.sh` and `/build.sh`: Local SDK/bootstrap/build helpers for command-line development.
 
-## Open Source Acknowledgements
-
-This fork includes upstream Walrus code, vendored compatibility code, bundled fonts, third-party libraries, and map/data attributions.
-
-The authoritative shipped acknowledgements page is:
-
-- `/app/src/main/assets/open_source.html`
-
-That page is also exposed inside the app through `Settings -> Open source acknowledgements`.
-
-The main externally sourced pieces currently called out there are:
-
-- Team Walrus / upstream Walrus
-- 0xType 0xProto
-- AndroidX and Material Components
-- MapLibre, OpenFreeMap, and OpenStreetMap
-- the remaining direct runtime libraries bundled with the app
-
 ## Device Support
 
 Here’s a table of the current devices / card type pairs we support and in what manner.
@@ -177,6 +159,24 @@ Here’s a table of the current devices / card type pairs we support and in what
 ## Contributing
 
 This fork welcomes all kinds of contributions and bug reports, big or small! Development takes place at the fork's [GitHub repository](https://github.com/NanashiTheNameless/Walrus). There you can file issues (both bugs and enhancement requests) and submit pull requests.
+
+## Open Source Acknowledgements
+
+This fork includes upstream Walrus code, vendored compatibility code, bundled fonts, third-party libraries, and map/data attributions.
+
+The authoritative shipped acknowledgements page is:
+
+- `/app/src/main/assets/open_source.html`
+
+That page is also exposed inside the app through `Settings -> Open source acknowledgements`.
+
+The main externally sourced pieces currently called out there are:
+
+- Team Walrus / upstream Walrus
+- 0xType 0xProto
+- AndroidX and Material Components
+- MapLibre, OpenFreeMap, and OpenStreetMap
+- the remaining direct runtime libraries bundled with the app
 
 ## Note on contributions from AI
 
