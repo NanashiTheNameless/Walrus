@@ -333,8 +333,8 @@ public class OpenStreetMapActivity extends AppCompatActivity {
         }
 
         ((LineLayer) layer).setProperties(
-                PropertyFactory.lineColor(Color.parseColor("#D7DEE8")),
-                PropertyFactory.lineOpacity(0.88f),
+                PropertyFactory.lineColor(Color.parseColor("#BCC6D1")),
+                PropertyFactory.lineOpacity(0.8f),
                 PropertyFactory.lineWidth(1.35f)
         );
     }
@@ -348,12 +348,12 @@ public class OpenStreetMapActivity extends AppCompatActivity {
             );
         } else if (layer instanceof SymbolLayer) {
             ((SymbolLayer) layer).setProperties(
-                    PropertyFactory.textColor(Color.parseColor("#E2E8EF")),
-                    PropertyFactory.textOpacity(0.98f),
+                    PropertyFactory.textColor(Color.parseColor("#EDF3F9")),
+                    PropertyFactory.textOpacity(1.0f),
                     PropertyFactory.textHaloColor(Color.parseColor("#11161D")),
-                    PropertyFactory.textHaloWidth(1.0f),
-                    PropertyFactory.iconColor(Color.parseColor("#D8E0E8")),
-                    PropertyFactory.iconOpacity(0.96f),
+                    PropertyFactory.textHaloWidth(1.1f),
+                    PropertyFactory.iconColor(Color.parseColor("#E3EBF3")),
+                    PropertyFactory.iconOpacity(0.98f),
                     PropertyFactory.iconHaloColor(Color.parseColor("#11161D")),
                     PropertyFactory.iconHaloWidth(0.6f)
             );
@@ -375,12 +375,12 @@ public class OpenStreetMapActivity extends AppCompatActivity {
             );
         } else if (layer instanceof SymbolLayer) {
             ((SymbolLayer) layer).setProperties(
-                    PropertyFactory.textColor(Color.parseColor("#CAE4F7")),
-                    PropertyFactory.textOpacity(0.98f),
+                    PropertyFactory.textColor(Color.parseColor("#D9EEFC")),
+                    PropertyFactory.textOpacity(1.0f),
                     PropertyFactory.textHaloColor(Color.parseColor("#12202B")),
-                    PropertyFactory.textHaloWidth(1.0f),
-                    PropertyFactory.iconColor(Color.parseColor("#B8D7EF")),
-                    PropertyFactory.iconOpacity(0.96f),
+                    PropertyFactory.textHaloWidth(1.1f),
+                    PropertyFactory.iconColor(Color.parseColor("#CBE4F7")),
+                    PropertyFactory.iconOpacity(0.98f),
                     PropertyFactory.iconHaloColor(Color.parseColor("#12202B")),
                     PropertyFactory.iconHaloWidth(0.5f)
             );
@@ -398,14 +398,14 @@ public class OpenStreetMapActivity extends AppCompatActivity {
                 || normalizedLayerId.contains("transport")
                 || normalizedLayerId.contains("station")) {
             layer.setProperties(
-                    PropertyFactory.textColor(Color.parseColor("#F0F4F8")),
-                    PropertyFactory.textOpacity(0.99f),
+                    PropertyFactory.textColor(Color.parseColor("#F7FAFD")),
+                    PropertyFactory.textOpacity(1.0f),
                     PropertyFactory.textHaloColor(Color.parseColor("#11161D")),
-                    PropertyFactory.textHaloWidth(1.05f),
-                    PropertyFactory.iconColor(Color.parseColor("#E1E7EE")),
-                    PropertyFactory.iconOpacity(0.97f),
+                    PropertyFactory.textHaloWidth(1.15f),
+                    PropertyFactory.iconColor(Color.parseColor("#ECF2F8")),
+                    PropertyFactory.iconOpacity(0.99f),
                     PropertyFactory.iconHaloColor(Color.parseColor("#11161D")),
-                    PropertyFactory.iconHaloWidth(0.55f)
+                    PropertyFactory.iconHaloWidth(0.6f)
             );
         }
     }
