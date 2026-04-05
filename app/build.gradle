@@ -109,7 +109,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.felhr85:usbserial:6.1.0'
     implementation 'com.j256.ormlite:ormlite-android:6.1'
-    implementation 'org.maplibre.gl:android-sdk:12.2.3'
+    implementation 'org.maplibre.gl:android-sdk:13.0.2'
     implementation('io.github.yavski:fab-speed-dial:1.0.6') {
         exclude group: 'com.android.support'
     }
