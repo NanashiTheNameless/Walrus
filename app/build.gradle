@@ -43,7 +43,7 @@ int resolvedVersionCode = (System.currentTimeMillis() / 1000L) as int
 
 android {
     namespace = "dev.namelessnanashi.walrus"
-    compileSdk = 35
+    compileSdk = 36
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
